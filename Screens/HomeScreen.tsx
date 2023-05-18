@@ -1,6 +1,8 @@
 import { View, Text, Button, TextInput } from "react-native"
 
-// import Icon from "react-native-vector-icons"
+import { Feather } from "@expo/vector-icons"
+import { AntDesign } from '@expo/vector-icons';
+
 
 import CustomButton from "../Components/CustomButton"
 
@@ -8,9 +10,7 @@ import tw from 'twrnc'
 
 const HomeScreen = ({ navigation }) => {
     return (
-        <View style={[tw`flex flex-row bg-red-500 h-full items-start `]}>
-            {/* <Icon name="search"  size={30} /> */}
-            <CustomButton title="Add" onPressFun={() => console.log("add to contact")}/>
+        <View style={[tw`flex flex-row h-full items-start bg-[#394867] `]}>
         </View>
     )   
 }

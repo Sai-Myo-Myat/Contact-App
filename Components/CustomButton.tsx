@@ -1,6 +1,8 @@
 import { FC } from "react";
 import { Pressable, Text } from "react-native";
 
+import tw from 'twrnc'
+
 interface Props {
     title: string,
     onPressFun: () => void
@@ -8,10 +10,10 @@ interface Props {
 
 const CustomButton:FC<Props> = ({title, onPressFun}) => {
     return (
-        <Pressable onPress={onPressFun}>
-            <Text>{title}</Text>
+        <Pressable onPress={onPressFun} style={[tw`text-[#F1F6F9] bg-[#212A3E] p-3 self-end rounded-lg`]}>
+            <Text style={[tw`text-[#F1F6F9]`]}>{title}</Text>
         </Pressable>
     )
-}
+ }
 
 export default CustomButton;
