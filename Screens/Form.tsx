@@ -11,12 +11,23 @@ interface InputType {
 
 import tw from "twrnc"
 import CustomButton from "../Components/CustomButton"
+
 const Form = () => {
 
-    const {register, handleSubmit, formState:{errors}} = useForm<InputType>();
+    const {register, handleSubmit, formState:{errors}} = useForm<InputType>({
+        defaultValues: {
+            name: "",
+            phoneNumber: "",
+            dataOfBirth: "",
+            remark: ""
+        }
+    });
+    const onSubmit: SubmitHandler<InputType> = data => console.log(data, "data")
+
     return (
         <View style={[tw`bg-[#394867] p-5 h-full text-[#F1F6F9] flex justify-center items-center gap-2`]}>
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Name</Text>
+            <Controller></Controller>
             <TextInput {...register("name")} 
                 placeholder="Name"
                 placeholderTextColor={"#9BA4B5"}
@@ -33,7 +44,7 @@ const Form = () => {
                 placeholder="Remark (optional)"
                 placeholderTextColor={"#9BA4B5"}
                 style={[tw`p-2 border w-full rounded-lg`,styles.textInput ]}/>
-            <CustomButton title="Submit" onPressFun={() => "contact added"}/>
+            <CustomButton title="Submit" onPressFun={handleSubmit(onSubmit)}/>
         </View>
     )
 }
