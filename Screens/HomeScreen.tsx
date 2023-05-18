@@ -10,7 +10,7 @@ import tw from 'twrnc'
 
 const HomeScreen = ({ navigation }) => {
     return (
-        <View style={[tw`flex flex-row h-full items-start bg-[#394867] `]}>
+        <View style={[tw`flex flex-row h-full items-start bg-[#212A3E] `]}>
         </View>
     )   
 }

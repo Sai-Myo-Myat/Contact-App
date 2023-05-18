@@ -2,6 +2,7 @@ import { StyleSheet, StatusBar, View } from 'react-native';
 
 import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet/lib/typescript/contexts';
 
 import HomeScreen from './Screens/HomeScreen';
 import Form from './Screens/Form';
@@ -31,7 +32,9 @@ export default function App() {
               )
             } 
           }} />
-        <Stack.Screen name='Form' component={Form} />
+        <BottomSheetModalProvider value={null}>
+          <Stack.Screen name='Form' component={Form} />
+        </BottomSheetModalProvider>
       </Stack.Navigator>
     </NavigationContainer>
   );

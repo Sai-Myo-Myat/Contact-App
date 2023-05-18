@@ -10,7 +10,7 @@ interface Props {
 
 const CustomButton:FC<Props> = ({title, onPressFun}) => {
     return (
-        <Pressable onPress={onPressFun} style={[tw`text-[#F1F6F9] bg-[#212A3E] p-3 self-end rounded-lg`]}>
+        <Pressable onPress={onPressFun} style={[tw`text-[#F1F6F9] bg-[#394867] p-3 self-end rounded-lg`]}>
             <Text style={[tw`text-[#F1F6F9]`]}>{title}</Text>
         </Pressable>
     )
