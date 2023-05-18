@@ -1,6 +1,8 @@
-import { View, Text, TextInput, StyleSheet } from "react-native"
+import { View, Text, TextInput, StyleSheet, Button } from "react-native"
+import { useMemo, useRef } from "react"
 
 import {useForm, SubmitHandler, Controller} from "react-hook-form"
+import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 
 interface InputType {
     name: string,
@@ -12,8 +14,10 @@ interface InputType {
 import tw from "twrnc"
 import CustomButton from "../Components/CustomButton"
 
+
 const Form = () => {
 
+    const bottomSheetModelRef = useRef<BottomSheetModal>(null)
     const {register, handleSubmit, control, formState:{errors}} = useForm<InputType>({
         defaultValues: {
             name: "",
@@ -23,10 +27,22 @@ const Form = () => {
         }
     });
 
+    const snapPoints = useMemo(() => ['25%', '50%'], []);
     const onSubmit: SubmitHandler<InputType> = data => console.log(data, "data")
 
     return (
-        <View style={[tw`bg-[#212A3E] p-5 h-full text-[#F1F6F9] flex justify-center items-center gap-2`]}>
+        <BottomSheetModalProvider >
+            <View style={[tw`bg-[#212A3E] p-5 h-full text-[#F1F6F9] flex justify-center items-center gap-2`]}>
+            {/* <Button title="open" onPress={() => bottomSheetModelRef.current?.present()}/>
+            <Button title="close" onPress={() => bottomSheetModelRef.current?.dismiss()}/>
+            <BottomSheetModal 
+                ref={bottomSheetModelRef}
+                index={1}
+                onChange={(index) => console.log(index)}
+                snapPoints={snapPoints}
+            >
+                <Text>Bottom Sheet Model</Text>
+            </BottomSheetModal> */}
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Name</Text>
             <Controller 
                 control={control}
@@ -56,7 +72,6 @@ const Form = () => {
                     style={[tw`p-2 border w-full rounded-lg`,styles.textInput ]}/>
                 )}/>
             
-            
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Remark</Text>
             <Controller 
                 control={control}
@@ -75,6 +90,7 @@ const Form = () => {
             
             <CustomButton title="Submit" onPressFun={handleSubmit(onSubmit)}/>
         </View>
+        </BottomSheetModalProvider>
     )
 }
 

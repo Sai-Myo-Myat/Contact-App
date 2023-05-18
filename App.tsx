@@ -1,13 +1,14 @@
 import { StyleSheet, StatusBar, View } from 'react-native';
 
-import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet/lib/typescript/contexts';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 import HomeScreen from './Screens/HomeScreen';
 import Form from './Screens/Form';
 
 import CustomRightHeader from './Components/CustomRightHeader';
+import { BottomSheetContext } from '@gorhom/bottom-sheet/lib/typescript/contexts';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,9 +33,7 @@ export default function App() {
               )
             } 
           }} />
-        <BottomSheetModalProvider value={null}>
-          <Stack.Screen name='Form' component={Form} />
-        </BottomSheetModalProvider>
+        <Stack.Screen name='Form' component={Form} />
       </Stack.Navigator>
     </NavigationContainer>
   );
