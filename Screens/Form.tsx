@@ -51,7 +51,7 @@ const Form = () => {
                         onBlur={onBlur}
                         onChangeText={value => onChange(value)}
                         placeholderTextColor={"#9BA4B5"}
-                        style={[tw`p-2 border w-full rounded-lg`,styles.textInput ]}/>
+                        style={[tw`p-2 border border-[#394867] w-full rounded-lg`,styles.textInput ]}/>
                 )}
             />
             
@@ -66,12 +66,12 @@ const Form = () => {
                     onBlur={onBlur}
                     onChangeText={value => onChange(value)}
                     placeholderTextColor={"#9BA4B5"}
-                    style={[tw`p-2 border w-full rounded-lg`,styles.textInput ]}/>
+                    style={[tw`p-2 border border-[#394867] w-full rounded-lg`,styles.textInput ]}/>
                 )}/>
 
 
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
-            <Pressable  style={[tw`self-start border px-2 py-3 rounded-lg w-full`]} onPress={() => bottomSheetModelRef.current?.present()}>
+            <Pressable  style={[tw`self-start border border-[#394867] px-2 py-3 rounded-lg w-full`]} onPress={() => bottomSheetModelRef.current?.present()}>
                 <Text style={[tw`text-[#F1F6F9] ${dob === "" ? 'opacity-50' : ''}`]}>{dob? dob : "2000-1-1"}</Text>
             </Pressable>
             <BottomSheetModal
@@ -113,7 +113,7 @@ const Form = () => {
                     onBlur={onBlur}
                     onChangeText={value => onChange(value)}
                     placeholderTextColor={"#9BA4B5"}
-                    style={[tw`p-2 border w-full rounded-lg`,styles.textInput ]}/>
+                    style={[tw`p-2 border border-[#394867] w-full rounded-lg`,styles.textInput ]}/>
                 )} />
             
             <CustomButton title="Submit" onPressFun={handleSubmit(onSubmit)}/>

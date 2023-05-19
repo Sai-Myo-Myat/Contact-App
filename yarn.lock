@@ -1922,6 +1922,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@expo/websql@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@expo/websql@npm:1.0.1"
+  dependencies:
+    argsarray: "npm:^0.0.1"
+    immediate: "npm:^3.2.2"
+    noop-fn: "npm:^1.0.0"
+    pouchdb-collections: "npm:^1.0.1"
+    tiny-queue: "npm:^0.2.1"
+  checksum: 283f382d9fce17832c848fc4dd70c6059eb4ef8b6ecf7da71e1540cf53cc602e83310bb85a34dbd9af0eade53954eb542c78111aac349ae36ac03de4e88d89a7
+  languageName: node
+  linkType: hard
+
 "@expo/xcpretty@npm:^4.2.1":
   version: 4.2.2
   resolution: "@expo/xcpretty@npm:4.2.2"
@@ -3010,6 +3023,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"argsarray@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "argsarray@npm:0.0.1"
+  checksum: a995496f8241f3289ad373ceff21355106c5920b9d099800580001d3bfa6d477561d424e010726a1bf6ad95eb868669eb398766c8db063b7479c5ed1fc293dfd
+  languageName: node
+  linkType: hard
+
 "arr-diff@npm:^4.0.0":
   version: 4.0.0
   resolution: "arr-diff@npm:4.0.0"
@@ -3968,6 +3988,7 @@ __metadata:
     "@types/react-native-datepicker": "npm:^1"
     "@types/react-native-vector-icons": "npm:^6.4.13"
     expo: "npm:~48.0.15"
+    expo-sqlite: "npm:~11.1.1"
     expo-status-bar: "npm:~1.4.4"
     moment: "npm:^2.29.4"
     react: "npm:18.2.0"
@@ -4639,6 +4660,17 @@ __metadata:
     compare-versions: "npm:^3.4.0"
     invariant: "npm:^2.2.4"
   checksum: 804005e787aae4fcee2d912a6f72f6f4b91b5f332172faf2d682086bfa8f095a06db0710af356416ded6cc13ba0c079886124cefa395a7f4394c1849944bbd00
+  languageName: node
+  linkType: hard
+
+"expo-sqlite@npm:~11.1.1":
+  version: 11.1.1
+  resolution: "expo-sqlite@npm:11.1.1"
+  dependencies:
+    "@expo/websql": "npm:^1.0.1"
+  peerDependencies:
+    expo: "*"
+  checksum: 2e23ccfd0dc16f036b44d20901715b881de63026362cc2190fa96b036ea040b2a30ecef272fdd8b9d6a5b140b42b3aa873d21bc82fe15985344f057e67df4976
   languageName: node
   linkType: hard
 
@@ -5448,6 +5480,13 @@ __metadata:
   bin:
     image-size: bin/image-size.js
   checksum: 977aa886fa23f89b7521d5318735428a150c28bb6442ba523417d357fae810a73d9cb620b5554c9a3c959f59a6f40c7451974b22c1529e7ab64a28f60448bf82
+  languageName: node
+  linkType: hard
+
+"immediate@npm:^3.2.2":
+  version: 3.3.0
+  resolution: "immediate@npm:3.3.0"
+  checksum: 1b47c47653bae8541b24e2d3e8880ddf2e2bc193514a677fd6a899210460fefbdda3775b0765afee8591711f56dedb51ea0b652acd98a7177a8b8161df5c2abf
   languageName: node
   linkType: hard
 
@@ -7238,6 +7277,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"noop-fn@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "noop-fn@npm:1.0.0"
+  checksum: 681ddeee225318f66a42b5c7f1d1fcfabdf05f33bc1ecb941b852db2d44cd12137a57c4cdc9d3265a8dcca4eade14ebc8edcc4f0ce0f218dd6f156f25e0d6a4f
+  languageName: node
+  linkType: hard
+
 "nopt@npm:^6.0.0":
   version: 6.0.0
   resolution: "nopt@npm:6.0.0"
@@ -7802,6 +7848,13 @@ __metadata:
     picocolors: "npm:^1.0.0"
     source-map-js: "npm:^1.0.2"
   checksum: fc6dc002e9a34c082f918a74c71bae89f8af48c66e60fcf94451ada935eee5e1ba6802731377abb98299d954636e5f01bf0be8de542acbcab694145fbf89665e
+  languageName: node
+  linkType: hard
+
+"pouchdb-collections@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "pouchdb-collections@npm:1.0.1"
+  checksum: c6145cbd617db681cfd6b68e5c2bc765419976f1863180ca6ff4a96944f0608797988114900828d653839509a2c6a9776dc1c020adb91f57a4b93bbd743cfbad
   languageName: node
   linkType: hard
 
@@ -9437,6 +9490,13 @@ __metadata:
   version: 2.3.8
   resolution: "through@npm:2.3.8"
   checksum: c9d6883ace26b3c967283827cafdd4ceee6164fa4d3754865f5032dcb564e0cbdea9dc6f43806afa51e1f2863d8e3beca141cbf7b8dcff989982aef69bb851c0
+  languageName: node
+  linkType: hard
+
+"tiny-queue@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "tiny-queue@npm:0.2.1"
+  checksum: 6d698ab09dc834ab8c2388a9f967b1df1db782fd9a95921f7699e17b68ca319740f194c9803c2c1c2b1b539a505439fbf9d699ebd4903597d60de7dc5ba451a5
   languageName: node
   linkType: hard
 
