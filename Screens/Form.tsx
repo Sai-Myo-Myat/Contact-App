@@ -9,28 +9,38 @@ import moment from "moment"
 interface InputType {
     name: string,
     phoneNumber: string,
-    dateOfBirth: Date,
-    remark?: string
+    dateOfBirth: string,
+    remark: string
 }
 
 import tw from "twrnc"
 import CustomButton from "../Components/CustomButton"
+import { db } from "../db"
 
 
 const Form = () => {
+
+    const addContact = ({name,phoneNumber,dateOfBirth,remark}: InputType) => {
+        db.transaction(tx => {
+            tx.executeSql('INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) values (?,?,?,?)',
+            [name,phoneNumber,dateOfBirth,remark],
+            (txObj,addedData) => console.log(addedData, "addedData")),
+            (txObj, error: any ) => console.log("error", error)
+        })
+    }
 
     const bottomSheetModelRef = useRef<BottomSheetModal>(null)
     const {register, handleSubmit, control, formState:{errors}} = useForm<InputType>({
         defaultValues: {
             name: "",
             phoneNumber: "",
-            dateOfBirth: new Date,
-            remark: ""
+            dateOfBirth: new Date('2000-1-1').toString(),
+            remark: " "
         }
     });
 
     const snapPoints = useMemo(() => ['25%', '50%'], []);
-    const onSubmit: SubmitHandler<InputType> = data => console.log(data, "data")
+    const onSubmit: SubmitHandler<InputType> = data => console.log(data)
 
 
 

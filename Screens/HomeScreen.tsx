@@ -1,4 +1,4 @@
-import { View, Text, Button, TextInput } from "react-native"
+import { View, Text, Button, TextInput, ActivityIndicator } from "react-native"
 import { useEffect, useState } from "react";
 
 import { FlashList } from "@shopify/flash-list"
@@ -12,14 +12,14 @@ import { db } from "../db";
 interface InputType {
     name: string,
     phoneNumber: string,
-    dateOfBirth: Date,
+    dateOfBirth: string,
     remark?: string
 }
 
 const HomeScreen = ({ navigation }) => {
 
-    // const [data,setData] = useState<InputType[]>([])
-
+    const [dataState,setDataState] = useState<InputType[]>([])
+  
     const fetchAllContact = () => {
         db.transaction(tx => {
           tx.executeSql('SELECT * FROM contact', [],
@@ -27,6 +27,9 @@ const HomeScreen = ({ navigation }) => {
             (_txObj, error) => console.log("error: ", error)
         )})
       }
+
+    const {isLoading, isError, data, error} = useQuery("fetchAllContact", fetchAllContact)
+
     useEffect(
         () => {
             db.transaction(tx => {
@@ -34,15 +37,16 @@ const HomeScreen = ({ navigation }) => {
                   'CREATE TABLE IF NOT EXISTS contact (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phoneNumber TEXT, dateOfBirth TEXT, remark TEXT)'
                 )
             })
+            setDataState(data ? data : [])
         }
+       
     ,[])
-
-    const {isLoading,isError, data, error} = useQuery("fetchAllContact", fetchAllContact)
 
     if (isLoading) {
         return (
-            <View style={[tw`bg-[#212A3E] w-full h-full`]}>
-                <Text>Loading ......</Text>
+            <View style={[tw`bg-[#212A3E] w-full h-full p-10`]}>
+                <ActivityIndicator />
+                <Text style={[tw`text-[#F1F6F9]`]}>Loading ......</Text>
             </View>
         )
     }
@@ -50,18 +54,7 @@ const HomeScreen = ({ navigation }) => {
     return (
         <View style={[tw`bg-[#212A3E] w-full h-full`]}>
             <FlashList  data={
-                [
-                    {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-                    {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-                    {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-                    {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-                    {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-                    {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-                    {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-                    {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-                    {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-                    {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-                ]   
+                dataState.length > 0 ? [...dataState] : [ {"name": "Test User", "phoneNumber": "093522453", "dateOfBirth": "2000-4-14", "remark": "remark (optional)"}]
             }
                 renderItem={({item}) => {
                     return (
