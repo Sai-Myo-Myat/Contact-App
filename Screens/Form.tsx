@@ -1,13 +1,15 @@
 import { View, Text, TextInput, StyleSheet, Button } from "react-native"
-import { useMemo, useRef } from "react"
+import { useMemo, useRef, useState } from "react"
 
 import {useForm, SubmitHandler, Controller} from "react-hook-form"
 import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet"
+import DatePicker from "@react-native-community/datetimepicker"
+import moment from "moment"
 
 interface InputType {
     name: string,
     phoneNumber: string,
-    dateOfBirth: string,
+    dateOfBirth: Date,
     remark?: string
 }
 
@@ -22,7 +24,7 @@ const Form = () => {
         defaultValues: {
             name: "",
             phoneNumber: "",
-            dateOfBirth: "",
+            dateOfBirth: new Date,
             remark: ""
         }
     });
@@ -33,18 +35,9 @@ const Form = () => {
     return (
         <BottomSheetModalProvider >
             <View style={[tw`bg-[#212A3E] p-5 h-full text-[#F1F6F9] flex justify-center items-center gap-2`]}>
-            {/* <Button title="open" onPress={() => bottomSheetModelRef.current?.present()}/>
-            <Button title="close" onPress={() => bottomSheetModelRef.current?.dismiss()}/>
-            <BottomSheetModal 
-                ref={bottomSheetModelRef}
-                index={1}
-                onChange={(index) => console.log(index)}
-                snapPoints={snapPoints}
-            >
-                <Text>Bottom Sheet Model</Text>
-            </BottomSheetModal> */}
+        
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Name</Text>
-            <Controller 
+            <Controller
                 control={control}
                 name="name"
                 render = {({field: {onChange, value, onBlur}}) => (
@@ -71,6 +64,32 @@ const Form = () => {
                     placeholderTextColor={"#9BA4B5"}
                     style={[tw`p-2 border w-full rounded-lg`,styles.textInput ]}/>
                 )}/>
+
+
+            <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
+            <Button title="Open" onPress={() => bottomSheetModelRef.current?.present()}/>
+            <BottomSheetModal 
+                ref={bottomSheetModelRef}
+                index={1}
+                onChange={(index) => console.log(index)}
+                snapPoints={snapPoints}
+            >
+                <Controller 
+                control={control}
+                name="dateOfBirth"
+                render = {({field: {onChange, value, onBlur}}) => (
+                    <DatePicker
+                        {...register("dateOfBirth")}
+                        value={new Date(value)}
+                        mode="date"
+                        onChange={(date) => {
+                            onChange(date)
+                            bottomSheetModelRef.current?.dismiss()
+                        }}
+                    />
+                    
+                )}/>
+            </BottomSheetModal>
             
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Remark</Text>
             <Controller 
@@ -106,3 +125,4 @@ export default Form;
                 placeholder="Name"
                 placeholderTextColor={"#9BA4B5"}
                 style={[tw`p-2 border w-full rounded-lg`,styles.textInput ]}/> */}
+

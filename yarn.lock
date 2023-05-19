@@ -2400,6 +2400,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/datetimepicker@npm:6.7.3":
+  version: 6.7.3
+  resolution: "@react-native-community/datetimepicker@npm:6.7.3"
+  dependencies:
+    invariant: "npm:^2.2.4"
+  checksum: cd3e3cf2f596a2a11875630bceb64d97de0f42de58c5a56a16caf5ffae47d923bf0ef6afb8326fc737604a07dc999ef1a8102fb88cdf1af74fcf071743d8dacd
+  languageName: node
+  linkType: hard
+
 "@react-native/assets@npm:1.0.0":
   version: 1.0.0
   resolution: "@react-native/assets@npm:1.0.0"
@@ -2418,6 +2427,19 @@ __metadata:
   version: 2.0.0
   resolution: "@react-native/polyfills@npm:2.0.0"
   checksum: d08c9107eeb00d245118246124be2b54c1119560622b0c14b8f7f6b2cb3c0908952eaf884189c9d92d0713b06b69b446ddff948e841f12c154bf88b6c2b609fa
+  languageName: node
+  linkType: hard
+
+"@react-native/virtualized-lists@npm:^0.72.4":
+  version: 0.72.4
+  resolution: "@react-native/virtualized-lists@npm:0.72.4"
+  dependencies:
+    invariant: "npm:^2.2.4"
+    nullthrows: "npm:^1.1.1"
+  peerDependencies:
+    react-native: "*"
+    react-test-renderer: 18.2.0
+  checksum: ba2f3ca045260422275ffb3d68bb3ad5c0270ea2a6ae35b2a9a8e3dad00fa899abeb63ebca0415235699e9f8215b961220ce5b310502c1b9e10a23546cfa983e
   languageName: node
   linkType: hard
 
@@ -2600,6 +2622,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-native-datepicker@npm:^1":
+  version: 1.7.1
+  resolution: "@types/react-native-datepicker@npm:1.7.1"
+  dependencies:
+    "@types/react": "npm:*"
+    "@types/react-native": "npm:*"
+    moment: "npm:>=2.14.0"
+  checksum: 3c3c5dd8a021ab38eee0c82529740b727661ad3ae2b349e9b18cca0deee6157e00694f6bd47baebf58fa1f2150bc1b481999791026e52228bc9154f1ca1d9c79
+  languageName: node
+  linkType: hard
+
 "@types/react-native-vector-icons@npm:^6.4.13":
   version: 6.4.13
   resolution: "@types/react-native-vector-icons@npm:6.4.13"
@@ -2607,6 +2640,16 @@ __metadata:
     "@types/react": "npm:*"
     "@types/react-native": "npm:^0.70"
   checksum: 4429a1770e988b1aa938cd9f39b992156b1796dbf9cc6b6936127927ef10f6f18f75df621c2bb19e57192cd982f766d304bc7b03bcb7e22e3923fe385ea097bb
+  languageName: node
+  linkType: hard
+
+"@types/react-native@npm:*":
+  version: 0.72.0
+  resolution: "@types/react-native@npm:0.72.0"
+  dependencies:
+    "@react-native/virtualized-lists": "npm:^0.72.4"
+    "@types/react": "npm:*"
+  checksum: 0e83707026d78244307281cef9c26df70ec59ad31c8cf2428a79dff62ee01202e33c54bc00747f356399592bb419cdf869db0b5918efbf0dbb6059936180cf08
   languageName: node
   linkType: hard
 
@@ -3903,16 +3946,19 @@ __metadata:
     "@babel/core": "npm:^7.20.0"
     "@expo/vector-icons": "npm:^13.0.0"
     "@gorhom/bottom-sheet": "npm:^4.4.6"
+    "@react-native-community/datetimepicker": "npm:6.7.3"
     "@react-navigation/native": "npm:^6.1.6"
     "@react-navigation/native-stack": "npm:^6.9.12"
     "@types/react": "npm:~18.0.14"
+    "@types/react-native-datepicker": "npm:^1"
     "@types/react-native-vector-icons": "npm:^6.4.13"
     expo: "npm:~48.0.15"
     expo-status-bar: "npm:~1.4.4"
+    moment: "npm:^2.29.4"
     react: "npm:18.2.0"
     react-hook-form: "npm:^7.43.9"
     react-native: "npm:0.71.8"
-    react-native-date-picker: "npm:^4.2.13"
+    react-native-datepicker: "npm:^1.7.2"
     react-native-gesture-handler: "npm:~2.9.0"
     react-native-reanimated: "npm:~2.14.4"
     react-native-safe-area-context: "npm:4.5.0"
@@ -6984,6 +7030,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"moment@npm:>=2.14.0, moment@npm:^2.22.0, moment@npm:^2.29.4":
+  version: 2.29.4
+  resolution: "moment@npm:2.29.4"
+  checksum: d275537a30f155cae7f53f6e6d164ccb59b560935f3c6ed0f4a2e6f3503063b491ffa6b4f7e7207501f6fcab92a2d0bb78ed539cde33cadcb91df6b254f7328d
+  languageName: node
+  linkType: hard
+
 "ms@npm:2.0.0":
   version: 2.0.0
   resolution: "ms@npm:2.0.0"
@@ -7826,7 +7879,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:*, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:*, prop-types@npm:^15.7.2":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -7985,15 +8038,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-date-picker@npm:^4.2.13":
-  version: 4.2.13
-  resolution: "react-native-date-picker@npm:4.2.13"
+"react-native-datepicker@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "react-native-datepicker@npm:1.7.2"
   dependencies:
-    prop-types: "npm:^15.8.1"
-  peerDependencies:
-    react: ">= 17.0.1"
-    react-native: ">= 0.64.3"
-  checksum: de42f75effeb25ecb710e4b51e1f98a430d65238982a3b854475cfedaea82b8e52e5b83591c472c145995b55ff59073288ff4fcc16ab132b6f5ec5874df287ac
+    moment: "npm:^2.22.0"
+  checksum: 3070180f110a634e8780e8339f15210f521cfbfa4ab348dac6835198492438ad2c15d9b60c8164ae3bb7e8aaf2eb32f5f642c1cacf63319f36431503e0022305
   languageName: node
   linkType: hard
 
