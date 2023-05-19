@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, Button } from "react-native"
+import { View, Text, TextInput, StyleSheet, Button, Pressable, Touchable } from "react-native"
 import { useMemo, useRef, useState } from "react"
 
 import {useForm, SubmitHandler, Controller} from "react-hook-form"
@@ -31,6 +31,10 @@ const Form = () => {
 
     const snapPoints = useMemo(() => ['25%', '50%'], []);
     const onSubmit: SubmitHandler<InputType> = data => console.log(data, "data")
+
+
+
+    const [dob, setDob] = useState<string>("")
 
     return (
         <BottomSheetModalProvider >
@@ -67,8 +71,10 @@ const Form = () => {
 
 
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
-            <Button title="Open" onPress={() => bottomSheetModelRef.current?.present()}/>
-            <BottomSheetModal 
+            <Pressable  style={[tw`self-start border px-2 py-3 rounded-lg w-full`]} onPress={() => bottomSheetModelRef.current?.present()}>
+                <Text style={[tw`text-[#F1F6F9] ${dob === "" ? 'opacity-50' : ''}`]}>{dob? dob : "2000-1-1"}</Text>
+            </Pressable>
+            <BottomSheetModal
                 ref={bottomSheetModelRef}
                 index={1}
                 onChange={(index) => console.log(index)}
@@ -79,13 +85,16 @@ const Form = () => {
                 name="dateOfBirth"
                 render = {({field: {onChange, value, onBlur}}) => (
                     <DatePicker
-                        {...register("dateOfBirth")}
-                        value={new Date(value)}
-                        mode="date"
-                        onChange={(date) => {
-                            onChange(date)
-                            bottomSheetModelRef.current?.dismiss()
-                        }}
+                            {...register("dateOfBirth")}
+                            value={new Date(value)}
+                            mode="date"
+                            display="spinner"
+                            onChange={(event, date) => {
+                                const formattedDate = moment(date?.toString()).format("YYYY,MM,DD")
+                                onChange(formattedDate)
+                                setDob(formattedDate)
+                                bottomSheetModelRef.current?.dismiss()
+                            }}
                     />
                     
                 )}/>
