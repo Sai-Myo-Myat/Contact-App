@@ -1,9 +1,10 @@
 import { View, Text, TextInput, StyleSheet, Button, Pressable, Touchable } from "react-native"
-import { useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 import {useForm, SubmitHandler, Controller} from "react-hook-form"
 import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import DatePicker from "@react-native-community/datetimepicker"
+import { useQuery } from "react-query"
 import moment from "moment"
 import { useNavigation } from "@react-navigation/native"
 
@@ -24,17 +25,50 @@ const Form = ({navigation, route}) => {
     const {editMode, id} = route.params;
 
     console.log("route", editMode, id)
+    //phoneNumber dateOfBirth remark
+    const getContactPromise = (args = [1]) => {
+        return new Promise((resolve, reject) => {
+            db.exec([{sql: "SELECT *  FROM contact WHERE id = ? ", args}], false, (err,res) => {
+                if(err) {
+                    return reject(err)
+                }
 
-    const addContact = ({name,phoneNumber,dateOfBirth,remark}: InputType) => {
-        db.transaction(tx => {
-            tx.executeSql('INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) values (?,?,?,?)',
-            [name,phoneNumber,dateOfBirth,remark],
-            (txObj,addedData) => console.log(addedData, "addedData")),
-            (txObj, error: any ) => console.log("error", error)
+                return resolve(res)
+            })
         })
     }
 
-    const bottomSheetModelRef = useRef<BottomSheetModal>(null)
+    const getContact = async () => {
+       if ( editMode) {
+        return  getContactPromise()
+                    .then(res => res[0]["rows"])
+                    .catch(err => console.log(err))
+       }
+    //    return {"name": "name", "phoneNumber": "phone number", "dateOfBirth": "2000-4-14", "remark": "remark (optional)"}
+    }
+
+    const addContact = ({name,phoneNumber,dateOfBirth,remark}: InputType) => {
+        let array = [name,phoneNumber,dateOfBirth,remark]
+        let queryString = 'INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) values (?,?,?,?)'
+        if( editMode ) {
+            array = [...array, id]
+            queryString = 'UPDATE contact SET name = ? phoneNumber = ? dateOfBirth = ? remark = ? WHERE id = ?'
+        }
+
+        db.transaction(tx => {
+            tx.executeSql(queryString,
+            array,
+            (txObj,data) => console.log(data, "data"),
+            (txObj, error: any ) => console.log("error", error));
+        })
+    }
+
+    const snapPoints = useMemo(() => ['25%', '50%'], []);
+    const onSubmit: SubmitHandler<InputType> = data => {
+        addContact(data)
+        navigation.navigate("Home")
+    }
+
     const {register, handleSubmit, control, formState:{errors}} = useForm<InputType>({
         defaultValues: {
             name: "",
@@ -44,15 +78,12 @@ const Form = ({navigation, route}) => {
         }
     });
 
-    const snapPoints = useMemo(() => ['25%', '50%'], []);
-    const onSubmit: SubmitHandler<InputType> = data => {
-        addContact(data)
-        navigation.navigate("Home")
-    }
 
 
-
+    const bottomSheetModelRef = useRef<BottomSheetModal>(null)
     const [dob, setDob] = useState<string>("")
+    const {isLoading, isError, data, error} = useQuery("getContact", getContact)
+
 
     return (
         <BottomSheetModalProvider >
@@ -64,7 +95,7 @@ const Form = ({navigation, route}) => {
                 name="name"
                 render = {({field: {onChange, value, onBlur}}) => (
                     <TextInput {...register("name")}
-                        placeholder="Name"
+                        placeholder= {editMode && data ? data[0].name : "name"}
                         value={value}
                         onBlur={onBlur}
                         onChangeText={value => onChange(value)}
@@ -79,7 +110,7 @@ const Form = ({navigation, route}) => {
                 name="phoneNumber"
                 render = {({field: {onChange, value, onBlur}}) => (
                     <TextInput {...register("phoneNumber")} 
-                    placeholder="Phone Number"
+                    placeholder={editMode && data ? data[0].phoneNumber : "name"}
                     value={value}
                     onBlur={onBlur}
                     onChangeText={value => onChange(value)}
@@ -126,7 +157,7 @@ const Form = ({navigation, route}) => {
                     <TextInput {...register("remark")} 
                     multiline={true}
                     numberOfLines={5}
-                    placeholder="Remark (optional)"
+                    placeholder={editMode && data ? data[0].remark : "remark ( optional )"}
                     value={value}
                     onBlur={onBlur}
                     onChangeText={value => onChange(value)}

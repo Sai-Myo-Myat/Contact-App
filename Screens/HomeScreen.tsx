@@ -46,7 +46,6 @@ const HomeScreen = ({ navigation }) => {
 
     // const {isLoading, isError, data, error} = useQuery("fetchAllContact", fetchData)
 
-    const {dataObj, setDataObj} = useState({})
 
     const {isLoading, isError, data, error} = useQuery("fetchAllContact", fetchData)
     
@@ -60,6 +59,8 @@ const HomeScreen = ({ navigation }) => {
         }
        
     ,[])
+
+    console.log(data, data)
 
     if (isLoading) {
         return (
