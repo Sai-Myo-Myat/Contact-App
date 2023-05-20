@@ -5,6 +5,7 @@ import {useForm, SubmitHandler, Controller} from "react-hook-form"
 import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import DatePicker from "@react-native-community/datetimepicker"
 import moment from "moment"
+import { useNavigation } from "@react-navigation/native"
 
 interface InputType {
     name: string,
@@ -19,6 +20,8 @@ import { db } from "../db"
 
 
 const Form = () => {
+
+    const navigation = useNavigation()
 
     const addContact = ({name,phoneNumber,dateOfBirth,remark}: InputType) => {
         db.transaction(tx => {
@@ -40,7 +43,10 @@ const Form = () => {
     });
 
     const snapPoints = useMemo(() => ['25%', '50%'], []);
-    const onSubmit: SubmitHandler<InputType> = data => console.log(data)
+    const onSubmit: SubmitHandler<InputType> = data => {
+        addContact(data)
+        navigation.navigate("Home")
+    }
 
 
 

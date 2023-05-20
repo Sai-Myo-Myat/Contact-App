@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 
 import { FlashList } from "@shopify/flash-list"
 import tw from 'twrnc';
-import { useQuery } from "react-query";
+import { Query, useQuery } from "react-query";
 
 import ContactItem from "../Components/ContactItem"
 
 import { db } from "../db";
+import { Retryer } from "react-query/types/core/retryer";
 
 interface InputType {
     name: string,
@@ -16,19 +17,41 @@ interface InputType {
     remark?: string
 }
 
+
 const HomeScreen = ({ navigation }) => {
 
-    const [dataState,setDataState] = useState<InputType[]>([])
-  
-    const fetchAllContact = () => {
-        db.transaction(tx => {
-          tx.executeSql('SELECT * FROM contact', [],
-            (_txObj, { rows: { _array } }) => console.log("data:", _array),
-            (_txObj, error) => console.log("error: ", error)
-        )})
-      }
+    const {dataState, setDataState} = useState<InputType[]>([])
 
-    const {isLoading, isError, data, error} = useQuery("fetchAllContact", fetchAllContact)
+
+    const fetchingPromise = (args = []) => {
+        return new Promise((resolve, reject) => {
+            db.exec([{sql: "SELECT * FROM contact", args}], false, (err,res) => {
+                if(err) {
+                    return reject(err)
+                }
+
+                return resolve(res)
+            })
+        })
+    }
+
+    const fetchData =  async () => {
+        return fetchingPromise()
+            .then(res => {
+                // console.log(res[0]["rows"], "from promise")
+                return res[0]["rows"]
+            })
+            .catch(err => console.log(err, "this is error heee"))
+    }
+
+    const {isLoading, isError, data, error} = useQuery("fetchAllContact", fetchData, {
+        refetchOnWindowFocus: true,
+        staleTime: 0,
+        cacheTime: 0,
+        refetchInterval: 0,
+      })
+
+      console.log(data, "secondData")
 
     useEffect(
         () => {
@@ -37,14 +60,14 @@ const HomeScreen = ({ navigation }) => {
                   'CREATE TABLE IF NOT EXISTS contact (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phoneNumber TEXT, dateOfBirth TEXT, remark TEXT)'
                 )
             })
-            setDataState(data ? data : [])
         }
+        
        
-    ,[])
+    ,[data])
 
     if (isLoading) {
         return (
-            <View style={[tw`bg-[#212A3E] w-full h-full p-10`]}>
+            <View style ={[tw`bg-[#212A3E] w-full h-full p-10`]}>
                 <ActivityIndicator />
                 <Text style={[tw`text-[#F1F6F9]`]}>Loading ......</Text>
             </View>
@@ -54,7 +77,7 @@ const HomeScreen = ({ navigation }) => {
     return (
         <View style={[tw`bg-[#212A3E] w-full h-full`]}>
             <FlashList  data={
-                dataState.length > 0 ? [...dataState] : [ {"name": "Test User", "phoneNumber": "093522453", "dateOfBirth": "2000-4-14", "remark": "remark (optional)"}]
+                data ? [...data] : [ {"name": "Test User", "phoneNumber": "093522453", "dateOfBirth": "2000-4-14", "remark": "remark (optional)"}]
             }
                 renderItem={({item}) => {
                     return (
