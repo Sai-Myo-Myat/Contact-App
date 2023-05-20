@@ -6,12 +6,21 @@ import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
+import { db } from "../db";
+
 interface Props {
     name: string,
     phoneNumber: string,
     dateOfBirth?: Date,
     remark?: string
     id: number,
+}
+
+const deleteContact = (id: number) => {
+    db.transaction(tx => {
+        tx.executeSql('DELETE FROM contact WHERE id = ? ', [id],
+          (txObj, result) => console.log(result) );
+      })
 }
 
 const ContactItem:FC<Props> = ({name,phoneNumber, id}) => {
@@ -28,7 +37,7 @@ const ContactItem:FC<Props> = ({name,phoneNumber, id}) => {
                 <Pressable style={[tw`mr-2`]} onPress={() => navigation.navigate("Form" ,{editMode: true, id:id})}>
                     <Feather name="edit" size={20} color="#F1F6F9" />
                 </Pressable>
-                <Pressable style={[tw`mr-2`]} onPress={() => console.log("delete button")}>
+                <Pressable style={[tw`mr-2`]} onPress={() => deleteContact(id)}>
                     <AntDesign name="delete" size={20} color={"#F1F6F9"}/>
                 </Pressable>
             </View>

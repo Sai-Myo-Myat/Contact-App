@@ -23,10 +23,12 @@ import { db } from "../db"
 const Form = ({navigation, route}) => {
 
     const {editMode, id} = route.params;
+    const bottomSheetModelRef = useRef<BottomSheetModal>(null)
+    const [dob, setDob] = useState<string>("")
 
     console.log("route", editMode, id)
-    //phoneNumber dateOfBirth remark
-    const getContactPromise = (args = [1]) => {
+   
+    const getContactPromise = (args:number[] = []) => {
         return new Promise((resolve, reject) => {
             db.exec([{sql: "SELECT *  FROM contact WHERE id = ? ", args}], false, (err,res) => {
                 if(err) {
@@ -40,12 +42,18 @@ const Form = ({navigation, route}) => {
 
     const getContact = async () => {
        if ( editMode) {
-        return  getContactPromise()
-                    .then(res => res[0]["rows"])
+        return  getContactPromise([id])
+                    .then(res => {
+                        const result = res[0]["rows"][0]
+                        console.log(result, "result from promise")
+                        setDob(result.dateOfBirth)
+                        return result
+                    })
                     .catch(err => console.log(err))
        }
-    //    return {"name": "name", "phoneNumber": "phone number", "dateOfBirth": "2000-4-14", "remark": "remark (optional)"}
     }
+
+    console.log(dob, "this is dob")
 
     const addContact = ({name,phoneNumber,dateOfBirth,remark}: InputType) => {
         let array = [name,phoneNumber,dateOfBirth,remark]
@@ -79,11 +87,7 @@ const Form = ({navigation, route}) => {
     });
 
 
-
-    const bottomSheetModelRef = useRef<BottomSheetModal>(null)
-    const [dob, setDob] = useState<string>("")
     const {isLoading, isError, data, error} = useQuery("getContact", getContact)
-
 
     return (
         <BottomSheetModalProvider >
@@ -95,7 +99,7 @@ const Form = ({navigation, route}) => {
                 name="name"
                 render = {({field: {onChange, value, onBlur}}) => (
                     <TextInput {...register("name")}
-                        placeholder= {editMode && data ? data[0].name : "name"}
+                        placeholder= {editMode && data ? data.name : "name"}
                         value={value}
                         onBlur={onBlur}
                         onChangeText={value => onChange(value)}
@@ -110,7 +114,7 @@ const Form = ({navigation, route}) => {
                 name="phoneNumber"
                 render = {({field: {onChange, value, onBlur}}) => (
                     <TextInput {...register("phoneNumber")} 
-                    placeholder={editMode && data ? data[0].phoneNumber : "name"}
+                    placeholder={editMode && data ? data.phoneNumber : "phone number"}
                     value={value}
                     onBlur={onBlur}
                     onChangeText={value => onChange(value)}
@@ -121,7 +125,7 @@ const Form = ({navigation, route}) => {
 
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
             <Pressable  style={[tw`self-start border border-[#394867] px-2 py-3 rounded-lg w-full`]} onPress={() => bottomSheetModelRef.current?.present()}>
-                <Text style={[tw`text-[#F1F6F9] ${dob === "" ? 'opacity-50' : ''}`]}>{dob? dob : "2000-1-1"}</Text>
+                <Text style={[tw`text-[#F1F6F9] ${dob === "" ? 'opacity-50' : ''}`]}>{ dob? dob : "2000-1-1"}</Text>
             </Pressable>
             <BottomSheetModal
                 ref={bottomSheetModelRef}
@@ -157,7 +161,6 @@ const Form = ({navigation, route}) => {
                     <TextInput {...register("remark")} 
                     multiline={true}
                     numberOfLines={5}
-                    placeholder={editMode && data ? data[0].remark : "remark ( optional )"}
                     value={value}
                     onBlur={onBlur}
                     onChangeText={value => onChange(value)}

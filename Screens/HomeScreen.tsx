@@ -18,36 +18,38 @@ interface InputType {
     setDataState: () => void
 }
 
+interface Result {
+    data: [],
+    setFun: (value: []) => void
+}
 
-    const fetchingPromise = (args = []) => {
-        return new Promise((resolve, reject) => {
-            db.exec([{sql: "SELECT * FROM contact", args}], false, (err,res) => {
-                if(err) {
-                    return reject(err)
-                }
 
-                return resolve(res)
-            })
+const fetchingPromise = (args = []) => {
+    return new Promise((resolve, reject) => {
+        db.exec([{sql: "SELECT * FROM contact", args}], false, (err,res) => {
+            if(err) {
+                return reject(err)
+            }
+
+            return resolve(res)
         })
-    }
+    })
+}
 
-    const fetchData =  async () => {
-        return fetchingPromise()
-            .then(res => {
-                // console.log(res[0]["rows"], "from promise")
-                return res[0]["rows"]
-            })
-            .catch(err => console.log("error:", err))
-    }
+const fetchData =  async () => {
+    return fetchingPromise()
+        .then(res => {
+            return res[0]["rows"]
+        })
+        .catch(err => console.log("error:", err))
+}
+
 
 
 const HomeScreen = ({ navigation }) => {
 
-
-    // const {isLoading, isError, data, error} = useQuery("fetchAllContact", fetchData)
-
-
     const {isLoading, isError, data, error} = useQuery("fetchAllContact", fetchData)
+
     
     useEffect(
         () => {
@@ -55,12 +57,10 @@ const HomeScreen = ({ navigation }) => {
                 tx.executeSql(
                   'CREATE TABLE IF NOT EXISTS contact (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phoneNumber TEXT, dateOfBirth TEXT, remark TEXT)'
                 )
-            })     
+            })
         }
        
     ,[])
-
-    console.log(data, data)
 
     if (isLoading) {
         return (
@@ -82,6 +82,7 @@ const HomeScreen = ({ navigation }) => {
                     )
                 }} 
                 estimatedItemSize={200}
+                extraData={data}
                 
             />
         </View>
