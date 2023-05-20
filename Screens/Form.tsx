@@ -53,14 +53,24 @@ const Form = ({navigation, route}) => {
        }
     }
 
-    console.log(dob, "this is dob")
+    const {isLoading, isError, data, error} = useQuery("getContact", getContact)
+
+    // console.log(dob, "this is dob")
 
     const addContact = ({name,phoneNumber,dateOfBirth,remark}: InputType) => {
         let array = [name,phoneNumber,dateOfBirth,remark]
         let queryString = 'INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) values (?,?,?,?)'
         if( editMode ) {
-            array = [...array, id]
-            queryString = 'UPDATE contact SET name = ? phoneNumber = ? dateOfBirth = ? remark = ? WHERE id = ?'
+            console.log([array], "arrayyyy")
+            array = [
+                name === "" ? data.name : name,
+                phoneNumber === "" ? data.phoneNumber : phoneNumber,
+                dateOfBirth === "" ? data.dateOfBirth : dateOfBirth,
+                remark === "" ? data.remark : remark,
+                id
+            ]
+            console.log(array, "arrayasdf")
+            queryString = 'UPDATE contact SET name = ?, phoneNumber = ?, dateOfBirth = ?, remark = ? WHERE id = ?'
         }
 
         db.transaction(tx => {
@@ -86,8 +96,6 @@ const Form = ({navigation, route}) => {
         }
     });
 
-
-    const {isLoading, isError, data, error} = useQuery("getContact", getContact)
 
     return (
         <BottomSheetModalProvider >
@@ -162,7 +170,8 @@ const Form = ({navigation, route}) => {
                     multiline={true}
                     numberOfLines={5}
                     value={value}
-                    onBlur={onBlur}
+                    placeholder={editMode && data ? data.remark : "remark ( optional )"}
+                    onBlur={onBlur} 
                     onChangeText={value => onChange(value)}
                     placeholderTextColor={"#9BA4B5"}
                     style={[tw`p-2 border border-[#394867] w-full rounded-lg`,styles.textInput ]}/>

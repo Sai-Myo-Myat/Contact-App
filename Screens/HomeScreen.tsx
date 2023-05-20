@@ -18,12 +18,6 @@ interface InputType {
     setDataState: () => void
 }
 
-interface Result {
-    data: [],
-    setFun: (value: []) => void
-}
-
-
 const fetchingPromise = (args = []) => {
     return new Promise((resolve, reject) => {
         db.exec([{sql: "SELECT * FROM contact", args}], false, (err,res) => {
