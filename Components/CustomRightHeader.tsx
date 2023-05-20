@@ -13,7 +13,7 @@ const CustomRightHeader = () => {
             <Pressable style={[tw`mr-2`]} onPress={() => console.log("search button")}>
                 <Feather name="search" size={30} style={[tw`text-[#F1F6F9]`]} />
             </Pressable>
-            <Pressable onPress={() => navigation.navigate("Form")}>
+            <Pressable onPress={() => navigation.navigate("Form", {editMode: false, id: null})}>
                 <AntDesign name="plus" size={30} style={[tw`text-[#F1F6F9]`]} />
             </Pressable>
         </View>

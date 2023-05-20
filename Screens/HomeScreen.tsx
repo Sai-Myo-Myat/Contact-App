@@ -15,12 +15,8 @@ interface InputType {
     phoneNumber: string,
     dateOfBirth: string,
     remark?: string
+    setDataState: () => void
 }
-
-
-const HomeScreen = ({ navigation }) => {
-
-    const {dataState, setDataState} = useState<InputType[]>([])
 
 
     const fetchingPromise = (args = []) => {
@@ -41,29 +37,29 @@ const HomeScreen = ({ navigation }) => {
                 // console.log(res[0]["rows"], "from promise")
                 return res[0]["rows"]
             })
-            .catch(err => console.log(err, "this is error heee"))
+            .catch(err => console.log("error:", err))
     }
 
-    const {isLoading, isError, data, error} = useQuery("fetchAllContact", fetchData, {
-        refetchOnWindowFocus: true,
-        staleTime: 0,
-        cacheTime: 0,
-        refetchInterval: 0,
-      })
 
-      console.log(data, "secondData")
+const HomeScreen = ({ navigation }) => {
 
+
+    // const {isLoading, isError, data, error} = useQuery("fetchAllContact", fetchData)
+
+    const {dataObj, setDataObj} = useState({})
+
+    const {isLoading, isError, data, error} = useQuery("fetchAllContact", fetchData)
+    
     useEffect(
         () => {
             db.transaction(tx => {
                 tx.executeSql(
                   'CREATE TABLE IF NOT EXISTS contact (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phoneNumber TEXT, dateOfBirth TEXT, remark TEXT)'
                 )
-            })
+            })     
         }
-        
        
-    ,[data])
+    ,[])
 
     if (isLoading) {
         return (
@@ -81,10 +77,11 @@ const HomeScreen = ({ navigation }) => {
             }
                 renderItem={({item}) => {
                     return (
-                        <ContactItem name={item?.name} phoneNumber={item.phoneNumber}/>
+                        <ContactItem name={item?.name} phoneNumber={item.phoneNumber} id = {item.id}/>
                     )
                 }} 
-                estimatedItemSize={20}
+                estimatedItemSize={200}
+                
             />
         </View>
     )   

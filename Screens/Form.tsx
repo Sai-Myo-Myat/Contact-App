@@ -19,9 +19,11 @@ import CustomButton from "../Components/CustomButton"
 import { db } from "../db"
 
 
-const Form = () => {
+const Form = ({navigation, route}) => {
 
-    const navigation = useNavigation()
+    const {editMode, id} = route.params;
+
+    console.log("route", editMode, id)
 
     const addContact = ({name,phoneNumber,dateOfBirth,remark}: InputType) => {
         db.transaction(tx => {
