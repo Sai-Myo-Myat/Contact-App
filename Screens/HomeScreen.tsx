@@ -3,12 +3,11 @@ import { useEffect, useState } from "react";
 
 import { FlashList } from "@shopify/flash-list"
 import tw from 'twrnc';
-import { useQueryClient, useQuery } from "react-query";
+import { useQueryClient, useQuery, useInfiniteQuery } from "react-query";
 
 import ContactItem from "../Components/ContactItem"
 
 import { db } from "../db";
-import { Retryer } from "react-query/types/core/retryer";
 
 interface InputType {
     name: string,
@@ -19,8 +18,11 @@ interface InputType {
 }
 
 const fetchingPromise = (args = []) => {
-    return new Promise((resolve, reject) => {
-        db.exec([{sql: "SELECT * FROM contact", args}], false, (err,res) => {
+    //DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT SET @PageNumber = 1 SET @RowsOfPage = 2 SELECT * FROM contact OFFSET (@PageNumber-1)*@RowsOfPage ROWS
+    return new Promise((resolve, reject) => { 
+        db.exec([{
+            sql: "SELECT * FROM contact", args}
+        ], false, (err,res) => {
             if(err) {
                 return reject(err)
             }
@@ -44,10 +46,24 @@ const HomeScreen = ({ navigation }) => {
 
     const queryClient = useQueryClient();
 
-    queryClient.invalidateQueries({queryKey: ["fetchContact"]})
+    queryClient.invalidateQueries({queryKey: ["fetchContact"]});
 
-    const {isLoading, isError, data, error} = useQuery("fetchContact", fetchData)
+    const {isLoading, isError, data, error} = useQuery("fetchContact", fetchData);
 
+    // const {
+    //     data,
+    //     error,
+    //     isFetching,
+    //     isFetchingNextPage,
+    //     isFetchingPreviousPage,
+
+    // } = useInfiniteQuery(["fetchContact"],async () => {
+    //     const res = await fetchData();
+    //     // console.log("this is res", res)
+    //     return res
+    // })
+
+    // console.log(data?.pages, "this is pages")
     
     useEffect(
         () => {
@@ -72,17 +88,25 @@ const HomeScreen = ({ navigation }) => {
     return (
         <View style={[tw`bg-[#212A3E] w-full h-full`]}>
             <FlashList  data={
-                data ? [...data] : [ {"name": "Test User", "phoneNumber": "093522453", "dateOfBirth": "2000-4-14", "remark": "remark (optional)"}]
-            }
-                renderItem={({item}) => {
-                    return (
-                        <ContactItem name={item?.name} phoneNumber={item.phoneNumber} id = {item.id}/>
-                    )
-                }} 
-                estimatedItemSize={200}
-                extraData={data}
-                
+                        data ? [...data] : [ {"name": "Test User", "phoneNumber": "093522453", "dateOfBirth": "2000-4-14", "remark": "remark (optional)"}]
+                    }
+                        renderItem={({item}) => {
+                            return (
+                                <ContactItem name={item?.name} phoneNumber={item.phoneNumber} id = {item.id}/>
+                            )
+                        }} 
+                        estimatedItemSize={200}
+                        extraData={data}
+                        
             />
+
+            {/* {data?.pages.map(page => (
+               <>
+                {page.map(data => (
+                    
+                ))}
+               </>
+            ))} */}
         </View>
     )   
 }

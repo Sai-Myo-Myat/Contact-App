@@ -27,7 +27,7 @@ export default function App() {
           name='Home'
           component={HomeScreen}
           options={{
-            headerTitle: "Contacts",
+            headerTitle: "Contact",
             headerRight: () => {
               return (
                 <CustomRightHeader />

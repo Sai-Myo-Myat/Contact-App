@@ -100,13 +100,15 @@ const Form = ({navigation, route}) => {
     return (
         <BottomSheetModalProvider >
             <View style={[tw`bg-[#212A3E] p-5 h-full text-[#F1F6F9] flex justify-center items-center gap-2`]}>
-            <Text style={[tw`text-[#9BA4B5]  mb-3`]}>{errors.name?.message || errors.phoneNumber?.message ||errors.dateOfBirth?.message}</Text>
+            <View style={[tw` w-full flex items-center rounded-lg justify-center p-2`]}>
+                <Text style={[tw`text-[#EB455F]  mb-3 text-lg`]}>{errors.name?.message || errors.phoneNumber?.message  ||errors.dateOfBirth?.message}</Text>
+            </View>
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Name</Text>
             <Controller
                 control={control}
                 name="name"
                 render = {({field: {onChange, value, onBlur}}) => (
-                    <TextInput {...register("name", {required:"name field is require!", maxLength:10,minLength:3})}
+                    <TextInput {...register("name", {required: !editMode ? "name field is require!" : false, maxLength:10,minLength:3})}
                         placeholder= {editMode && data ? data.name : "name"}
                         value={value}
                         onBlur={onBlur}
@@ -118,10 +120,18 @@ const Form = ({navigation, route}) => {
             
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Phone Number</Text>
             <Controller 
-                control={control}
+                control={control} 
                 name="phoneNumber"
                 render = {({field: {onChange, value, onBlur}}) => (
-                    <TextInput {...register("phoneNumber")} 
+                    <TextInput {...register("phoneNumber", {
+                        required: !editMode ? "Phone Number is required!" : false,
+                        maxLength: 11,
+                        minLength: 11,
+                        pattern: {
+                            value: /[09,959]+[2,4,6,8,9]/g,
+                            message: "Invalid phone number"
+                        }
+                    })} 
                     placeholder={editMode && data ? data.phoneNumber : "phone number"}
                     value={value}
                     onBlur={onBlur}
