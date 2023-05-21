@@ -100,13 +100,13 @@ const Form = ({navigation, route}) => {
     return (
         <BottomSheetModalProvider >
             <View style={[tw`bg-[#212A3E] p-5 h-full text-[#F1F6F9] flex justify-center items-center gap-2`]}>
-        
+            <Text style={[tw`text-[#9BA4B5]  mb-3`]}>{errors.name?.message || errors.phoneNumber?.message ||errors.dateOfBirth?.message}</Text>
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Name</Text>
             <Controller
                 control={control}
                 name="name"
                 render = {({field: {onChange, value, onBlur}}) => (
-                    <TextInput {...register("name")}
+                    <TextInput {...register("name", {required:"name field is require!", maxLength:10,minLength:3})}
                         placeholder= {editMode && data ? data.name : "name"}
                         value={value}
                         onBlur={onBlur}

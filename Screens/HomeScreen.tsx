@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { FlashList } from "@shopify/flash-list"
 import tw from 'twrnc';
-import { Query, useQuery } from "react-query";
+import { useQueryClient, useQuery } from "react-query";
 
 import ContactItem from "../Components/ContactItem"
 
@@ -42,7 +42,11 @@ const fetchData =  async () => {
 
 const HomeScreen = ({ navigation }) => {
 
-    const {isLoading, isError, data, error} = useQuery("fetchAllContact", fetchData)
+    const queryClient = useQueryClient();
+
+    queryClient.invalidateQueries({queryKey: ["fetchContact"]})
+
+    const {isLoading, isError, data, error} = useQuery("fetchContact", fetchData)
 
     
     useEffect(
