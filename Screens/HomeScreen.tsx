@@ -44,6 +44,10 @@ const fetchData =  async () => {
 
 const HomeScreen = ({ navigation }) => {
 
+    const [searchMode, setSearchMode] = useState(false);
+
+
+
     const queryClient = useQueryClient();
 
     queryClient.invalidateQueries({queryKey: ["fetchContact"]});
