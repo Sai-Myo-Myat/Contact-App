@@ -6,7 +6,8 @@ import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet
 import DatePicker from "@react-native-community/datetimepicker"
 import { useQuery } from "react-query"
 import moment from "moment"
-import { useNavigation } from "@react-navigation/native"
+
+import {  getContact } from "../db"
 
 interface InputType {
     name: string,
@@ -27,33 +28,9 @@ const Form = ({navigation, route}) => {
     const [dob, setDob] = useState<string>("")
 
     console.log("route", editMode, id)
-   
-    const getContactPromise = (args:number[] = []) => {
-        return new Promise((resolve, reject) => {
-            db.exec([{sql: "SELECT *  FROM contact WHERE id = ? ", args}], false, (err,res) => {
-                if(err) {
-                    return reject(err)
-                }
 
-                return resolve(res)
-            })
-        })
-    }
 
-    const getContact = async () => {
-       if ( editMode) {
-        return  getContactPromise([id])
-                    .then(res => {
-                        const result = res[0]["rows"][0]
-                        console.log(result, "result from promise")
-                        setDob(result.dateOfBirth)
-                        return result
-                    })
-                    .catch(err => console.log(err))
-       }
-    }
-
-    const {isLoading, isError, data, error} = useQuery("getContact", getContact)
+    const {isLoading, isError, data, error} = useQuery("getContact", () => getContact(editMode, id, setDob))
 
     // console.log(dob, "this is dob")
 

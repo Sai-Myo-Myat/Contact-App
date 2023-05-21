@@ -7,6 +7,8 @@ import { QueryClientProvider, QueryClient} from "react-query"
 import HomeScreen from './Screens/HomeScreen';
 import Form from './Screens/Form';
 import SearchScreen from './Screens/SearchScreen';
+import ContactDetail from './Screens/ContactDetail';
+
 
 import CustomRightHeader from './Components/CustomRightHeader';
 
@@ -37,6 +39,7 @@ export default function App() {
           }} />
         <Stack.Screen name='Form' component={Form} />
         <Stack.Screen name='Search' component={SearchScreen} />
+        <Stack.Screen name='Detail' component={ContactDetail}/>
       </Stack.Navigator>
     </NavigationContainer>
     </QueryClientProvider>

@@ -52,7 +52,7 @@ const HomeScreen = ({ navigation }) => {
 
     queryClient.invalidateQueries({queryKey: ["fetchContact"]});
 
-    const {isLoading, isError, data, error} = useQuery("fetchContact", fetchData);
+    const {isLoading,isSuccess, isError, data, error} = useQuery("fetchContact", fetchData);
 
     // const {
     //     data,
@@ -88,13 +88,14 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={[tw`text-[#F1F6F9]`]}>Loading ......</Text>
             </View>
         )
-    }else {
-        // dbObj["dataArray"] = [..data];
-        const setTodbObj = useCallback(() => {
-            dbObj["dataArray"] = [...data]
-        },[data,dbObj])
-        setTodbObj();
     }
+
+    // if (isSuccess) {
+    //     const setTodbObj = useCallback(() => {
+    //         dbObj["dataArray"] = [...data]
+    //     },[data,dbObj])
+    //     setTodbObj();
+    // }
 
     return (
         <View style={[tw`bg-[#212A3E] w-full h-full`]}>
@@ -124,15 +125,4 @@ const HomeScreen = ({ navigation }) => {
 
 export default HomeScreen;  
 
-// [
-//     {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-//     {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-//     {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-//     {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-//     {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-//     {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-//     {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-//     {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-//     {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-//     {"name": "mgmg", "phoneNumber": "093522453", "dateOfBirth": "2345-34-34", "remark": "adsfadfadsf"},
-// ]   
+  

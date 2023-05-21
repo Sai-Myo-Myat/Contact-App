@@ -48,7 +48,10 @@ const SearchScreen = ({navigation}) => {
                 <FlashList  data={matchContactState && matchContactState}
                         renderItem={({item}) => {
                             return (
-                                <ContactItem name={item?.name} phoneNumber={item.phoneNumber} id = {item.id}/>
+                                <View>
+                                    <Text>it's work</Text>
+                                    <ContactItem name={item?.name} phoneNumber={item.phoneNumber} id = {item.id}/>
+                                </View>
                             )
                         }} 
                         estimatedItemSize={20}

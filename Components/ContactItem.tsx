@@ -27,7 +27,8 @@ const ContactItem:FC<Props> = ({name,phoneNumber, id}) => {
 
     const navigation = useNavigation()
     return (
-        <View style={[tw`p-4 flex gap-1`]}>
+        <Pressable onPress={() => navigation.navigate("Detail",{id: id})}>
+            <View style={[tw`p-4 flex gap-1`]}>
             <View style={[tw`flex gap-3`]}>
                 <Text style={[tw`text-[#F1F6F9] font-bold text-lg`]}>{name}</Text>
                 <Text style={[tw`text-[#F1F6F9] font-bold text-sm`]}>ph:   {phoneNumber}</Text>
@@ -43,6 +44,7 @@ const ContactItem:FC<Props> = ({name,phoneNumber, id}) => {
             </View>
             <View style={[tw`h-.3 bg-[#394867] `]}></View>
         </View>
+        </Pressable>
     )
 }
 
