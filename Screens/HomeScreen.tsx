@@ -1,5 +1,5 @@
 import { View, Text, Button, TextInput, ActivityIndicator } from "react-native"
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { FlashList } from "@shopify/flash-list"
 import tw from 'twrnc';
@@ -7,7 +7,7 @@ import { useQueryClient, useQuery, useInfiniteQuery } from "react-query";
 
 import ContactItem from "../Components/ContactItem"
 
-import { db } from "../db";
+import { db, dbObj } from "../db";
 
 interface InputType {
     name: string,
@@ -77,6 +77,7 @@ const HomeScreen = ({ navigation }) => {
                 )
             })
         }
+
        
     ,[])
 
@@ -87,6 +88,12 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={[tw`text-[#F1F6F9]`]}>Loading ......</Text>
             </View>
         )
+    }else {
+        // dbObj["dataArray"] = [..data];
+        const setTodbObj = useCallback(() => {
+            dbObj["dataArray"] = [...data]
+        },[data,dbObj])
+        setTodbObj();
     }
 
     return (
