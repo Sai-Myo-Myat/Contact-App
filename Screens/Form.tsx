@@ -43,8 +43,8 @@ const Form = ({ route }) => {
         db.transaction(tx => {
             tx.executeSql(queryString,
             array,
-            (txObj,data) => console.log(data, "data"),
-            (txObj, error: any ) => console.log("error", error));
+            (_txObj,data) => console.log(data, "data"),
+            (_txObj, error: any ) => console.log("error", error));
         })
     }
 
@@ -63,7 +63,7 @@ const Form = ({ route }) => {
         }
     });
 
-    useEffect(() => {
+    useEffect(() => {   
         if(data) {
             reset({
                 name: data.name,
@@ -73,8 +73,6 @@ const Form = ({ route }) => {
             })
         }
     },[])
-
-    // console.log(data.name, "name from form")
 
     return (
         <BottomSheetModalProvider >
@@ -109,7 +107,7 @@ const Form = ({ route }) => {
                         maxLength: 11,
                         minLength: 11,
                         pattern: {
-                            value: /[09,959]+[2,4,6,8,9]/g,
+                            value: /^(09\d{9,11}|959\d{8,10}|01\d{5,7})$/g,
                             message: "Invalid phone number"
                         }
                     })} 
@@ -141,7 +139,7 @@ const Form = ({ route }) => {
                             value={new Date(value)}
                             mode="date"
                             display="spinner"
-                            onChange={(event, date) => {
+                            onChange={(_event, date) => {
                                 const formattedDate = moment(date?.toString()).format("YYYY,MM,DD")
                                 onChange(formattedDate)
                                 setDob(formattedDate)

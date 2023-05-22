@@ -1,10 +1,9 @@
 import { View, Text, Button, TextInput, ActivityIndicator } from "react-native"
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { FlashList } from "@shopify/flash-list"
 import tw from 'twrnc';
 import { useQueryClient, useQuery, useInfiniteQuery } from "react-query";
-import { useNavigation } from "@react-navigation/native";
 
 import ContactItem from "../Components/ContactItem"
 
@@ -28,7 +27,6 @@ const fetchingPromise = (args = []) => {
             if(err) {
                 return reject(err)
             }
-
             return resolve(res)
         })
     })
@@ -37,14 +35,12 @@ const fetchingPromise = (args = []) => {
 const fetchData =  async () => {
     return fetchingPromise()
         .then(res => {
-            return res[0]["rows"]
+            return res["rows"]
         })
         .catch(err => console.log("error:", err))
 }
 
 const HomeScreen = () => {
-
-    const navigation = useNavigation()
     const queryClient = useQueryClient();
 
     queryClient.invalidateQueries({queryKey: ["fetchContact"]});
