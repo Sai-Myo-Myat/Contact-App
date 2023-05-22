@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC} from 'react';
 import {View, Text, Pressable} from 'react-native';
 
 import tw from 'twrnc';
@@ -28,7 +28,7 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
   const navigation = useNavigation();
 
   return (
-    <Pressable onPress={() => navigation.navigate('Detail', {id: id})}>
+    <Pressable onPress={() => console.log("press")}>
       <View style={[tw`p-4 flex gap-1`]}>
         <View style={[tw`flex gap-3`]}>
           <Text style={[tw`text-[#F1F6F9] font-bold text-lg`]}>{name}</Text>
@@ -43,7 +43,7 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
             onPress={() => navigation.navigate('Form', {id: id})}>
             <Feather name="edit" size={20} color="#F1F6F9" />
           </Pressable>
-          <Pressable style={[tw`mr-2`]} onPress={() => deleteContact(id)}>
+          <Pressable style={[tw`mr-2`]} onPress={deleteContact(id)}>
             <AntDesign name="delete" size={20} color={'#F1F6F9'} />
           </Pressable>
         </View>

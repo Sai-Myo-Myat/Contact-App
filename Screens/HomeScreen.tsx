@@ -1,5 +1,5 @@
-import {View, Text, ActivityIndicator} from 'react-native';
-import React, {FC, useCallback, useEffect} from 'react';
+import {View, Text, ActivityIndicator, ViewProps} from 'react-native';
+import React, {useCallback, useEffect} from 'react';
 
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import tw from 'twrnc';
@@ -8,6 +8,7 @@ import {useQueryClient, useQuery} from 'react-query';
 import ContactItem from '../Components/ContactItem';
 
 import {db} from '../db';
+import {ResultSet, ResultSetError} from 'expo-sqlite';
 
 interface ItemType {
   name: string;
@@ -19,13 +20,13 @@ interface ItemType {
 
 interface ResponseType {
   insetId: number;
-  rows: [];
+  rows: Array<ItemType>;
   rowAffected: number;
 }
 
 const fetchingPromise = (args = []) => {
   //DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT SET @PageNumber = 1 SET @RowsOfPage = 2 SELECT * FROM contact OFFSET (@PageNumber-1)*@RowsOfPage ROWS
-  return new Promise<ResponseType>((resolve, reject) => {
+  return new Promise<ResponseType[]>((resolve, reject) => {
     db.exec(
       [
         {
@@ -38,27 +39,30 @@ const fetchingPromise = (args = []) => {
         if (err) {
           return reject(err);
         }
-        return res;
+        return resolve(res);
       },
     );
   });
 };
 
-const fetchData = async () => {
+const fetchContact = async () => {
   return fetchingPromise()
     .then(res => {
-      // console.log("res", res)
-      return res.rows;
+      console.log('res', res);
+      return res[0].rows;
     })
     .catch(err => console.log('error:', err));
 };
 
-const HomeScreen: FC = () => {
+const HomeScreen = () => {
   const queryClient = useQueryClient();
 
   queryClient.invalidateQueries({queryKey: 'fetchContact'});
 
-  const {isLoading, data} = useQuery('fetchContact', fetchData);
+  const {isLoading, isError, data, error} = useQuery(
+    'fetchContact',
+    fetchContact,
+  );
 
   useEffect(() => {
     db.transaction(tx => {
@@ -88,7 +92,11 @@ const HomeScreen: FC = () => {
         <Text style={[tw`text-[#F1F6F9]`]}>Loading ......</Text>
       </View>
     );
+  } else if (isError) {
+    console.log('error', error);
   }
+
+  // console.log(data, 'this is data');
 
   return (
     <View style={[tw`bg-[#212A3E] w-full h-full`]}>
