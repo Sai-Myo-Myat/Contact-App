@@ -1,12 +1,12 @@
-import {View, Text, TextInput, StyleSheet, Pressable} from 'react-native';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 
-import {useForm, SubmitHandler, Controller} from 'react-hook-form';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import DatePicker from '@react-native-community/datetimepicker';
-import {useQuery} from 'react-query';
-import moment from 'moment';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
+import {Controller, ControllerProps, ControllerRenderProps, SubmitHandler, useForm} from 'react-hook-form';
+import {useQuery} from 'react-query';
 
 import {getContact} from '../db';
 
@@ -15,6 +15,11 @@ interface InputType {
   phoneNumber: string;
   dateOfBirth: string;
   remark: string;
+}
+
+interface TextInputType {
+  name: string;
+  value: string;
 }
 
 import tw from 'twrnc';
@@ -81,6 +86,28 @@ const Form = ({route}) => {
     }
   }, [dob, data, reset]);
 
+  const textContollerFun = useCallback(
+    ({field: {onChange, value, onBlur}}) => (
+      <TextInput
+        {...register('name', {
+          required: !id ? 'name field is require!' : false,
+          maxLength: 10,
+          minLength: 3,
+        })}
+        placeholder={'name'}
+        value={value}
+        onBlur={onBlur}
+        onChangeText={onChange(value)}
+        placeholderTextColor={'#9BA4B5'}
+        style={[
+          tw`p-2 border border-[#394867] w-full rounded-lg`,
+          styles.textInput,
+        ]}
+      />
+    ),
+    [],
+  );
+
   return (
     <BottomSheetModalProvider>
       <View
@@ -100,24 +127,7 @@ const Form = ({route}) => {
           control={control}
           name="name"
           defaultValue={data?.name || ''}
-          render={({field: {onChange, value, onBlur}}) => (
-            <TextInput
-              {...register('name', {
-                required: !id ? 'name field is require!' : false,
-                maxLength: 10,
-                minLength: 3,
-              })}
-              placeholder={'name'}
-              value={value}
-              onBlur={onBlur}
-              onChangeText={value => onChange(value)}
-              placeholderTextColor={'#9BA4B5'}
-              style={[
-                tw`p-2 border border-[#394867] w-full rounded-lg`,
-                styles.textInput,
-              ]}
-            />
-          )}
+          render={}
         />
 
         <Text style={[tw`self-start text-[#F1F6F9]`]}>Phone Number</Text>
