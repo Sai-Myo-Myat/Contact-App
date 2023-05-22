@@ -4,10 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import { FlashList } from "@shopify/flash-list"
 import tw from 'twrnc';
 import { useQueryClient, useQuery, useInfiniteQuery } from "react-query";
+import { useNavigation } from "@react-navigation/native";
 
 import ContactItem from "../Components/ContactItem"
 
-import { db, dbObj } from "../db";
+import { db } from "../db";
+
 
 interface InputType {
     name: string,
@@ -40,14 +42,9 @@ const fetchData =  async () => {
         .catch(err => console.log("error:", err))
 }
 
+const HomeScreen = () => {
 
-
-const HomeScreen = ({ navigation }) => {
-
-    const [searchMode, setSearchMode] = useState(false);
-
-
-
+    const navigation = useNavigation()
     const queryClient = useQueryClient();
 
     queryClient.invalidateQueries({queryKey: ["fetchContact"]});
@@ -107,7 +104,7 @@ const HomeScreen = ({ navigation }) => {
                                 <ContactItem name={item?.name} phoneNumber={item.phoneNumber} id = {item.id}/>
                             )
                         }} 
-                        estimatedItemSize={200}
+                        estimatedItemSize={20}
                         extraData={data}
                         
             />

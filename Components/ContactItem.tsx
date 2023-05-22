@@ -35,7 +35,7 @@ const ContactItem:FC<Props> = ({name,phoneNumber, id}) => {
                 <Text style={[tw`text-[#9BA4B5]`]}>created at:  2011-2-4</Text>
             </View >
             <View style={[tw`flex-row gap-3 self-end`]}>
-                <Pressable style={[tw`mr-2`]} onPress={() => navigation.navigate("Form" ,{editMode: true, id:id})}>
+                <Pressable style={[tw`mr-2`]} onPress={() => navigation.navigate("Form" ,{id:id})}>
                     <Feather name="edit" size={20} color="#F1F6F9" />
                 </Pressable>
                 <Pressable style={[tw`mr-2`]} onPress={() => deleteContact(id)}>

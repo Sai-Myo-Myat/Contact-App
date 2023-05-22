@@ -2,13 +2,16 @@ import {Text, View, ActivityIndicator} from 'react-native'
 import tw from 'twrnc'
 
 import { useQuery } from 'react-query'
+import { useNavigation } from '@react-navigation/native'
 
 import { getContact } from '../db'
 
-const ContactDetail = ({navigation, route}) => {
+
+const ContactDetail = ({ route }) => {
+    const navigation  = useNavigation()
     const {id} = route.params
 
-    const {isLoading, isSuccess, isError, data, error} = useQuery("contactDetails", () => getContact(true, id, () => null))
+    const {isLoading, isSuccess, isError, data, error} = useQuery("contactDetails", () => getContact( id, () => null))
 
     if (isLoading) {
         return (
@@ -28,7 +31,7 @@ const ContactDetail = ({navigation, route}) => {
             <Text style={[tw`text-[#F1F6F9] text-xl`]}><Text style={[tw`text-[#9BA4B5]`]}>Name:</Text>   {data?.name}</Text>
             <Text style={[tw`text-[#F1F6F9] text-lg`]}><Text style={[tw`text-[#9BA4B5]`]}>Phone Number:</Text>   {data?.phoneNumber}</Text>
             <Text style={[tw`text-[#F1F6F9] text-lg`]}><Text style={[tw`text-[#9BA4B5]`]}>Date Of Birth:</Text>   {data?.dateOfBirth}</Text>
-            <Text style={[tw`text-[#F1F6F9] text-lg`]}><Text style={[tw`text-[#9BA4B5]`]}>Remark:</Text>   {data === " " ? "No Remark" : data.remark}</Text>
+            <Text style={[tw`text-[#F1F6F9] text-lg`]}><Text style={[tw`text-[#9BA4B5]`]}>Remark:</Text>   {data === "" ? "No Remark" : data.remark}</Text>
 
         </View>
     )

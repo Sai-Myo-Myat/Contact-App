@@ -15,8 +15,8 @@ const getContactPromise = (args:number[] = []) => {
     })
 }
 
-export const getContact = async (editMode: boolean, id: number, setDob:any) => {
-    if ( editMode) {
+export const getContact = async ( id: number, setDob:any) => {
+    if ( id) {
      return  getContactPromise([id])
                  .then(res => {
                      const result = res[0]["rows"][0]

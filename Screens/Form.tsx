@@ -6,6 +6,7 @@ import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet
 import DatePicker from "@react-native-community/datetimepicker"
 import { useQuery } from "react-query"
 import moment from "moment"
+import { useNavigation } from "@react-navigation/native"
 
 import {  getContact } from "../db"
 
@@ -20,35 +21,24 @@ import tw from "twrnc"
 import CustomButton from "../Components/CustomButton"
 import { db } from "../db"
 
+const Form = ({ route }) => {
 
-const Form = ({navigation, route}) => {
+    const navigation = useNavigation()
 
-    const {editMode, id} = route.params;
+    const {id} = route.params;
     const bottomSheetModelRef = useRef<BottomSheetModal>(null)
     const [dob, setDob] = useState<string>("")
 
-    console.log("route", editMode, id)
+    console.log("route", id)
 
 
-    const {isLoading, isError, data, error} = useQuery("getContact", () => getContact(editMode, id, setDob))
+    const {isLoading, isError, data, error} = useQuery("getContact", () => getContact(id, setDob))
 
     // console.log(dob, "this is dob")
 
     const addContact = ({name,phoneNumber,dateOfBirth,remark}: InputType) => {
         let array = [name,phoneNumber,dateOfBirth,remark]
         let queryString = 'INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) values (?,?,?,?)'
-        if( editMode ) {
-            console.log([array], "arrayyyy")
-            array = [
-                name === "" ? data.name : name,
-                phoneNumber === "" ? data.phoneNumber : phoneNumber,
-                dateOfBirth === "" ? data.dateOfBirth : dateOfBirth,
-                remark === "" ? data.remark : remark,
-                id
-            ]
-            console.log(array, "arrayasdf")
-            queryString = 'UPDATE contact SET name = ?, phoneNumber = ?, dateOfBirth = ?, remark = ? WHERE id = ?'
-        }
 
         db.transaction(tx => {
             tx.executeSql(queryString,
@@ -64,15 +54,27 @@ const Form = ({navigation, route}) => {
         navigation.navigate("Home")
     }
 
-    const {register, handleSubmit, control, formState:{errors}} = useForm<InputType>({
+    const {register, handleSubmit, reset, control, formState:{errors}} = useForm<InputType>({
         defaultValues: {
             name: "",
             phoneNumber: "",
             dateOfBirth: new Date('2000-1-1').toString(),
-            remark: " "
+            remark: ""
         }
     });
 
+    useEffect(() => {
+        if(data) {
+            reset({
+                name: data.name,
+                phoneNumber: data.phoneNumber,
+                dateOfBirth: data.dateOfBirth,
+                remark: data.remark
+            })
+        }
+    },[])
+
+    // console.log(data.name, "name from form")
 
     return (
         <BottomSheetModalProvider >
@@ -84,9 +86,10 @@ const Form = ({navigation, route}) => {
             <Controller
                 control={control}
                 name="name"
+                defaultValue={data?.name || ""} 
                 render = {({field: {onChange, value, onBlur}}) => (
-                    <TextInput {...register("name", {required: !editMode ? "name field is require!" : false, maxLength:10,minLength:3})}
-                        placeholder= {editMode && data ? data.name : "name"}
+                    <TextInput {...register("name", {required: !id ? "name field is require!" : false, maxLength:10,minLength:3})}
+                        placeholder= {"name"}
                         value={value}
                         onBlur={onBlur}
                         onChangeText={value => onChange(value)}
@@ -99,9 +102,10 @@ const Form = ({navigation, route}) => {
             <Controller 
                 control={control} 
                 name="phoneNumber"
+                defaultValue={data ? data?.phoneNumber : ""}
                 render = {({field: {onChange, value, onBlur}}) => (
                     <TextInput {...register("phoneNumber", {
-                        required: !editMode ? "Phone Number is required!" : false,
+                        required: !id ? "Phone Number is required!" : false,
                         maxLength: 11,
                         minLength: 11,
                         pattern: {
@@ -109,7 +113,7 @@ const Form = ({navigation, route}) => {
                             message: "Invalid phone number"
                         }
                     })} 
-                    placeholder={editMode && data ? data.phoneNumber : "phone number"}
+                    placeholder={"phone number"}
                     value={value}
                     onBlur={onBlur}
                     onChangeText={value => onChange(value)}
@@ -157,7 +161,7 @@ const Form = ({navigation, route}) => {
                     multiline={true}
                     numberOfLines={5}
                     value={value}
-                    placeholder={editMode && data ? data.remark : "remark ( optional )"}
+                    placeholder={ data ? data.remark : "remark ( optional )"}
                     onBlur={onBlur} 
                     onChangeText={value => onChange(value)}
                     placeholderTextColor={"#9BA4B5"}
