@@ -22,16 +22,16 @@ const ContactDetail = ({route}) => {
     );
   }
 
-  if (isSuccess) {
-    console.log(data.name);
-  }
+  // if (isSuccess) {
+  //   console.log(data.name);
+  // }
 
   return (
     <View
       style={[
         tw`bg-[#212A3E] p-5 h-full  flex justify-start items-start gap-2`,
       ]}>
-      <Text style={[tw`text-[#F1F6F9] text-xl`]}>
+      {/* <Text style={[tw`text-[#F1F6F9] text-xl`]}>
         <Text style={[tw`text-[#9BA4B5]`]}>Name:</Text> {data?.name}
       </Text>
       <Text style={[tw`text-[#F1F6F9] text-lg`]}>
@@ -45,7 +45,7 @@ const ContactDetail = ({route}) => {
       <Text style={[tw`text-[#F1F6F9] text-lg`]}>
         <Text style={[tw`text-[#9BA4B5]`]}>Remark:</Text>{' '}
         {data === '' ? 'No Remark' : data.remark}
-      </Text>
+      </Text> */}
     </View>
   );
 };

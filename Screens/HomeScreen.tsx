@@ -1,14 +1,13 @@
-import {View, Text, ActivityIndicator, ViewProps} from 'react-native';
 import React, {useCallback, useEffect} from 'react';
+import {ActivityIndicator, Text, View} from 'react-native';
 
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
+import {useQuery, useQueryClient} from 'react-query';
 import tw from 'twrnc';
-import {useQueryClient, useQuery} from 'react-query';
 
 import ContactItem from '../Components/ContactItem';
 
 import {db} from '../db';
-import {ResultSet, ResultSetError} from 'expo-sqlite';
 
 interface ItemType {
   name: string;
@@ -39,19 +38,15 @@ const fetchingPromise = (args = []) => {
         if (err) {
           return reject(err);
         }
-        return resolve(res);
+        return resolve(res as any);
       },
     );
   });
 };
 
 const fetchContact = async () => {
-  return fetchingPromise()
-    .then(res => {
-      console.log('res', res);
-      return res[0].rows;
-    })
-    .catch(err => console.log('error:', err));
+  const res = await fetchingPromise();
+  return res;
 };
 
 const HomeScreen = () => {
@@ -101,7 +96,7 @@ const HomeScreen = () => {
   return (
     <View style={[tw`bg-[#212A3E] w-full h-full`]}>
       <FlashList
-        data={data as ItemType[]}
+        data={data}
         renderItem={renderContactItem}
         estimatedItemSize={20}
         extraData={data}

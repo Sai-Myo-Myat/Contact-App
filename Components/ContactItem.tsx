@@ -1,12 +1,13 @@
-import React, {FC} from 'react';
-import {View, Text, Pressable} from 'react-native';
+import React, {FC, useCallback} from 'react';
+import {Pressable, Text, View} from 'react-native';
 
-import tw from 'twrnc';
+import {AntDesign, Feather} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
-import {AntDesign} from '@expo/vector-icons';
-import {Feather} from '@expo/vector-icons';
+import tw from 'twrnc';
 
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {db} from '../db';
+import {RootStackParamsList} from '../types';
 
 interface Props {
   name: string;
@@ -25,10 +26,15 @@ const deleteContact = (id: number) => {
 };
 
 const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
-  const navigation = useNavigation();
+  const {navigate} =
+    useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Home'>>();
+
+  const goToDetail = useCallback(() => {
+    navigate('Detail', {id});
+  }, [id, navigate]);
 
   return (
-    <Pressable onPress={() => console.log("press")}>
+    <Pressable onPress={goToDetail}>
       <View style={[tw`p-4 flex gap-1`]}>
         <View style={[tw`flex gap-3`]}>
           <Text style={[tw`text-[#F1F6F9] font-bold text-lg`]}>{name}</Text>
