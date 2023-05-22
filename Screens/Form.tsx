@@ -17,10 +17,10 @@ interface InputType {
   remark: string;
 }
 
-interface TextInputType {
-  name: string;
-  value: string;
-}
+// interface TextInputType {
+//   name: string;
+//   value: string;
+// }
 
 import tw from 'twrnc';
 import CustomButton from '../Components/CustomButton';
@@ -86,27 +86,27 @@ const Form = ({route}) => {
     }
   }, [dob, data, reset]);
 
-  const textContollerFun = useCallback(
-    ({field: {onChange, value, onBlur}}) => (
-      <TextInput
-        {...register('name', {
-          required: !id ? 'name field is require!' : false,
-          maxLength: 10,
-          minLength: 3,
-        })}
-        placeholder={'name'}
-        value={value}
-        onBlur={onBlur}
-        onChangeText={onChange(value)}
-        placeholderTextColor={'#9BA4B5'}
-        style={[
-          tw`p-2 border border-[#394867] w-full rounded-lg`,
-          styles.textInput,
-        ]}
-      />
-    ),
-    [],
-  );
+  // const textContollerFun = useCallback(
+  //   ({field: {onChange, value, onBlur}}) => (
+  //     <TextInput
+  //       {...register('name', {
+  //         required: !id ? 'name field is require!' : false,
+  //         maxLength: 10,
+  //         minLength: 3,
+  //       })}
+  //       placeholder={'name'}
+  //       value={value}
+  //       onBlur={onBlur}
+  //       onChangeText={onChange(value)}
+  //       placeholderTextColor={'#9BA4B5'}
+  //       style={[
+  //         tw`p-2 border border-[#394867] w-full rounded-lg`,
+  //         styles.textInput,
+  //       ]}
+  //     />
+  //   ),
+  //   [],
+  // );
 
   return (
     <BottomSheetModalProvider>
@@ -123,18 +123,19 @@ const Form = ({route}) => {
           </Text>
         </View>
         <Text style={[tw`self-start text-[#F1F6F9]`]}>Name</Text>
-        <Controller
+        {/* <Controller
           control={control}
           name="name"
           defaultValue={data?.name || ''}
-          render={}
-        />
+          // render={textContollerFun}
+        /> */}
 
         <Text style={[tw`self-start text-[#F1F6F9]`]}>Phone Number</Text>
         <Controller
           control={control}
           name="phoneNumber"
           defaultValue={data ? data?.phoneNumber : ''}
+          // eslint-disable-next-line react/jsx-no-bind
           render={({field: {onChange, value, onBlur}}) => (
             <TextInput
               {...register('phoneNumber', {
@@ -149,6 +150,7 @@ const Form = ({route}) => {
               placeholder={'phone number'}
               value={value}
               onBlur={onBlur}
+              // eslint-disable-next-line react/jsx-no-bind
               onChangeText={value => onChange(value)}
               placeholderTextColor={'#9BA4B5'}
               style={[
@@ -164,6 +166,7 @@ const Form = ({route}) => {
           style={[
             tw`self-start border border-[#394867] px-2 py-3 rounded-lg w-full`,
           ]}
+          // eslint-disable-next-line react/jsx-no-bind
           onPress={() => bottomSheetModelRef.current?.present()}>
           <Text style={[tw`text-[#F1F6F9] ${dob === '' ? 'opacity-50' : ''}`]}>
             {dob ? dob : '2000-1-1'}
@@ -172,17 +175,20 @@ const Form = ({route}) => {
         <BottomSheetModal
           ref={bottomSheetModelRef}
           index={1}
+          // eslint-disable-next-line react/jsx-no-bind
           onChange={index => console.log(index)}
           snapPoints={snapPoints}>
           <Controller
             control={control}
             name="dateOfBirth"
+            // eslint-disable-next-line react/jsx-no-bind
             render={({field: {onChange, value, onBlur}}) => (
               <DatePicker
                 {...register('dateOfBirth')}
                 value={new Date(value)}
                 mode="date"
                 display="spinner"
+                // eslint-disable-next-line react/jsx-no-bind
                 onChange={(_event, date) => {
                   const formattedDate = moment(date?.toString()).format(
                     'YYYY,MM,DD',
@@ -200,6 +206,7 @@ const Form = ({route}) => {
         <Controller
           control={control}
           name="remark"
+          // eslint-disable-next-line react/jsx-no-bind
           render={({field: {onChange, value, onBlur}}) => (
             <TextInput
               {...register('remark')}
@@ -208,6 +215,7 @@ const Form = ({route}) => {
               value={value}
               placeholder={data ? data.remark : 'remark ( optional )'}
               onBlur={onBlur}
+              // eslint-disable-next-line react/jsx-no-bind
               onChangeText={value => onChange(value)}
               placeholderTextColor={'#9BA4B5'}
               style={[
