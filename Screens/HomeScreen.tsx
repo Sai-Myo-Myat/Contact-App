@@ -1,7 +1,7 @@
 import {View, Text, ActivityIndicator} from 'react-native';
-import React, {useCallback, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 
-import {FlashList} from '@shopify/flash-list';
+import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import tw from 'twrnc';
 import {useQueryClient, useQuery} from 'react-query';
 
@@ -9,9 +9,23 @@ import ContactItem from '../Components/ContactItem';
 
 import {db} from '../db';
 
+interface ItemType {
+  name: string;
+  phoneNumber: string;
+  dateOfBirth: string;
+  remark: string;
+  id: number;
+}
+
+interface ResponseType {
+  insetId: number;
+  rows: [];
+  rowAffected: number;
+}
+
 const fetchingPromise = (args = []) => {
   //DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT SET @PageNumber = 1 SET @RowsOfPage = 2 SELECT * FROM contact OFFSET (@PageNumber-1)*@RowsOfPage ROWS
-  return new Promise((resolve, reject) => {
+  return new Promise<ResponseType>((resolve, reject) => {
     db.exec(
       [
         {
@@ -24,7 +38,7 @@ const fetchingPromise = (args = []) => {
         if (err) {
           return reject(err);
         }
-        return res[0].rows
+        return res;
       },
     );
   });
@@ -34,12 +48,12 @@ const fetchData = async () => {
   return fetchingPromise()
     .then(res => {
       // console.log("res", res)
-      return res;
+      return res.rows;
     })
     .catch(err => console.log('error:', err));
 };
 
-const HomeScreen = () => {
+const HomeScreen: FC = () => {
   const queryClient = useQueryClient();
 
   queryClient.invalidateQueries({queryKey: 'fetchContact'});
@@ -54,6 +68,19 @@ const HomeScreen = () => {
     });
   }, []);
 
+  const renderContactItem = useCallback(
+    ({item}: ListRenderItemInfo<ItemType>) => {
+      return (
+        <ContactItem
+          name={item?.name}
+          phoneNumber={item.phoneNumber}
+          id={item.id}
+        />
+      );
+    },
+    [],
+  );
+
   if (isLoading) {
     return (
       <View style={[tw`bg-[#212A3E] w-full h-full p-10`]}>
@@ -63,32 +90,11 @@ const HomeScreen = () => {
     );
   }
 
-  const RenderContactItem = useCallback(() => {
-    return (
-      <ContactItem
-        name={item?.name}
-        phoneNumber={item.phoneNumber}
-        id={item.id}
-      />
-    );
-  }, []);
-
   return (
     <View style={[tw`bg-[#212A3E] w-full h-full`]}>
       <FlashList
-        data={
-          data
-            ? [data]
-            : [
-                {
-                  name: 'Test User',
-                  phoneNumber: '093522453',
-                  dateOfBirth: '2000-4-14',
-                  remark: 'remark (optional)',
-                },
-              ]
-        }
-        renderItem={}
+        data={data as ItemType[]}
+        renderItem={renderContactItem}
         estimatedItemSize={20}
         extraData={data}
       />

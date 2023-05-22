@@ -1,5 +1,4 @@
-
-import React, {FC} from 'react';
+import React, {FC, useCallback} from 'react';
 import {View, Text, Pressable} from 'react-native';
 
 import tw from 'twrnc';
@@ -27,6 +26,7 @@ const deleteContact = (id: number) => {
 
 const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
   const navigation = useNavigation();
+
   return (
     <Pressable onPress={() => navigation.navigate('Detail', {id: id})}>
       <View style={[tw`p-4 flex gap-1`]}>

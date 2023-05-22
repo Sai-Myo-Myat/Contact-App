@@ -31,30 +31,6 @@ const Form = ({route}) => {
 
   console.log('route', id);
 
-  const {data} = useQuery('getContact', () => getContact(id));
-  // console.log(dob, "this is dob")
-
-  const addContact = ({name, phoneNumber, dateOfBirth, remark}: InputType) => {
-    let array = [name, phoneNumber, dateOfBirth, remark];
-    let queryString =
-      'INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) values (?,?,?,?)';
-
-    db.transaction(tx => {
-      tx.executeSql(
-        queryString,
-        array,
-        (_txObj, data) => console.log(data, 'data'),
-        (_txObj, error: any) => console.log('error', error),
-      );
-    });
-  };
-
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
-  const onSubmit: SubmitHandler<InputType> = data => {
-    addContact(data);
-    navigation.navigate('Home');
-  };
-
   const {
     register,
     handleSubmit,
@@ -69,6 +45,29 @@ const Form = ({route}) => {
       remark: '',
     },
   });
+
+  const {data} = useQuery('getContact', () => getContact(id));
+  // console.log(dob, "this is dob")
+  const addContact = ({name, phoneNumber, dateOfBirth, remark}: InputType) => {
+    let array = [name, phoneNumber, dateOfBirth, remark];
+    let queryString =
+      'INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) values (?,?,?,?)';
+
+    db.transaction(tx => {
+      tx.executeSql(
+        queryString,
+        array,
+        (_txObj, result) => console.log(result, 'data'),
+        (_txObj, error: any) => console.log('error', error),
+      );
+    });
+  };
+
+  const snapPoints = useMemo(() => ['25%', '50%'], []);
+  const onSubmit: SubmitHandler<InputType> = data => {
+    addContact(data);
+    navigation.navigate('Home');
+  };
 
   useEffect(() => {
     if (data) {
