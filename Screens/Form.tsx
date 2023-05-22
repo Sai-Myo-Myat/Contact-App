@@ -22,7 +22,7 @@ import CustomButton from '../Components/CustomButton';
 import {db} from '../db';
 
 const Form = ({route}) => {
-  const navigation = useNavigation();
+  const {navigate} = useNavigation();
 
   const {id} = route.params;
   const bottomSheetModelRef = useRef<BottomSheetModal>(null);
@@ -66,7 +66,7 @@ const Form = ({route}) => {
   const snapPoints = useMemo(() => ['25%', '50%'], []);
   const onSubmit: SubmitHandler<InputType> = data => {
     addContact(data);
-    navigation.navigate('Home');
+    navigate('Home');
   };
 
   useEffect(() => {

@@ -1,23 +1,30 @@
-import React from 'react';
-import {View, Pressable} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import React, {useCallback} from 'react';
+import {Pressable, View} from 'react-native';
 
-import {Feather} from '@expo/vector-icons';
-import {AntDesign} from '@expo/vector-icons';
+import {AntDesign, Feather} from '@expo/vector-icons';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
 import tw from 'twrnc';
+import {RootStackParamsList} from '../types';
 
 const CustomRightHeader = () => {
-  const navigation = useNavigation();
+  const {navigate} =
+    useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Home'>>();
+
+  const goToForm = useCallback(() => {
+    navigate('Form', {id: 0});
+  }, [navigate]);
+
+  const goToSearch = useCallback(() => {
+    navigate('Search');
+  }, [navigate]);
+
   return (
     <View style={[tw`flex-row justify-between`]}>
-      <Pressable
-        style={[tw`mr-2`]}
-        onPress={() => {
-          navigation.navigate('Search');
-        }}>
+      <Pressable style={[tw`mr-2`]} onPress={goToSearch}>
         <Feather name="search" size={30} style={[tw`text-[#F1F6F9]`]} />
       </Pressable>
-      <Pressable onPress={() => navigation.navigate('Form', {id: null})}>
+      <Pressable onPress={goToForm}>
         <AntDesign name="plus" size={30} style={[tw`text-[#F1F6F9]`]} />
       </Pressable>
     </View>

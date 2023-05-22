@@ -33,6 +33,10 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
     navigate('Detail', {id});
   }, [id, navigate]);
 
+  const goToForm = useCallback(() => {
+    navigate('Form', {id});
+  }, [id, navigate]);
+
   return (
     <Pressable onPress={goToDetail}>
       <View style={[tw`p-4 flex gap-1`]}>
@@ -44,9 +48,7 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
           <Text style={[tw`text-[#9BA4B5]`]}>created at: 2011-2-4</Text>
         </View>
         <View style={[tw`flex-row gap-3 self-end`]}>
-          <Pressable
-            style={[tw`mr-2`]}
-            onPress={() => navigation.navigate('Form', {id: id})}>
+          <Pressable style={[tw`mr-2`]} onPress={goToForm}>
             <Feather name="edit" size={20} color="#F1F6F9" />
           </Pressable>
           <Pressable style={[tw`mr-2`]} onPress={deleteContact(id)}>
