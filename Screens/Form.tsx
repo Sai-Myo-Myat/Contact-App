@@ -1,11 +1,29 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {
+  ReactElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import {
+  NativeSyntheticEvent,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import DatePicker from '@react-native-community/datetimepicker';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
-import {Controller, ControllerProps, ControllerRenderProps, SubmitHandler, useForm} from 'react-hook-form';
+import {
+  Controller,
+  ControllerRenderProps,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
 import {useQuery} from 'react-query';
 
 import {getContact} from '../db';
@@ -17,10 +35,12 @@ interface InputType {
   remark: string;
 }
 
-// interface TextInputType {
-//   name: string;
-//   value: string;
-// }
+interface TextInputType {
+  name: string;
+  value: string;
+}
+
+type name = string;
 
 import tw from 'twrnc';
 import CustomButton from '../Components/CustomButton';
@@ -86,27 +106,29 @@ const Form = ({route}) => {
     }
   }, [dob, data, reset]);
 
-  // const textContollerFun = useCallback(
-  //   ({field: {onChange, value, onBlur}}) => (
-  //     <TextInput
-  //       {...register('name', {
-  //         required: !id ? 'name field is require!' : false,
-  //         maxLength: 10,
-  //         minLength: 3,
-  //       })}
-  //       placeholder={'name'}
-  //       value={value}
-  //       onBlur={onBlur}
-  //       onChangeText={onChange(value)}
-  //       placeholderTextColor={'#9BA4B5'}
-  //       style={[
-  //         tw`p-2 border border-[#394867] w-full rounded-lg`,
-  //         styles.textInput,
-  //       ]}
-  //     />
-  //   ),
-  //   [],
-  // );
+  const textContollerFun = useCallback(
+    ({onChange, onBlur, value, name}: ControllerRenderProps<TextInputType>) =>
+      (
+        <TextInput
+          {...register('name', {
+            required: !id ? 'name field is require!' : false,
+            maxLength: 10,
+            minLength: 3,
+          })}
+          name={name}
+          placeholder={'name'}
+          value={value}
+          onBlur={onBlur}
+          onChange={onChange(value) as NativeSyntheticEvent<name> | unknown}
+          placeholderTextColor={'#9BA4B5'}
+          style={[
+            tw`p-2 border border-[#394867] w-full rounded-lg`,
+            // styles.textInput,
+          ]}
+        />
+      ) as ReactElement,
+    [id, register],
+  );
 
   return (
     <BottomSheetModalProvider>
@@ -123,12 +145,12 @@ const Form = ({route}) => {
           </Text>
         </View>
         <Text style={[tw`self-start text-[#F1F6F9]`]}>Name</Text>
-        {/* <Controller
+        <Controller
           control={control}
           name="name"
           defaultValue={data?.name || ''}
-          // render={textContollerFun}
-        /> */}
+          render={textContollerFun}
+        />
 
         <Text style={[tw`self-start text-[#F1F6F9]`]}>Phone Number</Text>
         <Controller
@@ -232,10 +254,10 @@ const Form = ({route}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  textInput: {
-    color: '#F1F6F9',
-  },
-});
+// const styles = StyleSheet.create({
+//   TextInput: {
+//     color: '#F1F6F9',
+//   },
+// });
 
 export default Form;
