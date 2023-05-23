@@ -24,9 +24,9 @@ const Form = ({route}) => {
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Form'>>();
 
-  const goToHome = () => {
+  const goToHome = useCallback(() => {
     navigate('Home');
-  };
+  }, [navigate]);
 
   const {id} = route.params;
   const [dob, setDob] = useState<string>('');
@@ -65,8 +65,8 @@ const Form = ({route}) => {
 
   // const snapPoints = useMemo(() => ['25%', '50%'], []);
   const onSubmit: SubmitHandler<InputType> = formData => {
-    addContact(formData);
     console.log('form data', formData);
+    addContact(formData);
     goToHome();
   };
 
@@ -100,7 +100,7 @@ const Form = ({route}) => {
   const renderPhoneNumber = useCallback(({field: {value, onChange}}: any) => {
     return (
       <TextInput
-        placeholder={'Enter your phone number'}
+        placeholder={'Enter your phone number...'}
         value={value}
         onChangeText={onChange}
         placeholderTextColor={'#9BA4B5'}

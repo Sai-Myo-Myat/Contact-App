@@ -17,49 +17,58 @@ interface ItemType {
   id: number;
 }
 
-interface ResponseType {
-  insetId: number;
-  rows: Array<ItemType>;
-  rowAffected: number;
-}
+// interface ResponseType {
+//   insetId: number;
+//   rows: Array<ItemType>;
+//   rowAffected: number;
+// }
 
 const fetchingPromise = (args = []) => {
   //DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT SET @PageNumber = 1 SET @RowsOfPage = 2 SELECT * FROM contact OFFSET (@PageNumber-1)*@RowsOfPage ROWS
-  return new Promise<ResponseType[]>((resolve, reject) => {
-    db.exec(
-      [
-        {
-          sql: 'SELECT * FROM contact',
-          args,
-        },
-      ],
-      false,
-      (err, res) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(res as any);
-      },
-    );
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => )
   });
 };
 
-const fetchContactFromDatabase = async () => {
+const fetchContact = async () => {
   return fetchingPromise()
     .then(res => {
+      // console.log('res from promise', res);
       return res;
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log('fetching error', err));
 };
+
+// exec(
+//   [
+//     {
+//       sql: 'SELECT * FROM contact',
+//       args,
+//     },
+//   ],
+//   false,
+//   (err, res) => {
+//     if (err) {
+//       return reject(err);
+//     }
+//     return resolve(res);
+//   },
+// );
 
 const HomeScreen = () => {
   const queryClient = useQueryClient();
 
-  queryClient.invalidateQueries({queryKey: 'fetchContactFromDatabase'});
+  queryClient.invalidateQueries({queryKey: 'fetchContact'});
 
   const {isLoading, isError, data, error} = useQuery(
-    'fetchContactFromDatabase',
-    fetchContactFromDatabase,
+    'fetchContact',
+    fetchContact,
+    {
+      refetchOnWindowFocus: true,
+      staleTime: 0,
+      cacheTime: 0,
+      refetchInterval: 0,
+    },
   );
 
   useEffect(() => {
@@ -93,6 +102,8 @@ const HomeScreen = () => {
   } else if (isError) {
     console.log('error', error);
   }
+
+  // console.log(data);
 
   return (
     <View style={[tw`bg-[#212A3E] w-full h-full`]}>
