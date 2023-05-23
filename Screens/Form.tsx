@@ -2,16 +2,15 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import DatePicker from '@react-native-community/datetimepicker';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import DatePicker from '@react-native-community/datetimepicker';
 import {useQuery} from 'react-query';
 import tw from 'twrnc';
 
 import CustomButton from '../Components/CustomButton';
 import {db, getContact} from '../db';
-import { validateLocaleAndSetLanguage } from 'typescript';
 
 interface InputType {
   name: string;
@@ -95,7 +94,7 @@ const Form = ({route}) => {
         placeholderTextColor={'#9BA4B5'}
         style={[
           tw`p-2 border border-[#394867] w-full rounded-lg`,
-          // styles.textInput,
+          styles.textInput,
         ]}
       />
     );
@@ -104,32 +103,23 @@ const Form = ({route}) => {
   const renderPhoneNumber = useCallback(({field: {value, onChange}}: any) => {
     return (
       <TextInput
-        placeholder={'phone number'}
+        placeholder={'Enter your phone number'}
         value={value}
         onChangeText={onChange}
         placeholderTextColor={'#9BA4B5'}
         style={[
           tw`p-2 border border-[#394867] w-full rounded-lg`,
-          styles.TextInput,
+          styles.textInput,
         ]}
       />
     );
   }, []);
 
-  const renderDateOfBirth = useCallback(({field: {value, onChange}}: any) => {
-    return (
-      <DatePicker
-        value={new Date(value)}
-        // eslint-disable-next-line react/jsx-no-bind
-        onChange={(event: any, date: any) => {
-          const formattedDate = moment(date?.toString()).format('YYYY,MM,DD');
-          onChange(formattedDate);
-          setDob(formattedDate);
-          bottomSheetModelRef.current?.dismiss();
-        }}
-      />
-    );
-  }, []);
+  // const renderDateOfBirth = useCallback(({field: {value, onChange}}: any) => {
+  //   return (
+     
+  //   );
+  // }, []);
 
   return (
     <BottomSheetModalProvider>
@@ -150,7 +140,7 @@ const Form = ({route}) => {
           control={control}
           name="name"
           rules={{
-            required: !id ? 'name field is require!' : false,
+            required: !id ? 'Name field is require!' : false,
             maxLength: 10,
             minLength: 3,
           }}
@@ -176,16 +166,7 @@ const Form = ({route}) => {
         />
 
         <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
-        <Pressable
-          style={[
-            tw`self-start border border-[#394867] px-2 py-3 rounded-lg w-full`,
-          ]}
-          // eslint-disable-next-line react/jsx-no-bind
-          onPress={() => bottomSheetModelRef.current?.present()}>
-          <Text style={[tw`text-[#F1F6F9] ${dob === '' ? 'opacity-50' : ''}`]}>
-            {dob ? dob : '2000-1-1'}
-          </Text>
-        </Pressable>
+
         <BottomSheetModal
           ref={bottomSheetModelRef}
           index={1}
@@ -229,8 +210,8 @@ const Form = ({route}) => {
 };
 
 const styles = StyleSheet.create({
-  TextInput: {
-    color: '#F1F6F9',
+  textInput: {
+    color: '#212A3E',
   },
 });
 
