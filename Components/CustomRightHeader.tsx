@@ -7,7 +7,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/type
 import tw from 'twrnc';
 import {RootStackParamsList} from '../types';
 
-
 const CustomRightHeader = () => {
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Home'>>();

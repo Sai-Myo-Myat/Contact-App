@@ -1,15 +1,17 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 
-import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useQuery} from 'react-query';
 import tw from 'twrnc';
 
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import CustomButton from '../Components/CustomButton';
 import DatePickerController from '../Components/DatePickerController';
 import {db, getContact} from '../db';
+import {RootStackParamsList} from '../types';
 
 interface InputType {
   name: string;
@@ -18,20 +20,16 @@ interface InputType {
   remark: string;
 }
 
-// interface TextInputType {
-//   name: string;
-//   value: string;
-// }
-
-// type name = string;
-
 const Form = ({route}) => {
-  const {navigate} = useNavigation();
+  const {navigate} =
+    useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Form'>>();
+
+  const goToHome = () => {
+    navigate('Home');
+  };
 
   const {id} = route.params;
-  // const bottomSheetModelRef = useRef<BottomSheetModal>(null);
   const [dob, setDob] = useState<string>('');
-  // const queryClient = useQueryClient()
 
   console.log('route', id);
 
@@ -43,11 +41,17 @@ const Form = ({route}) => {
   } = useForm<InputType>();
 
   const {data} = useQuery('getContact', () => getContact(id));
-  // console.log(dob, "this is dob")
+  // console.log("data from database", data)
   const addContact = ({name, phoneNumber, dateOfBirth, remark}: InputType) => {
-    let array = [name, phoneNumber, dateOfBirth, remark];
+    let array = [name, phoneNumber, dateOfBirth.toString(), remark];
     let queryString =
       'INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) values (?,?,?,?)';
+
+    if (data) {
+      queryString =
+        'UPDATE contact SET name=?, phoneNumber=?, dateOfBirth=?, remark=? WHERE id=?';
+      array = [...array, id];
+    }
 
     db.transaction(tx => {
       tx.executeSql(
@@ -60,9 +64,10 @@ const Form = ({route}) => {
   };
 
   // const snapPoints = useMemo(() => ['25%', '50%'], []);
-  const onSubmit: SubmitHandler<InputType> = data => {
-    addContact(data);
-    navigate('Home');
+  const onSubmit: SubmitHandler<InputType> = formData => {
+    addContact(formData);
+    console.log('form data', formData);
+    goToHome();
   };
 
   useEffect(() => {
@@ -97,6 +102,23 @@ const Form = ({route}) => {
       <TextInput
         placeholder={'Enter your phone number'}
         value={value}
+        onChangeText={onChange}
+        placeholderTextColor={'#9BA4B5'}
+        style={[
+          tw`p-2 border border-[#394867] w-full rounded-lg`,
+          styles.textInput,
+        ]}
+      />
+    );
+  }, []);
+
+  const renderRemark = useCallback(({field: {value, onChange}}: any) => {
+    return (
+      <TextInput
+        multiline={true}
+        numberOfLines={5}
+        value={value}
+        placeholder="Remark ( optional )"
         onChangeText={onChange}
         placeholderTextColor={'#9BA4B5'}
         style={[
@@ -151,31 +173,14 @@ const Form = ({route}) => {
           render={renderPhoneNumber}
         />
 
-        <DatePickerController name={'dateOfBirth'} control={control} />
-
-        {/* <Text style={[tw`self-start text-[#F1F6F9]`]}>Remark</Text>
-        <Controller
+        <DatePickerController
+          name={'dateOfBirth'}
           control={control}
-          name="remark"
-          // eslint-disable-next-line react/jsx-no-bind
-          render={({field: {onChange, value, onBlur}}) => (
-            <TextInput
-              {...register('remark')}
-              multiline={true}
-              numberOfLines={5}
-              value={value}
-              placeholder={data ? data.remark : 'remark ( optional )'}
-              onBlur={onBlur}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChangeText={value => onChange(value)}
-              placeholderTextColor={'#9BA4B5'}
-              style={[
-                tw`p-2 border border-[#394867] w-full rounded-lg`,
-                styles.TextInput,
-              ]}
-            />
-          )}
-        /> */}
+          currentDOB={id ? data.dateOfBirth : null}
+        />
+
+        <Text style={[tw`self-start text-[#F1F6F9]`]}>Remark</Text>
+        <Controller control={control} name="remark" render={renderRemark} />
 
         <CustomButton title="Submit" onPressFun={handleSubmit(onSubmit)} />
       </View>
@@ -185,7 +190,7 @@ const Form = ({route}) => {
 
 const styles = StyleSheet.create({
   textInput: {
-    color: '#212A3E',
+    color: '#F1F6F9',
   },
 });
 

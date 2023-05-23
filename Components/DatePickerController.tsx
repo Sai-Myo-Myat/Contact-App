@@ -11,11 +11,12 @@ import tw from 'twrnc';
 interface Props {
   control: any;
   name: string;
-  currentDOB: string;
+  currentDOB: string | null;
 }
 
 const DatePickerController: FC<Props> = props => {
   const [isOpen, setIsOpen] = useState(false);
+  const {currentDOB} = props;
 
   const {
     field: {value, onChange},
@@ -42,7 +43,7 @@ const DatePickerController: FC<Props> = props => {
             tw`p-2 border border-[#394867] w-full rounded-lg flex-row justify-between items-center`,
           ]}>
           <Text style={[tw`text-[#9BA4B5]`]}>
-            {value ? formattedDate : 'Select'}
+            {value ? formattedDate : currentDOB ? currentDOB : 'Select'}
           </Text>
           <AntDesign name="right" size={26} color="#9BA4B5" />
         </View>

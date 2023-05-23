@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {ActivityIndicator, Text, View, StyleSheet} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
 
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {useQuery, useQueryClient} from 'react-query';
@@ -44,19 +44,22 @@ const fetchingPromise = (args = []) => {
   });
 };
 
-const fetchContact = async () => {
-  const res = await fetchingPromise();
-  return res;
+const fetchContactFromDatabase = async () => {
+  return fetchingPromise()
+    .then(res => {
+      return res;
+    })
+    .catch(err => console.log(err));
 };
 
 const HomeScreen = () => {
   const queryClient = useQueryClient();
 
-  queryClient.invalidateQueries({queryKey: 'fetchContact'});
+  queryClient.invalidateQueries({queryKey: 'fetchContactFromDatabase'});
 
   const {isLoading, isError, data, error} = useQuery(
-    'fetchContact',
-    fetchContact,
+    'fetchContactFromDatabase',
+    fetchContactFromDatabase,
   );
 
   useEffect(() => {
@@ -91,12 +94,10 @@ const HomeScreen = () => {
     console.log('error', error);
   }
 
-  // console.log(data, 'this is data');
-
   return (
     <View style={[tw`bg-[#212A3E] w-full h-full`]}>
       <FlashList
-        data={data}
+        data={data && data[0].rows}
         renderItem={renderContactItem}
         estimatedItemSize={20}
         extraData={data}
