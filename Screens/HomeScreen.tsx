@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {ActivityIndicator, Text, View, StyleSheet} from 'react-native';
 
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import {useQuery, useQueryClient} from 'react-query';

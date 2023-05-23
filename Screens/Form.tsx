@@ -1,21 +1,20 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import DatePicker from '@react-native-community/datetimepicker';
 import {useNavigation} from '@react-navigation/native';
-import moment from 'moment';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useQuery} from 'react-query';
 import tw from 'twrnc';
 
 import CustomButton from '../Components/CustomButton';
+import DatePickerController from '../Components/DatePickerController';
 import {db, getContact} from '../db';
 
 interface InputType {
   name: string;
   phoneNumber: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   remark: string;
 }
 
@@ -30,7 +29,7 @@ const Form = ({route}) => {
   const {navigate} = useNavigation();
 
   const {id} = route.params;
-  const bottomSheetModelRef = useRef<BottomSheetModal>(null);
+  // const bottomSheetModelRef = useRef<BottomSheetModal>(null);
   const [dob, setDob] = useState<string>('');
   // const queryClient = useQueryClient()
 
@@ -41,14 +40,7 @@ const Form = ({route}) => {
     reset,
     control,
     formState: {errors},
-  } = useForm<InputType>({
-    defaultValues: {
-      name: '',
-      phoneNumber: '',
-      dateOfBirth: new Date('2000-1-1').toString(),
-      remark: '',
-    },
-  });
+  } = useForm<InputType>();
 
   const {data} = useQuery('getContact', () => getContact(id));
   // console.log(dob, "this is dob")
@@ -67,7 +59,7 @@ const Form = ({route}) => {
     });
   };
 
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
+  // const snapPoints = useMemo(() => ['25%', '50%'], []);
   const onSubmit: SubmitHandler<InputType> = data => {
     addContact(data);
     navigate('Home');
@@ -115,12 +107,6 @@ const Form = ({route}) => {
     );
   }, []);
 
-  // const renderDateOfBirth = useCallback(({field: {value, onChange}}: any) => {
-  //   return (
-     
-  //   );
-  // }, []);
-
   return (
     <BottomSheetModalProvider>
       <View
@@ -165,19 +151,7 @@ const Form = ({route}) => {
           render={renderPhoneNumber}
         />
 
-        <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
-
-        <BottomSheetModal
-          ref={bottomSheetModelRef}
-          index={1}
-          snapPoints={snapPoints}>
-          <Controller
-            control={control}
-            name="dateOfBirth"
-            defaultValue={new Date('2000-1-1').toDateString()}
-            render={renderDateOfBirth}
-          />
-        </BottomSheetModal>
+        <DatePickerController name={'dateOfBirth'} control={control} />
 
         {/* <Text style={[tw`self-start text-[#F1F6F9]`]}>Remark</Text>
         <Controller
