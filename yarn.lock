@@ -2564,19 +2564,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/virtualized-lists@npm:^0.72.4":
-  version: 0.72.4
-  resolution: "@react-native/virtualized-lists@npm:0.72.4"
-  dependencies:
-    invariant: "npm:^2.2.4"
-    nullthrows: "npm:^1.1.1"
-  peerDependencies:
-    react-native: "*"
-    react-test-renderer: 18.2.0
-  checksum: ba2f3ca045260422275ffb3d68bb3ad5c0270ea2a6ae35b2a9a8e3dad00fa899abeb63ebca0415235699e9f8215b961220ce5b310502c1b9e10a23546cfa983e
-  languageName: node
-  linkType: hard
-
 "@react-navigation/core@npm:^6.4.8":
   version: 6.4.8
   resolution: "@react-navigation/core@npm:6.4.8"
@@ -2801,17 +2788,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-native-datepicker@npm:^1":
-  version: 1.7.1
-  resolution: "@types/react-native-datepicker@npm:1.7.1"
-  dependencies:
-    "@types/react": "npm:*"
-    "@types/react-native": "npm:*"
-    moment: "npm:>=2.14.0"
-  checksum: 3c3c5dd8a021ab38eee0c82529740b727661ad3ae2b349e9b18cca0deee6157e00694f6bd47baebf58fa1f2150bc1b481999791026e52228bc9154f1ca1d9c79
-  languageName: node
-  linkType: hard
-
 "@types/react-native-vector-icons@npm:^6.4.13":
   version: 6.4.13
   resolution: "@types/react-native-vector-icons@npm:6.4.13"
@@ -2819,16 +2795,6 @@ __metadata:
     "@types/react": "npm:*"
     "@types/react-native": "npm:^0.70"
   checksum: 4429a1770e988b1aa938cd9f39b992156b1796dbf9cc6b6936127927ef10f6f18f75df621c2bb19e57192cd982f766d304bc7b03bcb7e22e3923fe385ea097bb
-  languageName: node
-  linkType: hard
-
-"@types/react-native@npm:*":
-  version: 0.72.0
-  resolution: "@types/react-native@npm:0.72.0"
-  dependencies:
-    "@react-native/virtualized-lists": "npm:^0.72.4"
-    "@types/react": "npm:*"
-  checksum: 0e83707026d78244307281cef9c26df70ec59ad31c8cf2428a79dff62ee01202e33c54bc00747f356399592bb419cdf869db0b5918efbf0dbb6059936180cf08
   languageName: node
   linkType: hard
 
@@ -4368,7 +4334,6 @@ __metadata:
     "@types/eslint": "npm:^8"
     "@types/prettier": "npm:^2"
     "@types/react": "npm:~18.0.14"
-    "@types/react-native-datepicker": "npm:^1"
     "@types/react-native-vector-icons": "npm:^6.4.13"
     "@typescript-eslint/eslint-plugin": "npm:^5.59.6"
     "@typescript-eslint/parser": "npm:^5.59.6"
@@ -8192,7 +8157,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:>=2.14.0, moment@npm:^2.22.0, moment@npm:^2.29.4":
+"moment@npm:^2.22.0, moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: d275537a30f155cae7f53f6e6d164ccb59b560935f3c6ed0f4a2e6f3503063b491ffa6b4f7e7207501f6fcab92a2d0bb78ed539cde33cadcb91df6b254f7328d

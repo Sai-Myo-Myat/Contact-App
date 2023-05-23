@@ -1,12 +1,17 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import DatePicker from '@react-native-community/datetimepicker';
 import {useQuery} from 'react-query';
+import tw from 'twrnc';
 
-import {getContact} from '../db';
+import CustomButton from '../Components/CustomButton';
+import {db, getContact} from '../db';
+import { validateLocaleAndSetLanguage } from 'typescript';
 
 interface InputType {
   name: string;
@@ -15,16 +20,12 @@ interface InputType {
   remark: string;
 }
 
-interface TextInputType {
-  name: string;
-  value: string;
-}
+// interface TextInputType {
+//   name: string;
+//   value: string;
+// }
 
-type name = string;
-
-import tw from 'twrnc';
-import CustomButton from '../Components/CustomButton';
-import {db} from '../db';
+// type name = string;
 
 const Form = ({route}) => {
   const {navigate} = useNavigation();
@@ -37,7 +38,6 @@ const Form = ({route}) => {
   console.log('route', id);
 
   const {
-    register,
     handleSubmit,
     reset,
     control,
@@ -104,7 +104,6 @@ const Form = ({route}) => {
   const renderPhoneNumber = useCallback(({field: {value, onChange}}: any) => {
     return (
       <TextInput
-        {...register('phoneNumber', {})}
         placeholder={'phone number'}
         value={value}
         onChangeText={onChange}
@@ -113,6 +112,21 @@ const Form = ({route}) => {
           tw`p-2 border border-[#394867] w-full rounded-lg`,
           styles.TextInput,
         ]}
+      />
+    );
+  }, []);
+
+  const renderDateOfBirth = useCallback(({field: {value, onChange}}: any) => {
+    return (
+      <DatePicker
+        value={new Date(value)}
+        // eslint-disable-next-line react/jsx-no-bind
+        onChange={(event: any, date: any) => {
+          const formattedDate = moment(date?.toString()).format('YYYY,MM,DD');
+          onChange(formattedDate);
+          setDob(formattedDate);
+          bottomSheetModelRef.current?.dismiss();
+        }}
       />
     );
   }, []);
@@ -161,7 +175,7 @@ const Form = ({route}) => {
           render={renderPhoneNumber}
         />
 
-        {/* <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
+        <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
         <Pressable
           style={[
             tw`self-start border border-[#394867] px-2 py-3 rounded-lg w-full`,
@@ -175,32 +189,14 @@ const Form = ({route}) => {
         <BottomSheetModal
           ref={bottomSheetModelRef}
           index={1}
-          // eslint-disable-next-line react/jsx-no-bind
-          onChange={index => console.log(index)}
           snapPoints={snapPoints}>
           <Controller
             control={control}
             name="dateOfBirth"
-            // eslint-disable-next-line react/jsx-no-bind
-            render={({field: {onChange, value, onBlur}}) => (
-              <DatePicker
-                {...register('dateOfBirth')}
-                value={new Date(value)}
-                mode="date"
-                display="spinner"
-                // eslint-disable-next-line react/jsx-no-bind
-                onChange={(_event, date) => {
-                  const formattedDate = moment(date?.toString()).format(
-                    'YYYY,MM,DD',
-                  );
-                  onChange(formattedDate);
-                  setDob(formattedDate);
-                  bottomSheetModelRef.current?.dismiss();
-                }}
-              />
-            )}
+            defaultValue={new Date('2000-1-1').toDateString()}
+            render={renderDateOfBirth}
           />
-        </BottomSheetModal> */}
+        </BottomSheetModal>
 
         {/* <Text style={[tw`self-start text-[#F1F6F9]`]}>Remark</Text>
         <Controller
