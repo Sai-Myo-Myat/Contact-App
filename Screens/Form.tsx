@@ -101,6 +101,22 @@ const Form = ({route}) => {
     );
   }, []);
 
+  const renderPhoneNumber = useCallback(({field: {value, onChange}}: any) => {
+    return (
+      <TextInput
+        {...register('phoneNumber', {})}
+        placeholder={'phone number'}
+        value={value}
+        onChangeText={onChange}
+        placeholderTextColor={'#9BA4B5'}
+        style={[
+          tw`p-2 border border-[#394867] w-full rounded-lg`,
+          styles.TextInput,
+        ]}
+      />
+    );
+  }, []);
+
   return (
     <BottomSheetModalProvider>
       <View
@@ -142,21 +158,7 @@ const Form = ({route}) => {
             },
           }}
           defaultValue={data ? data?.phoneNumber : ''}
-          render={({field: {onChange, value, onBlur}}) => (
-            <TextInput
-              {...register('phoneNumber', {})}
-              placeholder={'phone number'}
-              value={value}
-              onBlur={onBlur}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChangeText={value => onChange(value)}
-              placeholderTextColor={'#9BA4B5'}
-              style={[
-                tw`p-2 border border-[#394867] w-full rounded-lg`,
-                styles.TextInput,
-              ]}
-            />
-          )}
+          render={renderPhoneNumber}
         />
 
         {/* <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
