@@ -1,29 +1,9 @@
-import React, {
-  ReactElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import {
-  NativeSyntheticEvent,
-  Pressable,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import DatePicker from '@react-native-community/datetimepicker';
 import {useNavigation} from '@react-navigation/native';
-import moment from 'moment';
-import {
-  Controller,
-  ControllerRenderProps,
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useQuery} from 'react-query';
 
 import {getContact} from '../db';
@@ -106,29 +86,20 @@ const Form = ({route}) => {
     }
   }, [dob, data, reset]);
 
-  const textContollerFun = useCallback(
-    ({onChange, onBlur, value, name}: ControllerRenderProps<TextInputType>) =>
-      (
-        <TextInput
-          {...register('name', {
-            required: !id ? 'name field is require!' : false,
-            maxLength: 10,
-            minLength: 3,
-          })}
-          name={name}
-          placeholder={'name'}
-          value={value}
-          onBlur={onBlur}
-          onChange={onChange(value) as NativeSyntheticEvent<name> | unknown}
-          placeholderTextColor={'#9BA4B5'}
-          style={[
-            tw`p-2 border border-[#394867] w-full rounded-lg`,
-            // styles.textInput,
-          ]}
-        />
-      ) as ReactElement,
-    [id, register],
-  );
+  const renderName = useCallback(({field: {value, onChange}}: any) => {
+    return (
+      <TextInput
+        placeholder={'Enter your name...'}
+        value={value}
+        onChangeText={onChange}
+        placeholderTextColor={'#9BA4B5'}
+        style={[
+          tw`p-2 border border-[#394867] w-full rounded-lg`,
+          // styles.textInput,
+        ]}
+      />
+    );
+  }, []);
 
   return (
     <BottomSheetModalProvider>
@@ -148,27 +119,32 @@ const Form = ({route}) => {
         <Controller
           control={control}
           name="name"
+          rules={{
+            required: !id ? 'name field is require!' : false,
+            maxLength: 10,
+            minLength: 3,
+          }}
           defaultValue={data?.name || ''}
-          render={textContollerFun}
+          render={renderName}
         />
 
         <Text style={[tw`self-start text-[#F1F6F9]`]}>Phone Number</Text>
         <Controller
           control={control}
           name="phoneNumber"
+          rules={{
+            required: !id ? 'Phone Number is required!' : false,
+            maxLength: 11,
+            minLength: 11,
+            pattern: {
+              value: /^(09\d{9,11}|959\d{8,10}|01\d{5,7})$/g,
+              message: 'Invalid phone number',
+            },
+          }}
           defaultValue={data ? data?.phoneNumber : ''}
-          // eslint-disable-next-line react/jsx-no-bind
           render={({field: {onChange, value, onBlur}}) => (
             <TextInput
-              {...register('phoneNumber', {
-                required: !id ? 'Phone Number is required!' : false,
-                maxLength: 11,
-                minLength: 11,
-                pattern: {
-                  value: /^(09\d{9,11}|959\d{8,10}|01\d{5,7})$/g,
-                  message: 'Invalid phone number',
-                },
-              })}
+              {...register('phoneNumber', {})}
               placeholder={'phone number'}
               value={value}
               onBlur={onBlur}
@@ -177,13 +153,13 @@ const Form = ({route}) => {
               placeholderTextColor={'#9BA4B5'}
               style={[
                 tw`p-2 border border-[#394867] w-full rounded-lg`,
-                styles.textInput,
+                styles.TextInput,
               ]}
             />
           )}
         />
 
-        <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
+        {/* <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
         <Pressable
           style={[
             tw`self-start border border-[#394867] px-2 py-3 rounded-lg w-full`,
@@ -222,9 +198,9 @@ const Form = ({route}) => {
               />
             )}
           />
-        </BottomSheetModal>
+        </BottomSheetModal> */}
 
-        <Text style={[tw`self-start text-[#F1F6F9]`]}>Remark</Text>
+        {/* <Text style={[tw`self-start text-[#F1F6F9]`]}>Remark</Text>
         <Controller
           control={control}
           name="remark"
@@ -242,11 +218,11 @@ const Form = ({route}) => {
               placeholderTextColor={'#9BA4B5'}
               style={[
                 tw`p-2 border border-[#394867] w-full rounded-lg`,
-                styles.textInput,
+                styles.TextInput,
               ]}
             />
           )}
-        />
+        /> */}
 
         <CustomButton title="Submit" onPressFun={handleSubmit(onSubmit)} />
       </View>
@@ -254,10 +230,10 @@ const Form = ({route}) => {
   );
 };
 
-// const styles = StyleSheet.create({
-//   TextInput: {
-//     color: '#F1F6F9',
-//   },
-// });
+const styles = StyleSheet.create({
+  TextInput: {
+    color: '#F1F6F9',
+  },
+});
 
 export default Form;
