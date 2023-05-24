@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
-import {useQuery, useQueryClient} from 'react-query';
+import {useQuery} from 'react-query';
 import tw from 'twrnc';
 
 import ContactItem from '../Components/ContactItem';
@@ -26,7 +26,22 @@ interface ItemType {
 const fetchingPromise = (args = []) => {
   //DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT SET @PageNumber = 1 SET @RowsOfPage = 2 SELECT * FROM contact OFFSET (@PageNumber-1)*@RowsOfPage ROWS
   return new Promise((resolve, reject) => {
-    db.transaction(tx => )
+    db.exec(
+      [
+        {
+          sql: 'SELECT * FROM contact',
+          args,
+        },
+      ],
+      false,
+      (err, res) => {
+        if (err) {
+          return reject(err);
+        }
+        console.log('data', res);
+        return resolve(res);
+      },
+    );
   });
 };
 
@@ -39,26 +54,10 @@ const fetchContact = async () => {
     .catch(err => console.log('fetching error', err));
 };
 
-// exec(
-//   [
-//     {
-//       sql: 'SELECT * FROM contact',
-//       args,
-//     },
-//   ],
-//   false,
-//   (err, res) => {
-//     if (err) {
-//       return reject(err);
-//     }
-//     return resolve(res);
-//   },
-// );
-
 const HomeScreen = () => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
-  queryClient.invalidateQueries({queryKey: 'fetchContact'});
+  // queryClient.invalidateQueries({queryKey: 'fetchContact'});
 
   const {isLoading, isError, data, error} = useQuery(
     'fetchContact',

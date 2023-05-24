@@ -1,17 +1,21 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
-
-import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import {useNavigation} from '@react-navigation/native';
-import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {useQuery} from 'react-query';
+//dependencies
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import tw from 'twrnc';
 
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+//components
 import CustomButton from '../Components/CustomButton';
 import DatePickerController from '../Components/DatePickerController';
-import {db, getContact} from '../db';
-import {RootStackParamsList} from '../types';
+
+//db
+import { db, getContact } from '../db';
+//types
+import { RootStackParamsList } from '../types';
 
 interface InputType {
   name: string;
@@ -20,7 +24,17 @@ interface InputType {
   remark: string;
 }
 
+interface MutationType {
+  mutationKey: string;
+  mutationFn: () => void;
+}
+
 const Form = ({route}) => {
+  //variables
+  const {id} = route.params;
+  const [dob, setDob] = useState<string>('');
+
+  //navigation
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Form'>>();
 
@@ -28,24 +42,21 @@ const Form = ({route}) => {
     navigate('Home');
   }, [navigate]);
 
-  const {id} = route.params;
-  const [dob, setDob] = useState<string>('');
-
-  console.log('route', id);
-
-  const {
-    handleSubmit,
-    reset,
-    control,
-    formState: {errors},
-  } = useForm<InputType>();
-
+  //react query
+  const queryClient = useQueryClient();
   const {data} = useQuery('getContact', () => getContact(id));
-  // console.log("data from database", data)
-  const addContact = ({name, phoneNumber, dateOfBirth, remark}: InputType) => {
-    let array = [name, phoneNumber, dateOfBirth.toString(), remark];
+
+  //db functions
+  const addContact = (props: InputType) => {
+    console.log(props.name, 'name');
+    let array = [
+      props.name,
+      props.phoneNumber,
+      props.dateOfBirth.toString(),
+      props.remark,
+    ];
     let queryString =
-      'INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) values (?,?,?,?)';
+      'INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) VALUES (?,?,?,?)';
 
     if (data) {
       queryString =
@@ -53,20 +64,39 @@ const Form = ({route}) => {
       array = [...array, id];
     }
 
+    console.log('data', array, 'query', queryString);
+
     db.transaction(tx => {
       tx.executeSql(
         queryString,
         array,
-        (_txObj, result) => console.log(result, 'data'),
+        (_txObj, result: any) => {
+          if (result.rowAffected > 0) {
+            queryClient.invalidateQueries({queryKey: 'fetchContact'});
+          }
+        },
         (_txObj, error: any) => console.log('error', error),
       );
     });
   };
 
-  // const snapPoints = useMemo(() => ['25%', '50%'], []);
+  //react query
+  const mutation = useMutation({
+    mutationFn: (formData: any) => {
+      return addContact(formData);
+    },
+  });
+
+  //react-hook-form
+  const {
+    handleSubmit,
+    reset,
+    control,
+    formState: {errors},
+  } = useForm<InputType>();
+
   const onSubmit: SubmitHandler<InputType> = formData => {
-    console.log('form data', formData);
-    addContact(formData);
+    mutation.mutate(formData);
     goToHome();
   };
 
@@ -82,6 +112,7 @@ const Form = ({route}) => {
     }
   }, [dob, data, reset]);
 
+  //rendering
   const renderName = useCallback(({field: {value, onChange}}: any) => {
     return (
       <TextInput
