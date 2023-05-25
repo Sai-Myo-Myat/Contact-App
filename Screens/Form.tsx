@@ -24,11 +24,6 @@ interface InputType {
   remark: string;
 }
 
-interface MutationType {
-  mutationKey: string;
-  mutationFn: () => void;
-}
-
 const Form = ({route}) => {
   //variables
   const {id} = route.params;
@@ -38,8 +33,12 @@ const Form = ({route}) => {
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Form'>>();
 
-  const goToHome = useCallback(() => {
-    navigate('Home');
+  // const goToHome = useCallback(() => {
+  //   navigate('Home');
+  // }, [navigate]);
+
+  const goToTest = useCallback(() => {
+    navigate('Test');
   }, [navigate]);
 
   //react query
@@ -48,7 +47,13 @@ const Form = ({route}) => {
 
   //db functions
   const addContact = (props: InputType) => {
-    console.log(props.name, 'name');
+    // console.log(
+    //   'array',
+    //   props.name,
+    //   props.phoneNumber,
+    //   props.dateOfBirth,
+    //   props.remark,
+    // );
     let array: any = [
       props.name,
       props.phoneNumber,
@@ -64,27 +69,27 @@ const Form = ({route}) => {
       array = [...array, id];
     }
 
-    console.log('data', array, 'query', queryString);
+    // console.log('data', array, 'query', queryString);
 
     db.transaction(tx => {
       tx.executeSql(
         queryString,
         array,
-        (_txObj, {rows: {_array}}) => {},
-        (_txObj, error: any) => console.log('error', error),
+        (_txObj, {rows: {_array}, rowsAffected}) => {
+          if (rowsAffected > 0) {
+            console.log('rowsAffected', rowsAffected);
+          }
+        },
+        (_txObj, error: any) => console.log(error.message),
       );
     });
-    return new Promise(resolve => {
-      resolve('success');
+    return new Promise((resolve, _reject) => {
+      return resolve('success');
     });
   };
 
   //react query
-  const mutation = useMutation(addContact, {
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: 'fetchContact'});
-    },
-  });
+  const mutation = useMutation(addContact);
 
   //react-hook-form
   const {
@@ -96,7 +101,8 @@ const Form = ({route}) => {
 
   const onSubmit: SubmitHandler<InputType> = formData => {
     mutation.mutate(formData);
-    goToHome();
+    // goToHome();
+    goToTest();
   };
 
   useEffect(() => {

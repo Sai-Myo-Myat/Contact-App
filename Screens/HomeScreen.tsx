@@ -23,32 +23,41 @@ interface ItemType {
 //   rowAffected: number;
 // }
 
-const fetchingPromise = (args = []) => {
+// db.exec(
+//   [
+//     {
+//       sql: 'SELECT * FROM contact',
+//       args,
+//     },
+//   ],
+//   false,
+//   (err, res) => {
+//     if (err) {
+//       return reject(err);
+//     }
+//     // console.log('data', res);
+//     return resolve(res);
+//   },
+// );
+
+const fetchingPromise = () => {
   //DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT SET @PageNumber = 1 SET @RowsOfPage = 2 SELECT * FROM contact OFFSET (@PageNumber-1)*@RowsOfPage ROWS
   return new Promise((resolve, reject) => {
-    db.exec(
-      [
-        {
-          sql: 'SELECT * FROM contact',
-          args,
-        },
-      ],
-      false,
-      (err, res) => {
-        if (err) {
-          return reject(err);
-        }
-        console.log('data', res);
-        return resolve(res);
-      },
-    );
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM contact',
+        [],
+        (txObj, {rows: {_array}}) => resolve(_array),
+        (_txObj, error) => reject(error),
+      );
+    });
   });
 };
 
 const fetchContact = async () => {
   return fetchingPromise()
     .then(res => {
-      // console.log('res from promise', res);
+      console.log('res from promise', res);
       return res;
     })
     .catch(err => console.log('fetching error', err));
@@ -66,13 +75,13 @@ const HomeScreen = () => {
     },
   );
 
-  // useEffect(() => {
-  //   db.transaction(tx => {
-  //     tx.executeSql(
-  //       'CREATE TABLE IF NOT EXISTS contact (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phoneNumber TEXT, dateOfBirth TEXT, remark TEXT)',
-  //     );
-  //   });
-  // }, []);
+  useEffect(() => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'CREATE TABLE IF NOT EXISTS contact (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phoneNumber TEXT, dateOfBirth TEXT, remark TEXT)',
+      );
+    });
+  }, []);
 
   const renderContactItem = useCallback(
     ({item}: ListRenderItemInfo<ItemType>) => {

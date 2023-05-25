@@ -3,4 +3,5 @@ export type RootStackParamsList = {
   Detail: {id: number};
   Form: {id: number};
   Search: undefined;
+  Test: undefined;
 };
