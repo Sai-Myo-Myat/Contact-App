@@ -13,7 +13,7 @@ import CustomButton from '../Components/CustomButton';
 import DatePickerController from '../Components/DatePickerController';
 
 //db
-import {db, getContact} from '../db';
+import {db} from '../db';
 //types
 import {RootStackParamsList} from '../types';
 
@@ -33,13 +33,13 @@ const Form = ({route}) => {
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Form'>>();
 
-  // const goToHome = useCallback(() => {
-  //   navigate('Home');
-  // }, [navigate]);
-
-  const goToTest = useCallback(() => {
-    navigate('Test');
+  const goToHome = useCallback(() => {
+    navigate('Home');
   }, [navigate]);
+
+  // const goToTest = useCallback(() => {
+  //   navigate('Test');
+  // }, [navigate]);
 
   //react query
   const queryClient = useQueryClient();
@@ -47,13 +47,6 @@ const Form = ({route}) => {
 
   //db functions
   const addContact = (props: InputType) => {
-    // console.log(
-    //   'array',
-    //   props.name,
-    //   props.phoneNumber,
-    //   props.dateOfBirth,
-    //   props.remark,
-    // );
     let array: any = [
       props.name,
       props.phoneNumber,
@@ -68,8 +61,6 @@ const Form = ({route}) => {
         'UPDATE contact SET name=?, phoneNumber=?, dateOfBirth=?, remark=? WHERE id=?';
       array = [...array, id];
     }
-
-    // console.log('data', array, 'query', queryString);
 
     db.transaction(tx => {
       tx.executeSql(
@@ -88,8 +79,37 @@ const Form = ({route}) => {
     });
   };
 
+  const getContactPromise = (id: number) => {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          'SELECT * FROM contact WHERE id=?',
+          [id],
+          (txObj, {rows: {_array}}) => resolve(_array),
+          (txObj, error) => reject(error),
+        );
+      });
+    });
+  };
+
+  const getContact = async (id: number) => {
+    if (id) {
+      return getContactPromise(id)
+        .then(res => {
+          const result = res[0].rows[0];
+          console.log(result, 'result from promise');
+          return result;
+        })
+        .catch(err => console.log(err));
+    }
+  };
+
   //react query
-  const mutation = useMutation(addContact);
+  const mutation = useMutation(addContact, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('fetchContact');
+    },
+  });
 
   //react-hook-form
   const {
@@ -101,8 +121,8 @@ const Form = ({route}) => {
 
   const onSubmit: SubmitHandler<InputType> = formData => {
     mutation.mutate(formData);
-    // goToHome();
-    goToTest();
+    goToHome();
+    // goToTest();
   };
 
   useEffect(() => {
@@ -122,7 +142,7 @@ const Form = ({route}) => {
       dateOfBirth: undefined,
       remark: '',
     });
-  }, [dob, data, reset]);
+  }, [dob, reset, data]);
 
   //rendering
   const renderName = useCallback(({field: {value, onChange}}: any) => {

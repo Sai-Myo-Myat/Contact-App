@@ -1,24 +1,47 @@
 import React from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
+import {useQuery} from 'react-query';
 import tw from 'twrnc';
 
-import {useQuery} from 'react-query';
-
-import {getContact} from '../db';
+import {db} from '../db';
 
 const ContactDetail = ({route}) => {
   const {id} = route.params;
 
-  // const {isLoading} = useQuery('contactDetails', () => getContact(id));
+  const getContactPromise = (id:number) => {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          'SELECT * FROM contact WHERE id=?',
+          [id],
+          (txObj, {rows: {_array}}) => resolve(_array),
+          (txObj, error) => reject(error),
+        );
+      });
+    });
+  };
 
-  // if (isLoading) {
-  //   return (
-  //     <View style={[tw`bg-[#212A3E] w-full h-full p-10`]}>
-  //       <ActivityIndicator />
-  //       <Text style={[tw`text-[#F1F6F9]`]}>Loading ......</Text>
-  //     </View>
-  //   );
-  // }
+  const getContact = async (id: number) => {
+    if (id) {
+      return getContactPromise(id)
+        .then(res => {
+          return res;
+        })
+        .catch(err => console.log(err));
+    }
+  };
+
+  const {isLoading, data} = useQuery('contactDetails', () => getContact(id));
+
+  if (isLoading) {
+    return (
+      <View style={[tw`bg-[#212A3E] w-full h-full p-10`]}>
+        <ActivityIndicator />
+        <Text style={[tw`text-[#F1F6F9]`]}>Loading ......</Text>
+      </View>
+    );
+  }
+  console.log(data, 'this is data');
 
   return (
     <View

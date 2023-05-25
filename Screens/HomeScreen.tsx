@@ -17,29 +17,6 @@ interface ItemType {
   id: number;
 }
 
-// interface ResponseType {
-//   insetId: number;
-//   rows: Array<ItemType>;
-//   rowAffected: number;
-// }
-
-// db.exec(
-//   [
-//     {
-//       sql: 'SELECT * FROM contact',
-//       args,
-//     },
-//   ],
-//   false,
-//   (err, res) => {
-//     if (err) {
-//       return reject(err);
-//     }
-//     // console.log('data', res);
-//     return resolve(res);
-//   },
-// );
-
 const fetchingPromise = () => {
   //DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT SET @PageNumber = 1 SET @RowsOfPage = 2 SELECT * FROM contact OFFSET (@PageNumber-1)*@RowsOfPage ROWS
   return new Promise((resolve, reject) => {
@@ -112,7 +89,7 @@ const HomeScreen = () => {
   return (
     <View style={[tw`bg-[#212A3E] w-full h-full`]}>
       <FlashList
-        data={data && data[0].rows}
+        data={data && data}
         renderItem={renderContactItem}
         estimatedItemSize={20}
         extraData={data}
