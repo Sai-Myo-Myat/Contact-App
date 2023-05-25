@@ -38,9 +38,6 @@ const Form = ({route}) => {
     navigate('Home');
   }, [navigate]);
 
-  // const goToTest = useCallback(() => {
-  //   navigate('Test');
-  // }, [navigate]);
 
   //react query
   const queryClient = useQueryClient();
@@ -128,12 +125,12 @@ const Form = ({route}) => {
 
   useEffect(() => {
     if (data) {
-      setDob(data.dateOfBirth);
+      setDob(data[0].dateOfBirth);
       reset({
-        name: data.name,
-        phoneNumber: data.phoneNumber,
-        dateOfBirth: data.dateOfBirth,
-        remark: data.remark,
+        name: data[0].name,
+        phoneNumber: data[0].phoneNumber,
+        dateOfBirth: data[0].dateOfBirth,
+        remark: data[0].remark,
       });
       return;
     }
