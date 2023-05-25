@@ -96,9 +96,8 @@ const Form = ({route}) => {
     if (id) {
       return getContactPromise(id)
         .then(res => {
-          const result = res[0].rows[0];
-          console.log(result, 'result from promise');
-          return result;
+          console.log(res, 'result from promise, form-edit page');
+          return res;
         })
         .catch(err => console.log(err));
     }
@@ -239,7 +238,7 @@ const Form = ({route}) => {
         <DatePickerController
           name={'dateOfBirth'}
           control={control}
-          currentDOB={id ? data.dateOfBirth : null}
+          currentDOB={id ? data?.dateOfBirth : null}
         />
 
         <Text style={[tw`self-start text-[#F1F6F9]`]}>Remark</Text>
