@@ -56,11 +56,11 @@ const Form = ({route}) => {
     let queryString =
       'INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) VALUES (?,?,?,?)';
 
-    if (data) {
-      queryString =
-        'UPDATE contact SET name=?, phoneNumber=?, dateOfBirth=?, remark=? WHERE id=?';
-      array = [...array, id];
-    }
+    // if (data) {
+    //   queryString =
+    //     'UPDATE contact SET name=?, phoneNumber=?, dateOfBirth=?, remark=? WHERE id=?';
+    //   array = [...array, id];
+    // }
 
     db.transaction(tx => {
       tx.executeSql(
@@ -68,10 +68,10 @@ const Form = ({route}) => {
         array,
         (_txObj, {rows: {_array}, rowsAffected}) => {
           if (rowsAffected > 0) {
-            console.log('rowsAffected', rowsAffected);
+            // console.log('rowsAffected', rowsAffected);
           }
         },
-        (_txObj, error: any) => console.log(error.message),
+        (_txObj, error: any) => console.log('creattion error', error.message),
       );
     });
     return new Promise((resolve, _reject) => {

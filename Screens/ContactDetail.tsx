@@ -25,7 +25,7 @@ const ContactDetail = ({route}) => {
     if (id) {
       return getContactPromise(id)
         .then(res => {
-          return res;
+          return res[0];
         })
         .catch(err => console.log(err));
     }
@@ -48,21 +48,21 @@ const ContactDetail = ({route}) => {
       style={[
         tw`bg-[#212A3E] p-5 h-full  flex justify-start items-start gap-2`,
       ]}>
-      {/* <Text style={[tw`text-[#F1F6F9] text-xl`]}>
+      <Text style={[tw`text-[#F1F6F9] text-xl`]}>
         <Text style={[tw`text-[#9BA4B5]`]}>Name:</Text> {data?.name}
       </Text>
       <Text style={[tw`text-[#F1F6F9] text-lg`]}>
-        <Text style={[tw`text-[#9BA4B5]`]}>Phone Number:</Text>{' '}
+        <Text style={[tw`text-[#9BA4B5]`]}>Phone Number:</Text>
         {data?.phoneNumber}
       </Text>
       <Text style={[tw`text-[#F1F6F9] text-lg`]}>
-        <Text style={[tw`text-[#9BA4B5]`]}>Date Of Birth:</Text>{' '}
+        <Text style={[tw`text-[#9BA4B5]`]}>Date Of Birth:</Text>
         {data?.dateOfBirth}
       </Text>
       <Text style={[tw`text-[#F1F6F9] text-lg`]}>
-        <Text style={[tw`text-[#9BA4B5]`]}>Remark:</Text>{' '}
+        <Text style={[tw`text-[#9BA4B5]`]}>Remark:</Text>
         {data === '' ? 'No Remark' : data.remark}
-      </Text> */}
+      </Text>
     </View>
   );
 };

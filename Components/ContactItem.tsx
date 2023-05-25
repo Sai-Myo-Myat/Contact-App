@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import tw from 'twrnc';
 
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useQueryClient} from 'react-query';
 import {db} from '../db';
 import {RootStackParamsList} from '../types';
 
@@ -20,7 +21,7 @@ interface Props {
 const deleteContact = (id: number) => {
   db.transaction(tx => {
     tx.executeSql('DELETE FROM contact WHERE id = ? ', [id], (txObj, result) =>
-      console.log(result),
+      console.log('delete', result),
     );
   });
 };
@@ -29,6 +30,8 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Home'>>();
 
+  const queryClient = useQueryClient();
+
   const goToDetail = useCallback(() => {
     navigate('Detail', {id});
   }, [id, navigate]);
@@ -36,6 +39,11 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
   const goToForm = useCallback(() => {
     navigate('Form', {id});
   }, [id, navigate]);
+
+  const deleteContactCallback = useCallback(() => {
+    deleteContact(id);
+    queryClient.invalidateQueries('fetchContact');
+  }, [id, queryClient]);
 
   return (
     <Pressable onPress={goToDetail}>
@@ -51,7 +59,7 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
           <Pressable style={[tw`mr-2`]} onPress={goToForm}>
             <Feather name="edit" size={20} color="#F1F6F9" />
           </Pressable>
-          <Pressable style={[tw`mr-2`]} onPress={deleteContact(id)}>
+          <Pressable style={[tw`mr-2`]} onPress={deleteContactCallback}>
             <AntDesign name="delete" size={20} color={'#F1F6F9'} />
           </Pressable>
         </View>
