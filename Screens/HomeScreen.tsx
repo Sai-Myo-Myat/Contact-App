@@ -55,10 +55,6 @@ const fetchContact = async () => {
 };
 
 const HomeScreen = () => {
-  // const queryClient = useQueryClient();
-
-  // queryClient.invalidateQueries({queryKey: 'fetchContact'});
-
   const {isLoading, isError, data, error} = useQuery(
     'fetchContact',
     fetchContact,
@@ -70,13 +66,13 @@ const HomeScreen = () => {
     },
   );
 
-  useEffect(() => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS contact (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phoneNumber TEXT, dateOfBirth TEXT, remark TEXT)',
-      );
-    });
-  }, []);
+  // useEffect(() => {
+  //   db.transaction(tx => {
+  //     tx.executeSql(
+  //       'CREATE TABLE IF NOT EXISTS contact (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phoneNumber TEXT, dateOfBirth TEXT, remark TEXT)',
+  //     );
+  //   });
+  // }, []);
 
   const renderContactItem = useCallback(
     ({item}: ListRenderItemInfo<ItemType>) => {

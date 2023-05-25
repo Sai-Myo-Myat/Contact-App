@@ -1,11 +1,11 @@
 //dependencies
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
 import tw from 'twrnc';
 
 //components
@@ -13,9 +13,9 @@ import CustomButton from '../Components/CustomButton';
 import DatePickerController from '../Components/DatePickerController';
 
 //db
-import { db, getContact } from '../db';
+import {db, getContact} from '../db';
 //types
-import { RootStackParamsList } from '../types';
+import {RootStackParamsList} from '../types';
 
 interface InputType {
   name: string;
@@ -49,10 +49,10 @@ const Form = ({route}) => {
   //db functions
   const addContact = (props: InputType) => {
     console.log(props.name, 'name');
-    let array = [
+    let array: any = [
       props.name,
       props.phoneNumber,
-      props.dateOfBirth.toString(),
+      props.dateOfBirth,
       props.remark,
     ];
     let queryString =
@@ -70,20 +70,19 @@ const Form = ({route}) => {
       tx.executeSql(
         queryString,
         array,
-        (_txObj, result: any) => {
-          if (result.rowAffected > 0) {
-            queryClient.invalidateQueries({queryKey: 'fetchContact'});
-          }
-        },
+        (_txObj, {rows: {_array}}) => {},
         (_txObj, error: any) => console.log('error', error),
       );
+    });
+    return new Promise(resolve => {
+      resolve('success');
     });
   };
 
   //react query
-  const mutation = useMutation({
-    mutationFn: (formData: any) => {
-      return addContact(formData);
+  const mutation = useMutation(addContact, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: 'fetchContact'});
     },
   });
 
@@ -109,7 +108,14 @@ const Form = ({route}) => {
         dateOfBirth: data.dateOfBirth,
         remark: data.remark,
       });
+      return;
     }
+    reset({
+      name: '',
+      phoneNumber: '',
+      dateOfBirth: undefined,
+      remark: '',
+    });
   }, [dob, data, reset]);
 
   //rendering
