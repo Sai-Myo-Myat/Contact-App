@@ -34,7 +34,7 @@ const fetchingPromise = () => {
 const fetchContact = async () => {
   return fetchingPromise()
     .then(res => {
-      console.log('res from promise', res);
+      // console.log('res from promise', res);
       return res;
     })
     .catch(err => console.log('fetching error', err));

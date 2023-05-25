@@ -2,6 +2,7 @@
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import moment from 'moment';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
@@ -47,20 +48,21 @@ const Form = ({route}) => {
 
   //db functions
   const addContact = (props: InputType) => {
+    console.log('dataOfBirth', props.dateOfBirth);
     let array: any = [
       props.name,
       props.phoneNumber,
-      props.dateOfBirth,
+      moment(props.dateOfBirth).format('DD-MM-YYYY'),
       props.remark,
     ];
     let queryString =
       'INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) VALUES (?,?,?,?)';
 
-    // if (data) {
-    //   queryString =
-    //     'UPDATE contact SET name=?, phoneNumber=?, dateOfBirth=?, remark=? WHERE id=?';
-    //   array = [...array, id];
-    // }
+    if (id) {
+      queryString =
+        'UPDATE contact SET name=?, phoneNumber=?, dateOfBirth=?, remark=? WHERE id=?';
+      array = [...array, id];
+    }
 
     db.transaction(tx => {
       tx.executeSql(
@@ -68,7 +70,7 @@ const Form = ({route}) => {
         array,
         (_txObj, {rows: {_array}, rowsAffected}) => {
           if (rowsAffected > 0) {
-            // console.log('rowsAffected', rowsAffected);
+            console.log('rowsAffected', rowsAffected);
           }
         },
         (_txObj, error: any) => console.log('creattion error', error.message),
@@ -86,7 +88,7 @@ const Form = ({route}) => {
           'SELECT * FROM contact WHERE id=?',
           [id],
           (txObj, {rows: {_array}}) => resolve(_array),
-          (txObj, error) => reject(error),
+          (_txObj, error) => reject(error),
         );
       });
     });
