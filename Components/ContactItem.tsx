@@ -51,16 +51,16 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
         <View style={[tw`flex gap-3`]}>
           <Text style={[tw`text-[#F1F6F9] font-bold text-lg`]}>{name}</Text>
           <Text style={[tw`text-[#F1F6F9] font-bold text-sm`]}>
-            ph: {phoneNumber}
+            phone number : {phoneNumber}
           </Text>
-          <Text style={[tw`text-[#9BA4B5]`]}>created at: 2011-2-4</Text>
+          <Text style={[tw`text-[#9BA4B5]`]}>2011-2-4</Text>
         </View>
         <View style={[tw`flex-row gap-3 self-end`]}>
           <Pressable style={[tw`mr-2`]} onPress={goToForm}>
-            <Feather name="edit" size={20} color="#F1F6F9" />
+            <Feather name="edit" size={23} color="#F1F6F9" />
           </Pressable>
           <Pressable style={[tw`mr-2`]} onPress={deleteContactCallback}>
-            <AntDesign name="delete" size={20} color={'#F1F6F9'} />
+            <AntDesign name="delete" size={23} color={'#F1F6F9'} />
           </Pressable>
         </View>
         <View style={[tw`h-.3 bg-[#394867] `]} />

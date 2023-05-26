@@ -9,7 +9,7 @@ import {db} from '../db';
 const ContactDetail = ({route}) => {
   const {id} = route.params;
 
-  const getContactPromise = (id:number) => {
+  const getContactPromise = (id: number) => {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql(
@@ -43,26 +43,35 @@ const ContactDetail = ({route}) => {
     );
   }
 
+  console.log('detail page', data.dateOfBirth);
+
   return (
     <View
       style={[
-        tw`bg-[#212A3E] p-5 h-full  flex justify-start items-start gap-2`,
+        tw`bg-[#212A3E] p-5 h-full  flex justify-start items-start gap-3`,
       ]}>
-      <Text style={[tw`text-[#F1F6F9] text-xl`]}>
-        <Text style={[tw`text-[#9BA4B5]`]}>Name: </Text> {data?.name}
-      </Text>
-      <Text style={[tw`text-[#F1F6F9] text-lg`]}>
-        <Text style={[tw`text-[#9BA4B5]`]}>Phone Number: </Text>
-        {data?.phoneNumber}
-      </Text>
-      <Text style={[tw`text-[#F1F6F9] text-lg`]}>
-        <Text style={[tw`text-[#9BA4B5]`]}>Date Of Birth: </Text>
-        {moment(data?.dateOfBirth).format('DD-MM-YYYY')}
-      </Text>
-      <Text style={[tw`text-[#F1F6F9] text-lg`]}>
-        <Text style={[tw`text-[#9BA4B5]`]}>Remark: </Text>
-        {data === '' ? 'No Remark' : data.remark}
-      </Text>
+      <View style={[tw`flex gap-1`]}>
+        <Text style={[tw`text-sm text-[#F1F6F9]`]}>Name :</Text>
+        <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>{data.name}</Text>
+      </View>
+      <View style={[tw`flex gap-1`]}>
+        <Text style={[tw`text-sm text-[#F1F6F9]`]}>Phone Number :</Text>
+        <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
+          {data.phoneNumber}
+        </Text>
+      </View>
+      <View style={[tw`flex gap-1`]}>
+        <Text style={[tw`text-sm text-[#F1F6F9]`]}>Date Of Birth :</Text>
+        <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
+          {moment(data.dataOfBirth).format('DD-MM-YY')}
+        </Text>
+      </View>
+      <View style={[tw`flex gap-1`]}>
+        <Text style={[tw`text-sm text-[#F1F6F9]`]}>Remark :</Text>
+        <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
+          {data.remark ? data.remark : 'no remark'}
+        </Text>
+      </View>
     </View>
   );
 };

@@ -38,7 +38,6 @@ const Form = ({route}) => {
     navigate('Home');
   }, [navigate]);
 
-
   //react query
   const queryClient = useQueryClient();
   const {data} = useQuery('getContact', () => getContact(id));
@@ -70,7 +69,7 @@ const Form = ({route}) => {
             console.log('rowsAffected', rowsAffected);
           }
         },
-        (_txObj, error: any) => console.log('creattion error', error.message),
+        (_txObj, error: any) => error.message,
       );
     });
     return new Promise((resolve, _reject) => {
@@ -79,13 +78,13 @@ const Form = ({route}) => {
   };
 
   const getContactPromise = (id: number) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.transaction(tx => {
         tx.executeSql(
           'SELECT * FROM contact WHERE id=?',
           [id],
           (txObj, {rows: {_array}}) => resolve(_array),
-          (_txObj, error) => reject(error),
+          (_txObj, error: any) => error,
         );
       });
     });
@@ -112,6 +111,7 @@ const Form = ({route}) => {
   //react-hook-form
   const {
     handleSubmit,
+    register,
     reset,
     control,
     formState: {errors},
@@ -120,8 +120,8 @@ const Form = ({route}) => {
   const onSubmit: SubmitHandler<InputType> = formData => {
     mutation.mutate(formData);
     goToHome();
-    // goToTest();
   };
+  console.log('form errors: ', errors.phoneNumber?.message);
 
   useEffect(() => {
     if (data) {
@@ -162,6 +162,15 @@ const Form = ({route}) => {
     return (
       <TextInput
         placeholder={'Enter your phone number...'}
+        {...register('phoneNumber', {
+          required: !id ? 'Phone Number is required!' : false,
+          maxLength: 12,
+          minLength: 11,
+          pattern: {
+            value: /^(09\d{9,11}|959\d{8,10}|01\d{5,7})$/g,
+            message: 'Invalid phone number',
+          },
+        })}
         value={value}
         onChangeText={onChange}
         placeholderTextColor={'#9BA4B5'}
@@ -193,46 +202,41 @@ const Form = ({route}) => {
   return (
     <BottomSheetModalProvider>
       <View
-        style={[
-          tw`bg-[#212A3E] p-5 h-full text-[#F1F6F9] flex justify-center items-center gap-2`,
-        ]}>
-        <View
-          style={[tw` w-full flex items-center rounded-lg justify-center p-2`]}>
-          <Text style={[tw`text-[#EB455F]  mb-3 text-lg`]}>
-            {errors.name?.message ||
-              errors.phoneNumber?.message ||
-              errors.dateOfBirth?.message}
-          </Text>
+        style={[tw`bg-[#212A3E] px-5 py-10 h-full text-[#F1F6F9] flex gap-4`]}>
+        <View>
+          <View style={[tw`flex-row gap-2 items-center mb-2`]}>
+            <Text style={[tw`self-start text-[#F1F6F9]`]}>Name</Text>
+            <Text style={[tw`text-[#E43F5A]`]}>
+              {errors.name ? ` : ${errors.name.message} ` : ''}
+            </Text>
+          </View>
+          <Controller
+            control={control}
+            name="name"
+            rules={{
+              required: !id ? 'Name field is require!' : false,
+              maxLength: 10,
+              minLength: 3,
+            }}
+            defaultValue={data?.name || ''}
+            render={renderName}
+          />
         </View>
-        <Text style={[tw`self-start text-[#F1F6F9]`]}>Name</Text>
-        <Controller
-          control={control}
-          name="name"
-          rules={{
-            required: !id ? 'Name field is require!' : false,
-            maxLength: 10,
-            minLength: 3,
-          }}
-          defaultValue={data?.name || ''}
-          render={renderName}
-        />
 
-        <Text style={[tw`self-start text-[#F1F6F9]`]}>Phone Number</Text>
-        <Controller
-          control={control}
-          name="phoneNumber"
-          rules={{
-            required: !id ? 'Phone Number is required!' : false,
-            maxLength: 11,
-            minLength: 11,
-            pattern: {
-              value: /^(09\d{9,11}|959\d{8,10}|01\d{5,7})$/g,
-              message: 'Invalid phone number',
-            },
-          }}
-          defaultValue={data ? data?.phoneNumber : ''}
-          render={renderPhoneNumber}
-        />
+        <View>
+          <View style={[tw`flex-row gap-2 items-center mb-2`]}>
+            <Text style={[tw`self-start text-[#F1F6F9]`]}>Phone Number</Text>
+            <Text style={[tw`text-[#E43F5A]`]}>
+              {errors.phoneNumber ? ` : ${errors.phoneNumber.message} ` : ''}
+            </Text>
+          </View>
+          <Controller
+            control={control}
+            name="phoneNumber"
+            defaultValue={data ? data?.phoneNumber : ''}
+            render={renderPhoneNumber}
+          />
+        </View>
 
         <DatePickerController
           name={'dateOfBirth'}
@@ -240,8 +244,10 @@ const Form = ({route}) => {
           currentDOB={id ? data?.dateOfBirth : null}
         />
 
-        <Text style={[tw`self-start text-[#F1F6F9]`]}>Remark</Text>
-        <Controller control={control} name="remark" render={renderRemark} />
+        <View>
+          <Text style={[tw`self-start text-[#F1F6F9] mb-2`]}>Remark</Text>
+          <Controller control={control} name="remark" render={renderRemark} />
+        </View>
 
         <CustomButton title="Submit" onPressFun={handleSubmit(onSubmit)} />
       </View>
