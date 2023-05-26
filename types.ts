@@ -5,3 +5,11 @@ export type RootStackParamsList = {
   Search: undefined;
   Test: undefined;
 };
+
+export interface ItemType {
+  name: string;
+  phoneNumber: string;
+  dateOfBirth: string;
+  remark: string;
+  id: number;
+}

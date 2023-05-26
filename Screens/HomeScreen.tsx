@@ -8,14 +8,7 @@ import tw from 'twrnc';
 import ContactItem from '../Components/ContactItem';
 
 import {db} from '../db';
-
-interface ItemType {
-  name: string;
-  phoneNumber: string;
-  dateOfBirth: string;
-  remark: string;
-  id: number;
-}
+import {ItemType} from '../types';
 
 const fetchingPromise = () => {
   //DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT SET @PageNumber = 1 SET @RowsOfPage = 2 SELECT * FROM contact OFFSET (@PageNumber-1)*@RowsOfPage ROWS

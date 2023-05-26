@@ -1,0 +1,293 @@
+[33mcommit e901d38b58742b908feb4b4f707140b5cc19f181[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Fri May 26 13:34:56 2023 +0630
+
+    fixed:  not appearing date of birth properly
+
+[33mcommit cb0267eb814e59c0eae069c3b4c6d4914bac56e4[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Fri May 26 10:09:47 2023 +0630
+
+    changed form design and detail page design
+
+[33mcommit f85d682e19a43b3d356076701c1830ec845b665f[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 25 22:44:22 2023 +0630
+
+    fixed detail page
+
+[33mcommit 5dbaf430bb792e4a00672339467f4859cb622ca9[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 25 17:57:50 2023 +0630
+
+    fixed invalid dateOfBirth error
+
+[33mcommit 1fafc8da54664f973453e25bbd3c2adbdd896a31[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 25 17:35:19 2023 +0630
+
+    fixed fetching error
+
+[33mcommit 4237eb759129d4b6aa8b2731477962ae2b26ab78[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 25 12:03:29 2023 +0630
+
+    Not rendering edit-form is fixed
+
+[33mcommit bef3cb937a670e4de8ce1d9d621e1f920065a2cf[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 25 11:54:27 2023 +0630
+
+    fixing fetching error
+
+[33mcommit dde3a164c219d2aa8851c7e275d2f6033cda9a99[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 25 11:14:18 2023 +0630
+
+    TestScreen is added Temporarily
+
+[33mcommit 4c13adc02831440ca7ad769eb9da8f72b7b95b89[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 25 09:29:09 2023 +0630
+
+    fixed mutation error
+
+[33mcommit ae269cf867d7b8327ecd1e04f54b4e1e0200e338[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Wed May 24 17:26:50 2023 +0630
+
+    add contact mutation
+
+[33mcommit 32499f43a8caf62cf25c3b9f97afe1743cb2abbe[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Tue May 23 17:43:58 2023 +0630
+
+    fetching error
+
+[33mcommit 3209b4268bbe74c3dc9d64d22acda860f8c708eb[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Tue May 23 16:27:14 2023 +0630
+
+    remark controller
+
+[33mcommit c239e512f1f25f0e983be4fa9360a90f33c41afb[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Tue May 23 15:25:38 2023 +0630
+
+    custom dateOfBirth controller
+
+[33mcommit ac9cff8c12411778753e5f96663313cf52aeb23e[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Tue May 23 12:15:31 2023 +0630
+
+    building date of birth custom controller
+
+[33mcommit 03ab8c53989d46d637ce7e46243b2f859e9bacce[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Tue May 23 10:57:02 2023 +0630
+
+    dateOfbirth controller
+
+[33mcommit dc29668866aa392d8c0ddee78b551d016a6463f7[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Tue May 23 10:20:59 2023 +0630
+
+    phone number controller
+
+[33mcommit 25491a2e21bddb7f7b4cdf57ccf914178ffd665a[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Tue May 23 10:17:16 2023 +0630
+
+    name controller
+
+[33mcommit 6ee94b5a5feec8982b1c35abfec0f6f9f406b180[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Tue May 23 09:47:02 2023 +0630
+
+    fixing type errors
+
+[33mcommit 63b99645a9150b9d87f56178583a0fa40a6cf9d9[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Mon May 22 22:15:33 2023 +0630
+
+    form tempory fixing
+
+[33mcommit de8e5431d6d39928c885e31489e49754b39b66d7[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Mon May 22 17:59:34 2023 +0630
+
+    react hook form controller
+
+[33mcommit 8141ad1ae42288b199839d3faa729a25223dd0bd[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Mon May 22 17:27:59 2023 +0630
+
+    navigation between screen
+
+[33mcommit 996d36f32204a9298474a9dae9cae94087fde783[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Mon May 22 17:12:06 2023 +0630
+
+    Detail navigation
+
+[33mcommit 948aa4f33e4920026ad3e01efd1eb004fd5863af[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Mon May 22 16:31:47 2023 +0630
+
+    fixing some type-errors
+
+[33mcommit 007c4401417e641af4603755d320618355a32303[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Mon May 22 15:21:44 2023 +0630
+
+    solve some code format
+
+[33mcommit 1f003e5b0bfa36b9d68bd7c86572a5aca298c95d[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Mon May 22 14:25:42 2023 +0630
+
+    eslint setup
+
+[33mcommit a7d1ee7738bb019d31d91be9b0161270e483e30a[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Mon May 22 10:34:23 2023 +0630
+
+    update regular expression
+
+[33mcommit 41539183ed41282b0d06945ad39bdbd5d3101a84[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Mon May 22 10:12:16 2023 +0630
+
+    refactoring edit feature
+
+[33mcommit df20a5f688c6d974d4e26f213888ff9773d1b9ff[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Sun May 21 23:29:35 2023 +0630
+
+    detail page
+
+[33mcommit f637445dfef4ffe9930e6102b4634dba907c0e94[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Sun May 21 20:10:46 2023 +0630
+
+    searching feature
+
+[33mcommit 68d8535ab17772a0f934991977ea7138e15c454e[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Sun May 21 18:39:52 2023 +0630
+
+    search screen
+
+[33mcommit dc8e279917206d529ed929da24e66863ed81d5c7[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Sun May 21 17:53:41 2023 +0630
+
+    search bar
+
+[33mcommit 0837957b1194c3cb96fd6db54fd2ba074fd38885[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Sun May 21 10:20:42 2023 +0630
+
+    auto refresh
+
+[33mcommit 59e0b768f97c81d565fdc1d4ebfcded1acba213a[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Sun May 21 01:50:23 2023 +0630
+
+    edit function
+
+[33mcommit 11532b73a1f40ba562d3becdfae7269ed2bf5046[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Sat May 20 19:38:48 2023 +0630
+
+    delete function and edite form
+
+[33mcommit b3e5f358a16c7d40ed152393de6e1a8bd36d9e8f[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Sat May 20 16:50:40 2023 +0630
+
+    edit function
+
+[33mcommit c59dcd294a58b238b8eb7e9741ed207d10464b88[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Sat May 20 15:15:51 2023 +0630
+
+    edit and delete button
+
+[33mcommit 6478d8b2a4d1215b91c4e02d897b9c1b6dc70631[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Sat May 20 13:54:23 2023 +0630
+
+    fetching with react-query
+
+[33mcommit bc1525a5a095113503a1c821cc57789c04f6fd83[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Fri May 19 23:07:47 2023 +0630
+
+    adding contact to database
+
+[33mcommit f73f51004d3f4522e1a398e2c4eb9b56ff40bfa6[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Fri May 19 19:44:23 2023 +0630
+
+    react query set-up
+
+[33mcommit 48d3e93bad4a5c05db99a43c538e18035c56d676[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Fri May 19 19:07:25 2023 +0630
+
+    sqlite db
+
+[33mcommit 2895640d5c242a6190479625a6b340b917b9c6cf[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Fri May 19 18:13:27 2023 +0630
+
+    date of birth
+
+[33mcommit f2862874a6ed10de93aad4a776bb090a48c02297[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Fri May 19 15:55:00 2023 +0630
+
+    date picker issue
+
+[33mcommit f39724469f142e44a1131bb546c569439a1c77ed[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 18 22:28:16 2023 +0630
+
+    bottom sheet set-up
+
+[33mcommit 7239283acd9feabd99eca6d83d5fa3c008d1dabf[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 18 21:38:32 2023 +0630
+
+    react hook form controller
+
+[33mcommit 6a7b24531e75a35c9dee41db01643ed9e7cb995b[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 18 16:33:55 2023 +0630
+
+    fixed some issues
+
+[33mcommit 25b14115fdc8b0f51e0ba411e06ec1ec0dd1bc9f[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 18 16:07:17 2023 +0630
+
+    form
+
+[33mcommit 1bab2226b1b660147438ffc57bb9220f119a863b[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 18 11:45:56 2023 +0630
+
+    adding  packages
+
+[33mcommit 2d6af75a8c445da91d9ef47431ac1ff081297ed9[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 18 11:31:47 2023 +0630
+
+    custom button
+
+[33mcommit a51c5174f49e9ba6999567698712d9cb887bf659[m
+Author: saimyomyat <saimyomyat511@gmail.com>
+Date:   Thu May 18 10:40:39 2023 +0630
+
+    first commit
