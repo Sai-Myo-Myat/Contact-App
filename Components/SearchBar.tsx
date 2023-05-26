@@ -1,8 +1,7 @@
 import {Feather} from '@expo/vector-icons';
 import React, {FC, useCallback} from 'react';
-import {useController} from 'react-hook-form';
+import {useController, useFieldArray} from 'react-hook-form';
 import {Pressable, StyleSheet, TextInput, View} from 'react-native';
-import {useQuery} from 'react-query';
 
 import tw from 'twrnc';
 import {db} from '../db';
@@ -30,17 +29,24 @@ const SearchBar: FC<Props> = props => {
     field: {value, onChange},
   } = useController({...props});
 
+  const {control} = props;
+
+  const {append, remove} = useFieldArray({
+    control,
+    name: 'items',
+  });
+
   const findByName = useCallback(async () => {
     return findByNamePromise(value)
-      .then(res => console.log(res))
+      .then(res => {
+        remove();
+        append(res);
+        return res;
+      })
       .catch(err => err);
-  }, [value]);
+  }, [append, value]);
 
-  const {data, isSuccess} = useQuery('findByName', findByName);
-
-  if (isSuccess) {
-    console.log(data, 'filtered data');
-  }
+  // console.log('fields from serach bar', fields);
 
   return (
     <View style={[tw`flex-row items-center border-b border-[#9BA4B5] mx-3`]}>
