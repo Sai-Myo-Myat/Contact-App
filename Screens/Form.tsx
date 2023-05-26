@@ -2,7 +2,6 @@
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import moment from 'moment';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
@@ -29,7 +28,6 @@ const Form = ({route}) => {
   //variables
   const {id} = route.params;
   const [dob, setDob] = useState<string>('');
-
   //navigation
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Form'>>();
@@ -48,7 +46,7 @@ const Form = ({route}) => {
     let array: any = [
       props.name,
       props.phoneNumber,
-      moment(props.dateOfBirth).format('DD-MM-YYYY'),
+      props.dateOfBirth,
       props.remark,
     ];
     let queryString =
@@ -121,11 +119,11 @@ const Form = ({route}) => {
     mutation.mutate(formData);
     goToHome();
   };
-  console.log('form errors: ', errors.phoneNumber?.message);
 
   useEffect(() => {
-    if (data) {
+    if (data && data[0]) {
       setDob(data[0].dateOfBirth);
+      console.log('typeof dob', typeof data[0]?.dateOfBirth);
       reset({
         name: data[0].name,
         phoneNumber: data[0].phoneNumber,
@@ -141,6 +139,8 @@ const Form = ({route}) => {
       remark: '',
     });
   }, [dob, reset, data]);
+
+  console.log(data, 'after reset');
 
   //rendering
   const renderName = useCallback(({field: {value, onChange}}: any) => {
@@ -238,11 +238,7 @@ const Form = ({route}) => {
           />
         </View>
 
-        <DatePickerController
-          name={'dateOfBirth'}
-          control={control}
-          currentDOB={id ? data?.dateOfBirth : null}
-        />
+        <DatePickerController name="dateOfBirth" control={control} />
 
         <View>
           <Text style={[tw`self-start text-[#F1F6F9] mb-2`]}>Remark</Text>

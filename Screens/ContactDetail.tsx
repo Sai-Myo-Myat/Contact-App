@@ -52,23 +52,23 @@ const ContactDetail = ({route}) => {
       ]}>
       <View style={[tw`flex gap-1`]}>
         <Text style={[tw`text-sm text-[#F1F6F9]`]}>Name :</Text>
-        <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>{data.name}</Text>
+        <Text style={[tw`py-2 ml-10 text-lg text-[#F1F6F9]`]}>{data.name}</Text>
       </View>
       <View style={[tw`flex gap-1`]}>
         <Text style={[tw`text-sm text-[#F1F6F9]`]}>Phone Number :</Text>
-        <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
+        <Text style={[tw`py-2 ml-10 text-lg text-[#F1F6F9]`]}>
           {data.phoneNumber}
         </Text>
       </View>
       <View style={[tw`flex gap-1`]}>
         <Text style={[tw`text-sm text-[#F1F6F9]`]}>Date Of Birth :</Text>
-        <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
-          {moment(data.dataOfBirth).format('DD-MM-YY')}
+        <Text style={[tw`py-2 ml-10 text-lg text-[#F1F6F9]`]}>
+          {data.dateOfBirth}
         </Text>
       </View>
       <View style={[tw`flex gap-1`]}>
         <Text style={[tw`text-sm text-[#F1F6F9]`]}>Remark :</Text>
-        <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
+        <Text style={[tw`py-2 ml-10 text-lg text-[#F1F6F9]`]}>
           {data.remark ? data.remark : 'no remark'}
         </Text>
       </View>

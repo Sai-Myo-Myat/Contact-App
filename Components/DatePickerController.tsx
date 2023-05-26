@@ -11,12 +11,10 @@ import tw from 'twrnc';
 interface Props {
   control: any;
   name: string;
-  currentDOB: string | null;
 }
 
 const DatePickerController: FC<Props> = props => {
   const [isOpen, setIsOpen] = useState(false);
-  const {currentDOB} = props;
 
   const {
     field: {value, onChange},
@@ -24,15 +22,16 @@ const DatePickerController: FC<Props> = props => {
 
   const onChangeFun = useCallback<any>(
     (event: DateTimePickerEvent, date: Date) => {
+      console.log('data is here', moment(date).format('DD-MM-YYYY'));
       setIsOpen(false);
-      onChange(date);
+      onChange(moment(date).format('DD-MM-YYYY'));
     },
     [onChange],
   );
 
-  const openDatePicker = useCallback(() => setIsOpen(true), []);
-
-  const formattedDate = moment(value).format('DD-MM-YYYY');
+  const openDatePicker = useCallback(() => {
+    setIsOpen(true);
+  }, []);
 
   return (
     <View style={[tw`w-full `]}>
@@ -42,14 +41,13 @@ const DatePickerController: FC<Props> = props => {
           style={[
             tw`p-2 border border-[#394867] w-full rounded-lg flex-row justify-between items-center`,
           ]}>
-          <Text style={[tw`text-[#9BA4B5]`]}>
-            {value ? formattedDate : currentDOB ? currentDOB : 'Select'}
-          </Text>
+          <Text style={[tw`text-[#9BA4B5]`]}>{value ? value : 'Select'}</Text>
           <AntDesign name="right" size={26} color="#9BA4B5" />
         </View>
       </Pressable>
+
       {isOpen && (
-        <DatePicker value={value || new Date()} onChange={onChangeFun} />
+        <DatePicker value={undefined || new Date()} onChange={onChangeFun} />
       )}
     </View>
   );

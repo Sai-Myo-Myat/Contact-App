@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
