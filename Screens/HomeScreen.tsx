@@ -12,13 +12,13 @@ import {ItemType} from '../types';
 
 const fetchingPromise = () => {
   //DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT SET @PageNumber = 1 SET @RowsOfPage = 2 SELECT * FROM contact OFFSET (@PageNumber-1)*@RowsOfPage ROWS
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _reject) => {
     db.transaction(tx => {
       tx.executeSql(
         'SELECT * FROM contact',
         [],
         (txObj, {rows: {_array}}) => resolve(_array),
-        (_txObj, error) => reject(error),
+        (_txObj, _error) => false,
       );
     });
   });
@@ -74,7 +74,7 @@ const HomeScreen = () => {
   return (
     <View style={[tw`bg-[#212A3E] w-full h-full`]}>
       <FlashList
-        data={data && data}
+        data={data && (data as any)}
         renderItem={renderContactItem}
         estimatedItemSize={20}
         extraData={data}

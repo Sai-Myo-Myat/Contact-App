@@ -4347,7 +4347,6 @@ __metadata:
     react-hook-form: "npm:^7.43.9"
     react-native: "npm:0.71.8"
     react-native-date-picker: "npm:^4.2.13"
-    react-native-datepicker: "npm:^1.7.2"
     react-native-gesture-handler: "npm:~2.9.0"
     react-native-reanimated: "npm:~2.14.4"
     react-native-safe-area-context: "npm:4.5.0"
@@ -8158,7 +8157,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.22.0, moment@npm:^2.29.4":
+"moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: d275537a30f155cae7f53f6e6d164ccb59b560935f3c6ed0f4a2e6f3503063b491ffa6b4f7e7207501f6fcab92a2d0bb78ed539cde33cadcb91df6b254f7328d
@@ -9336,15 +9335,6 @@ __metadata:
     react: ">= 17.0.1"
     react-native: ">= 0.64.3"
   checksum: de42f75effeb25ecb710e4b51e1f98a430d65238982a3b854475cfedaea82b8e52e5b83591c472c145995b55ff59073288ff4fcc16ab132b6f5ec5874df287ac
-  languageName: node
-  linkType: hard
-
-"react-native-datepicker@npm:^1.7.2":
-  version: 1.7.2
-  resolution: "react-native-datepicker@npm:1.7.2"
-  dependencies:
-    moment: "npm:^2.22.0"
-  checksum: 3070180f110a634e8780e8339f15210f521cfbfa4ab348dac6835198492438ad2c15d9b60c8164ae3bb7e8aaf2eb32f5f642c1cacf63319f36431503e0022305
   languageName: node
   linkType: hard
 

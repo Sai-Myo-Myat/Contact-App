@@ -1,5 +1,4 @@
-import moment from 'moment';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 import {useQuery} from 'react-query';
 import tw from 'twrnc';
@@ -9,30 +8,30 @@ import {db} from '../db';
 const ContactDetail = ({route}) => {
   const {id} = route.params;
 
-  const getContactPromise = (id: number) => {
-    return new Promise((resolve, reject) => {
+  const getContactPromise = (idParam: number) => {
+    return new Promise((resolve, _reject) => {
       db.transaction(tx => {
         tx.executeSql(
           'SELECT * FROM contact WHERE id=?',
-          [id],
+          [idParam],
           (txObj, {rows: {_array}}) => resolve(_array),
-          (txObj, error) => reject(error),
+          (_txObj, error: any) => error,
         );
       });
     });
   };
 
-  const getContact = async (id: number) => {
+  const getContact = useCallback(async () => {
     if (id) {
       return getContactPromise(id)
-        .then(res => {
+        .then((res: any) => {
           return res[0];
         })
         .catch(err => console.log(err));
     }
-  };
+  }, [id]);
 
-  const {isLoading, data} = useQuery('contactDetails', () => getContact(id));
+  const {isLoading, data} = useQuery('contactDetails', getContact);
 
   if (isLoading) {
     return (
@@ -43,32 +42,30 @@ const ContactDetail = ({route}) => {
     );
   }
 
-  console.log('detail page', data.dateOfBirth);
-
   return (
     <View
       style={[
         tw`bg-[#212A3E] p-5 h-full  flex justify-start items-start gap-3`,
       ]}>
-      <View style={[tw`flex gap-1`]}>
+      <View style={[tw`flex-row gap-1 items-center`]}>
         <Text style={[tw`text-sm text-[#F1F6F9]`]}>Name :</Text>
-        <Text style={[tw`py-2 ml-10 text-lg text-[#F1F6F9]`]}>{data.name}</Text>
+        <Text style={[tw`ml-10 text-lg text-[#E43F5A]`]}>{data.name}</Text>
       </View>
-      <View style={[tw`flex gap-1`]}>
-        <Text style={[tw`text-sm text-[#F1F6F9]`]}>Phone Number :</Text>
-        <Text style={[tw`py-2 ml-10 text-lg text-[#F1F6F9]`]}>
+      <View style={[tw`flex-row gap-1 items-center`]}>
+        <Text style={[tw`text-lg text-[#F1F6F9]`]}>Phone Number :</Text>
+        <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
           {data.phoneNumber}
         </Text>
       </View>
-      <View style={[tw`flex gap-1`]}>
+      <View style={[tw`flex-row gap-1 items-center`]}>
         <Text style={[tw`text-sm text-[#F1F6F9]`]}>Date Of Birth :</Text>
-        <Text style={[tw`py-2 ml-10 text-lg text-[#F1F6F9]`]}>
+        <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
           {data.dateOfBirth}
         </Text>
       </View>
-      <View style={[tw`flex gap-1`]}>
+      <View style={[tw`flex-row gap-1 items-center`]}>
         <Text style={[tw`text-sm text-[#F1F6F9]`]}>Remark :</Text>
-        <Text style={[tw`py-2 ml-10 text-lg text-[#F1F6F9]`]}>
+        <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
           {data.remark ? data.remark : 'no remark'}
         </Text>
       </View>
