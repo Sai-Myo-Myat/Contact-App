@@ -13,3 +13,8 @@ export interface ItemType {
   remark: string;
   id: number;
 }
+
+export interface FormType {
+  searchString: string;
+  items: [{item: ItemType}];
+}
