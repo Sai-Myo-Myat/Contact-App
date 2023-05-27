@@ -8,6 +8,8 @@ import {db} from '../db';
 const ContactDetail = ({route}) => {
   const {id} = route.params;
 
+  console.log('id from detail page', id);
+
   const getContactPromise = (idParam: number) => {
     return new Promise((resolve, _reject) => {
       db.transaction(tx => {
@@ -22,13 +24,11 @@ const ContactDetail = ({route}) => {
   };
 
   const getContact = useCallback(async () => {
-    if (id) {
-      return getContactPromise(id)
-        .then((res: any) => {
-          return res[0];
-        })
-        .catch(err => console.log(err));
-    }
+    return getContactPromise(id)
+      .then((res: any) => {
+        return res[0];
+      })
+      .catch(err => console.log(err));
   }, [id]);
 
   const {isLoading, data} = useQuery('contactDetails', getContact);
@@ -41,6 +41,8 @@ const ContactDetail = ({route}) => {
       </View>
     );
   }
+
+  console.log('data from detail page', data);
 
   return (
     <View

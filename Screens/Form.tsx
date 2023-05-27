@@ -158,29 +158,32 @@ const Form = ({route}) => {
     );
   }, []);
 
-  const renderPhoneNumber = useCallback(({field: {value, onChange}}: any) => {
-    return (
-      <TextInput
-        placeholder={'Enter your phone number...'}
-        {...register('phoneNumber', {
-          required: !id ? 'Phone Number is required!' : false,
-          maxLength: 12,
-          minLength: 11,
-          pattern: {
-            value: /^(09\d{9,11}|959\d{8,10}|01\d{5,7})$/g,
-            message: 'Invalid phone number',
-          },
-        })}
-        value={value}
-        onChangeText={onChange}
-        placeholderTextColor={'#9BA4B5'}
-        style={[
-          tw`p-2 border border-[#394867] w-full rounded-lg`,
-          styles.textInput,
-        ]}
-      />
-    );
-  }, []);
+  const renderPhoneNumber = useCallback(
+    ({field: {value, onChange}}: any) => {
+      return (
+        <TextInput
+          placeholder={'Enter your phone number...'}
+          {...register('phoneNumber', {
+            required: !id ? 'Phone Number is required!' : false,
+            maxLength: 12,
+            minLength: 11,
+            pattern: {
+              value: /^(09\d{9,11}|959\d{8,10}|01\d{5,7})$/g,
+              message: 'Invalid phone number',
+            },
+          })}
+          value={value}
+          onChangeText={onChange}
+          placeholderTextColor={'#9BA4B5'}
+          style={[
+            tw`p-2 border border-[#394867] w-full rounded-lg`,
+            styles.textInput,
+          ]}
+        />
+      );
+    },
+    [id, register],
+  );
 
   const renderRemark = useCallback(({field: {value, onChange}}: any) => {
     return (

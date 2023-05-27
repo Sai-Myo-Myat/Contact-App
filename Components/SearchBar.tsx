@@ -19,7 +19,7 @@ const findByNamePromise = (searchString: string) => {
   return new Promise((resolve, _reject) => {
     db.transaction(tx =>
       tx.executeSql(
-        'SELECT * FROM contact WHERE name LIKE ?',
+        'SELECT name, phoneNumber, id, remark FROM contact WHERE name = ?',
         [searchString],
         (txObj, {rows: {_array}}) => resolve(_array),
         (txObj, error: any) => error,
@@ -35,11 +35,12 @@ interface Props {
 }
 
 const SearchBar: FC<Props> = props => {
-  const renderContactItem = useCallback<any>(
+  const renderContactItem = useCallback(
     ({item}: ListRenderItemInfo<ItemType>) => {
+      console.log('item from searching', item);
       return (
         <ContactItem
-          name={item.name}
+          name={item?.name}
           phoneNumber={item.phoneNumber}
           id={item.id}
         />
@@ -62,6 +63,7 @@ const SearchBar: FC<Props> = props => {
     return findByNamePromise(value)
       .then(res => {
         reset();
+        console.log('id test', res);
         append(res);
         return res;
       })

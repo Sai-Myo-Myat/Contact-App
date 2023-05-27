@@ -33,11 +33,11 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
   const queryClient = useQueryClient();
 
   const goToDetail = useCallback(() => {
-    navigate('Detail', {id});
+    navigate('Detail', {id: id});
   }, [id, navigate]);
 
   const goToForm = useCallback(() => {
-    navigate('Form', {id});
+    navigate('Form', {id: id});
   }, [id, navigate]);
 
   const deleteContactCallback = useCallback(() => {
