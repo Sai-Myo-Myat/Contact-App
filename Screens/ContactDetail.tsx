@@ -3,25 +3,12 @@ import {ActivityIndicator, Text, View} from 'react-native';
 import {useQuery} from 'react-query';
 import tw from 'twrnc';
 
-import {db} from '../db';
+import {getContactPromise} from '../db';
 
 const ContactDetail = ({route}) => {
   const {id} = route.params;
 
   console.log('id from detail page', id);
-
-  const getContactPromise = (idParam: number) => {
-    return new Promise((resolve, _reject) => {
-      db.transaction(tx => {
-        tx.executeSql(
-          'SELECT * FROM contact WHERE id=?',
-          [idParam],
-          (txObj, {rows: {_array}}) => resolve(_array),
-          (_txObj, error: any) => error,
-        );
-      });
-    });
-  };
 
   const getContact = useCallback(async () => {
     return getContactPromise(id)

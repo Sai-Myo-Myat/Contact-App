@@ -13,7 +13,7 @@ import CustomButton from '../Components/CustomButton';
 import DatePickerController from '../Components/DatePickerController';
 
 //db
-import {db} from '../db';
+import {db, getContactPromise} from '../db';
 //types
 import {RootStackParamsList} from '../types';
 
@@ -72,19 +72,6 @@ const Form = ({route}) => {
     });
     return new Promise((resolve, _reject) => {
       return resolve('success');
-    });
-  };
-
-  const getContactPromise = (id: number) => {
-    return new Promise((resolve, _reject) => {
-      db.transaction(tx => {
-        tx.executeSql(
-          'SELECT * FROM contact WHERE id=?',
-          [id],
-          (txObj, {rows: {_array}}) => resolve(_array),
-          (_txObj, error: any) => error,
-        );
-      });
     });
   };
 

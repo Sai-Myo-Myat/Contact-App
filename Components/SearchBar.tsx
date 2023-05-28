@@ -37,7 +37,6 @@ interface Props {
 const SearchBar: FC<Props> = props => {
   const renderContactItem = useCallback(
     ({item}: ListRenderItemInfo<ItemType>) => {
-      console.log('item from searching', item);
       return (
         <ContactItem
           name={item?.name}
@@ -59,7 +58,7 @@ const SearchBar: FC<Props> = props => {
     name: 'items',
   });
 
-  const findByName = useCallback(async () => {
+  const findByName = useCallback<any>(async () => {
     return findByNamePromise(value)
       .then(res => {
         reset();

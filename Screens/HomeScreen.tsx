@@ -77,7 +77,6 @@ const HomeScreen = () => {
         data={data && (data as any)}
         renderItem={renderContactItem}
         estimatedItemSize={20}
-        extraData={data}
       />
     </View>
   );

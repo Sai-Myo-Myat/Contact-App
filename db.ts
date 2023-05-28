@@ -9,4 +9,17 @@ db.transaction(tx => {
   );
 });
 
+export const getContactPromise = (idParam: number) => {
+  return new Promise((resolve, _reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM contact WHERE id=?',
+        [idParam],
+        (txObj, {rows: {_array}}) => resolve(_array),
+        (_txObj, error: any) => error,
+      );
+    });
+  });
+};
+
 export {db};
