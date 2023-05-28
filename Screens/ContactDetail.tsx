@@ -1,14 +1,17 @@
-import React, {useCallback} from 'react';
+import {useRoute} from '@react-navigation/native';
+import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 import {useQuery} from 'react-query';
 import tw from 'twrnc';
 
 import {getContactPromise} from '../db';
 
-const ContactDetail = ({route}) => {
+const ContactDetail = () => {
+  const route = useRoute();
+
   const {id} = route.params;
 
-  console.log('id from detail page', id);
+  // console.log('id from detail page', route);
 
   const getContact = useCallback(async () => {
     return getContactPromise(id)
@@ -28,8 +31,6 @@ const ContactDetail = ({route}) => {
       </View>
     );
   }
-
-  console.log('data from detail page', data);
 
   return (
     <View

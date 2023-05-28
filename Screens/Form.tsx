@@ -1,6 +1,6 @@
 //dependencies
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
@@ -24,8 +24,9 @@ interface InputType {
   remark: string;
 }
 
-const Form = ({route}) => {
+const Form = () => {
   //variables
+  const route = useRoute();
   const {id} = route.params;
   const [dob, setDob] = useState<string>('');
   //navigation

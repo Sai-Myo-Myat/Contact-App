@@ -1,5 +1,5 @@
-import React, {FC, useCallback} from 'react';
-import {Pressable, Text, View} from 'react-native';
+import React, {FC, useCallback, useState} from 'react';
+import {Modal, Pressable, Text, View} from 'react-native';
 
 import {AntDesign, Feather} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
@@ -27,6 +27,8 @@ const deleteContact = (id: number) => {
 };
 
 const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
+  const {modalVisiable, setModalVisiable} = useState(true);
+
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Home'>>();
 
@@ -45,8 +47,16 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
     queryClient.invalidateQueries('fetchContact');
   }, [id, queryClient]);
 
+  const setModalVisiableX = useCallback(
+    () => setModalVisiable(!modalVisiable),
+    [],
+  );
+
   return (
     <Pressable onPress={goToDetail}>
+      <Modal animationType="fade" transparent={true} visible={modalVisiable}>
+        <Text>This is modal</Text>
+      </Modal>
       <View style={[tw`p-4 flex gap-1`]}>
         <View style={[tw`flex gap-3`]}>
           <Text style={[tw`text-[#F1F6F9] font-bold text-lg`]}>{name}</Text>
@@ -59,7 +69,7 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
           <Pressable style={[tw`mr-2`]} onPress={goToForm}>
             <Feather name="edit" size={23} color="#F1F6F9" />
           </Pressable>
-          <Pressable style={[tw`mr-2`]} onPress={deleteContactCallback}>
+          <Pressable style={[tw`mr-2`]} onPress={setModalVisiableX}>
             <AntDesign name="delete" size={23} color={'#F1F6F9'} />
           </Pressable>
         </View>

@@ -84,7 +84,7 @@ const SearchBar: FC<Props> = props => {
       </View>
       <View style={[tw` h-full mt-3`]}>
         <FlashList
-          data={fields as any}
+          data={fields && (fields as any)}
           renderItem={renderContactItem}
           estimatedItemSize={200}
         />
