@@ -8,13 +8,28 @@ import ContactItem from '../Components/ContactItem';
 
 import {ItemType} from '../types';
 import {useQuery} from 'react-query';
+import {fetchQuery} from '../api/base';
+import {Timestamp} from 'react-native-reanimated/lib/types/lib/reanimated2/commonTypes';
+
+interface DataType {
+  id: number;
+  name: string;
+  phone_number: string;
+  date_of_birth: Timestamp;
+  remark: string;
+}
 
 const useContactList = () => {
-  return useQuery('fetchAllContacts', async () => {});
+  return useQuery('fetchAllContacts', async () => {
+    const data = await fetchQuery<DataType>('', {}, 'GET');
+    return data;
+  });
 };
 
 const HomeScreen = () => {
   const {isLoading, isError, data, error} = useContactList();
+
+  console.log('data from database', data);
 
   const renderContactItem = useCallback(
     ({item}: ListRenderItemInfo<ItemType>) => {
@@ -45,7 +60,7 @@ const HomeScreen = () => {
   return (
     <View style={[tw`bg-[#212A3E] w-full h-full`]}>
       <FlashList
-        data={data && (data as any)}
+        data={data as any}
         renderItem={renderContactItem}
         estimatedItemSize={20}
       />

@@ -6,7 +6,7 @@ const toQueryString = (params: {[k: string]: string}) => {
     .join('&');
 };
 
-export const fetchQuery = async (
+export const fetchQuery = async <T>(
   url: string,
   params: {[key: string]: string} | null,
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
@@ -16,31 +16,28 @@ export const fetchQuery = async (
   if (method === 'GET' && params) {
     resource += toQueryString(params);
   }
-  let resp;
-  try {
-    resp = await fetch(resource, {
-      method: method,
-    });
-  } catch (err) {
-    console.log(
-      'Fetching Error',
-      err,
-      '\n',
-      'method: ',
-      method,
-      '\n',
-      'url: ',
-      url,
-      '\n',
-      'resourse: ',
-      resource,
-    );
-  }
 
-  if (resp?.status !== 200 || 201) {
-    return new Error('Fetching Error');
+  const resp = await fetch(resource, {
+    method: method,
+  });
+  const data = await resp.json();
+  console.log(data.status, 'status');
+  if (data.status === 200 || data.status === 201) {
+    console.log(data.data);
+    return data.data as T[];
   }
-  console.log('database', resp);
-
-  return resp;
 };
+
+// console.log(
+//   'Fetching Error',
+//   err,
+//   '\n',
+//   'method: ',
+//   method,
+//   '\n',
+//   'url: ',
+//   url,
+//   '\n',
+//   'resourse: ',
+//   resource,
+// );
