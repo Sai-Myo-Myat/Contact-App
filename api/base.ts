@@ -12,7 +12,7 @@ export const fetchQuery = async <T>(
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
 ) => {
   let resource = API_BASE + url;
-  console.log('API BASE', resource);
+  // console.log('API BASE', resource);
   if (method === 'GET' && params) {
     resource += toQueryString(params);
   }
@@ -23,8 +23,7 @@ export const fetchQuery = async <T>(
   const data = await resp.json();
   console.log(data.status, 'status');
   if (data.status === 200 || data.status === 201) {
-    console.log(data.data);
-    return data.data as T[];
+    return data.data as T;
   }
 };
 

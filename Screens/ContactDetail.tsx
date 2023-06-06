@@ -1,27 +1,25 @@
 import {useRoute} from '@react-navigation/native';
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 import {useQuery} from 'react-query';
 import tw from 'twrnc';
 
-import {getContactPromise} from '../db';
+import {fetchQuery} from '../api/base';
+import {ContactType} from '../types';
 
 const ContactDetail = () => {
   const route = useRoute();
 
   const {id} = route.params;
 
-  // console.log('id from detail page', route);
+  const useContact = () => {
+    return useQuery('fetchContact', async () => {
+      const data = await fetchQuery<ContactType>(`/${id}`, {}, 'GET');
+      return data;
+    });
+  };
 
-  const getContact = useCallback(async () => {
-    return getContactPromise(id)
-      .then((res: any) => {
-        return res[0];
-      })
-      .catch(err => console.log(err));
-  }, [id]);
-
-  const {isLoading, data} = useQuery('contactDetails', getContact);
+  const {data, isLoading} = useContact();
 
   if (isLoading) {
     return (
@@ -39,24 +37,24 @@ const ContactDetail = () => {
       ]}>
       <View style={[tw`flex-row gap-1 items-center`]}>
         <Text style={[tw`text-sm text-[#F1F6F9]`]}>Name :</Text>
-        <Text style={[tw`ml-10 text-lg text-[#E43F5A]`]}>{data.name}</Text>
+        <Text style={[tw`ml-10 text-lg text-[#E43F5A]`]}>{data?.name}</Text>
       </View>
       <View style={[tw`flex-row gap-1 items-center`]}>
         <Text style={[tw`text-lg text-[#F1F6F9]`]}>Phone Number :</Text>
         <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
-          {data.phoneNumber}
+          {data?.phone_number}
         </Text>
       </View>
       <View style={[tw`flex-row gap-1 items-center`]}>
         <Text style={[tw`text-sm text-[#F1F6F9]`]}>Date Of Birth :</Text>
         <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
-          {data.dateOfBirth}
+          {data?.date_of_birth}
         </Text>
       </View>
       <View style={[tw`flex-row gap-1 items-center`]}>
         <Text style={[tw`text-sm text-[#F1F6F9]`]}>Remark :</Text>
         <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
-          {data.remark ? data.remark : 'no remark'}
+          {data?.remark ? data.remark : 'no remark'}
         </Text>
       </View>
     </View>

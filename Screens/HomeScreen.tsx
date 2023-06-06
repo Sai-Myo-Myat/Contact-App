@@ -3,25 +3,17 @@ import {ActivityIndicator, Text, View} from 'react-native';
 
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
 import tw from 'twrnc';
+import {fetchQuery} from '../api/base';
 
 import ContactItem from '../Components/ContactItem';
 
-import {ItemType} from '../types';
 import {useQuery} from 'react-query';
-import {fetchQuery} from '../api/base';
-import {Timestamp} from 'react-native-reanimated/lib/types/lib/reanimated2/commonTypes';
 
-interface DataType {
-  id: number;
-  name: string;
-  phone_number: string;
-  date_of_birth: Timestamp;
-  remark: string;
-}
+import {ContactType} from '../types';
 
 const useContactList = () => {
   return useQuery('fetchAllContacts', async () => {
-    const data = await fetchQuery<DataType>('', {}, 'GET');
+    const data = await fetchQuery<ContactType[]>('', {}, 'GET');
     return data;
   });
 };
@@ -29,14 +21,14 @@ const useContactList = () => {
 const HomeScreen = () => {
   const {isLoading, isError, data, error} = useContactList();
 
-  console.log('data from database', data);
+  // console.log('data from database', data);
 
   const renderContactItem = useCallback(
-    ({item}: ListRenderItemInfo<ItemType>) => {
+    ({item}: ListRenderItemInfo<ContactType>) => {
       return (
         <ContactItem
           name={item?.name}
-          phoneNumber={item.phoneNumber}
+          phoneNumber={item?.phone_number}
           id={item.id}
         />
       );
@@ -54,8 +46,6 @@ const HomeScreen = () => {
   } else if (isError) {
     console.log('error', error);
   }
-
-  // console.log(data);
 
   return (
     <View style={[tw`bg-[#212A3E] w-full h-full`]}>
