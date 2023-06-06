@@ -15,7 +15,6 @@ export interface ContactType {
   remark: string;
 }
 
-export interface FormType {
-  searchString: string;
-  items: [{item: ContactType}];
+export interface ContextType {
+  current_contact_id: number;
 }

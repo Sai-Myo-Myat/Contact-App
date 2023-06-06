@@ -1,16 +1,18 @@
-import {useRoute} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import React from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 import {useQuery} from 'react-query';
 import tw from 'twrnc';
 
 import {fetchQuery} from '../api/base';
-import {ContactType} from '../types';
+import {ContactType, RootStackParamsList} from '../types';
+
+type ProductScreenRouteProps = RouteProp<RootStackParamsList, 'Detail'>;
 
 const ContactDetail = () => {
-  const route = useRoute();
-
-  const {id} = route.params;
+  const {
+    params: {id},
+  } = useRoute<ProductScreenRouteProps>();
 
   const useContact = () => {
     return useQuery('fetchContact', async () => {

@@ -13,13 +13,13 @@ import SearchScreen from './Screens/SearchScreen';
 import TestScreen from './Screens/TestScreen';
 
 import CustomRightHeader from './Components/CustomRightHeader';
-import {FormType} from './types';
+import {ContextType} from './types';
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
 
 export default function App() {
-  const methods = useForm<FormType>();
+  const methods = useForm<ContextType>();
   return (
     <FormProvider {...methods}>
       <QueryClientProvider client={queryClient}>
