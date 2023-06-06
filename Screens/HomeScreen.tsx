@@ -2,48 +2,19 @@ import React, {useCallback} from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
-import {useQuery} from 'react-query';
 import tw from 'twrnc';
 
 import ContactItem from '../Components/ContactItem';
 
-import {db} from '../db';
 import {ItemType} from '../types';
+import {useQuery} from 'react-query';
 
-const fetchingPromise = () => {
-  //DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT SET @PageNumber = 1 SET @RowsOfPage = 2 SELECT * FROM contact OFFSET (@PageNumber-1)*@RowsOfPage ROWS
-  return new Promise((resolve, _reject) => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'SELECT * FROM contact',
-        [],
-        (txObj, {rows: {_array}}) => resolve(_array),
-        (_txObj, _error) => false,
-      );
-    });
-  });
-};
-
-const fetchContact = async () => {
-  return fetchingPromise()
-    .then(res => {
-      // console.log('res from promise', res);
-      return res;
-    })
-    .catch(err => console.log('fetching error', err));
+const useContactList = () => {
+  return useQuery('fetchAllContacts', async () => {});
 };
 
 const HomeScreen = () => {
-  const {isLoading, isError, data, error} = useQuery(
-    'fetchContact',
-    fetchContact,
-    {
-      refetchOnWindowFocus: true,
-      staleTime: 0,
-      cacheTime: 0,
-      refetchInterval: 0,
-    },
-  );
+  const {isLoading, isError, data, error} = useContactList();
 
   const renderContactItem = useCallback(
     ({item}: ListRenderItemInfo<ItemType>) => {
