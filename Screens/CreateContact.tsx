@@ -2,9 +2,15 @@
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import {useMutation, useQueryClient} from 'react-query';
 import tw from 'twrnc';
 
@@ -16,6 +22,8 @@ import DatePickerController from '../Components/DatePickerController';
 import {ContactType, RootStackParamsList} from '../types';
 
 import {fetchQuery} from '../api/base';
+import {useContact} from '../api/api';
+import moment from 'moment';
 
 type ContactScreenRouteProps = RouteProp<RootStackParamsList, 'Form'>;
 
@@ -25,6 +33,14 @@ const Form = () => {
     params: {id},
   } = useRoute<ContactScreenRouteProps>();
   // const [dob, setDob] = useState<string>('');
+
+  //get contact
+  const useExistingContactData = (idParam: number) => {
+    const {isLoading, data, isError, error} = useContact(idParam);
+    return {isLoading, data, isError, error};
+  };
+  const {isLoading, data, isError, error} = useExistingContactData(id);
+  const [dob, setDob] = useState<any>();
 
   //navigation
   const {navigate} =
@@ -39,14 +55,14 @@ const Form = () => {
 
   //db functions
   const addContact = async (props: ContactType) => {
-    const data = await fetchQuery('', props, 'POST');
-    return data;
+    const formData = await fetchQuery('', props, 'POST');
+    return formData;
   };
 
   //react query
   const mutation = useMutation(addContact, {
     onSuccess: () => {
-      queryClient.invalidateQueries('fetchContact');
+      queryClient.invalidateQueries('fetchAllContacts');
     },
   });
 
@@ -54,6 +70,7 @@ const Form = () => {
   const {
     handleSubmit,
     register,
+    reset,
     control,
     formState: {errors},
   } = useForm<ContactType>();
@@ -63,25 +80,25 @@ const Form = () => {
     goToHome();
   };
 
-  // useEffect(() => {
-  //   if (data && data[0]) {
-  //     setDob(data[0].dateOfBirth);
-  //     console.log('typeof dob', typeof data[0]?.dateOfBirth);
-  //     reset({
-  //       name: data[0].name,
-  //       phoneNumber: data[0].phoneNumber,
-  //       dateOfBirth: data[0].dateOfBirth,
-  //       remark: data[0].remark,
-  //     });
-  //     return;
-  //   }
-  //   reset({
-  //     name: '',
-  //     phoneNumber: '',
-  //     dateOfBirth: undefined,
-  //     remark: '',
-  //   });
-  // }, [dob, reset, data]);
+  useEffect(() => {
+    if (id && data) {
+      setDob(data.date_of_birth);
+      console.log('typeof dob', typeof data?.date_of_birth);
+      reset({
+        name: data.name,
+        phone_number: data.phone_number,
+        date_of_birth: moment(data.date_of_birth).format('DD-MM-YYYY'),
+        remark: data.remark,
+      });
+      return;
+    }
+    reset({
+      name: '',
+      phone_number: '',
+      date_of_birth: undefined,
+      remark: '',
+    });
+  }, [dob, reset, data, id]);
 
   //rendering
   const renderName = useCallback(({field: {value, onChange}}: any) => {
@@ -143,6 +160,16 @@ const Form = () => {
     );
   }, []);
 
+  if (isLoading) {
+    return (
+      <View style={[tw`bg-[#212A3E] w-full h-full p-10`]}>
+        <ActivityIndicator />
+        <Text style={[tw`text-[#F1F6F9]`]}>Loading ......</Text>
+      </View>
+    );
+  } else if (isError) {
+    console.log('error', error);
+  }
   return (
     <BottomSheetModalProvider>
       <View
@@ -162,7 +189,7 @@ const Form = () => {
               maxLength: 10,
               minLength: 3,
             }}
-            defaultValue={''}
+            defaultValue={data ? data.name : ''}
             render={renderName}
           />
         </View>
@@ -177,7 +204,7 @@ const Form = () => {
           <Controller
             control={control}
             name="phone_number"
-            defaultValue={''}
+            defaultValue={data ? data.phone_number : ''}
             render={renderPhoneNumber}
           />
         </View>
@@ -186,7 +213,12 @@ const Form = () => {
 
         <View>
           <Text style={[tw`self-start text-[#F1F6F9] mb-2`]}>Remark</Text>
-          <Controller control={control} name="remark" render={renderRemark} />
+          <Controller
+            control={control}
+            name="remark"
+            defaultValue={data ? data.remark : ''}
+            render={renderRemark}
+          />
         </View>
 
         <CustomButton title="Submit" onPressFun={handleSubmit(onSubmit)} />

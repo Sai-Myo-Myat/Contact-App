@@ -1,11 +1,11 @@
 import {RouteProp, useRoute} from '@react-navigation/native';
 import React from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
-import {useQuery} from 'react-query';
 import tw from 'twrnc';
 
-import {fetchQuery} from '../api/base';
-import {ContactType, RootStackParamsList} from '../types';
+import {useContact} from '../api/api';
+import {RootStackParamsList} from '../types';
+import moment from 'moment';
 
 type ConatctScreenRouteProps = RouteProp<RootStackParamsList, 'Detail'>;
 
@@ -14,14 +14,7 @@ const ContactDetail = () => {
     params: {id},
   } = useRoute<ConatctScreenRouteProps>();
 
-  const useContact = () => {
-    return useQuery('fetchContact', async () => {
-      const data = await fetchQuery<ContactType>(`/${id}`, {}, 'GET');
-      return data;
-    });
-  };
-
-  const {data, isLoading} = useContact();
+  const {data, isLoading} = useContact(id);
 
   if (isLoading) {
     return (
@@ -50,7 +43,7 @@ const ContactDetail = () => {
       <View style={[tw`flex-row gap-1 items-center`]}>
         <Text style={[tw`text-sm text-[#F1F6F9]`]}>Date Of Birth :</Text>
         <Text style={[tw`py-2 ml-10 text-lg text-[#E43F5A]`]}>
-          {data?.date_of_birth}
+          {moment(data?.date_of_birth).format('DD-MM-YYYY')}
         </Text>
       </View>
       <View style={[tw`flex-row gap-1 items-center`]}>

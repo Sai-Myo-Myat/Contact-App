@@ -33,6 +33,8 @@ const DatePickerController: FC<Props> = props => {
     setIsOpen(true);
   }, []);
 
+  console.log('here is dob', value);
+
   return (
     <View style={[tw`w-full `]}>
       <Text style={[tw`self-start text-[#F1F6F9] mb-2`]}>Date Of Birth</Text>

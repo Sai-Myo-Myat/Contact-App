@@ -1,4 +1,3 @@
-import {Timestamp} from 'react-native-reanimated/lib/types/lib/reanimated2/commonTypes';
 export type RootStackParamsList = {
   Home: undefined;
   Detail: {id: number};
@@ -11,7 +10,7 @@ export interface ContactType {
   id: number;
   name: string;
   phone_number: string;
-  date_of_birth?: Timestamp;
+  date_of_birth?: string;
   remark?: string;
 }
 

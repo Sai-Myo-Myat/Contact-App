@@ -19,7 +19,7 @@ export const fetchQuery = async <T>(
   const body =
     method === 'POST' || method === 'PUT' ? JSON.stringify(params) : undefined;
 
-  console.log('this is body', body);
+  // console.log('this is body', body);
   const resp = await fetch(resource, {
     method: method,
     body,
