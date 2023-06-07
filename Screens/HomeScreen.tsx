@@ -10,6 +10,7 @@ import ContactItem from '../Components/ContactItem';
 import {useQuery} from 'react-query';
 
 import {ContactType} from '../types';
+import SearchBar from '../Components/SearchBar';
 
 const useContactList = () => {
   return useQuery('fetchAllContacts', async () => {
@@ -49,6 +50,7 @@ const HomeScreen = () => {
 
   return (
     <View style={[tw`bg-[#212A3E] w-full h-full`]}>
+      <SearchBar />
       <FlashList
         data={data as any}
         renderItem={renderContactItem}

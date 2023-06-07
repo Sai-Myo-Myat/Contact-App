@@ -10,8 +10,6 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import ContactDetail from './Screens/ContactDetail';
 import Form from './Screens/CreateContact';
 import HomeScreen from './Screens/HomeScreen';
-import SearchScreen from './Screens/SearchScreen';
-import TestScreen from './Screens/TestScreen';
 
 import CustomRightHeader from './Components/CustomRightHeader';
 import {ContextType} from './types';
@@ -39,7 +37,7 @@ export default function App() {
                 name="Home"
                 component={HomeScreen}
                 options={{
-                  headerTitle: 'Contact',
+                  headerTitle: 'Contacts',
                   // eslint-disable-next-line react/no-unstable-nested-components
                   headerRight: () => {
                     return <CustomRightHeader />;
@@ -47,9 +45,7 @@ export default function App() {
                 }}
               />
               <Stack.Screen name="Form" component={Form} />
-              <Stack.Screen name="Search" component={SearchScreen} />
               <Stack.Screen name="Detail" component={ContactDetail} />
-              <Stack.Screen name="Test" component={TestScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </QueryClientProvider>
