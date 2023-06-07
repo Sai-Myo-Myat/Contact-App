@@ -10,6 +10,8 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamsList} from '../types';
 
 import {ContactType} from '../types';
+import {useMutation, useQueryClient} from 'react-query';
+import {fetchQuery} from '../api/base';
 
 const ContactItem: FC<ContactType> = ({id, name, phone_number}) => {
   const {navigate} =
@@ -22,6 +24,19 @@ const ContactItem: FC<ContactType> = ({id, name, phone_number}) => {
   const goToForm = useCallback(() => {
     navigate('Form', {id: id});
   }, [id, navigate]);
+
+  const queryClient = useQueryClient();
+
+  const deleteContact = async (idParam: number) => {
+    const data = await fetchQuery(`/${idParam}`, {}, 'DELETE');
+    return data;
+  };
+
+  const {mutate} = useMutation(deleteContact, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('fetchAllContacts');
+    },
+  });
 
   //action sheet
   const {showActionSheetWithOptions} = useActionSheet();
@@ -42,11 +57,11 @@ const ContactItem: FC<ContactType> = ({id, name, phone_number}) => {
       },
       (selectedIndex: number | undefined) => {
         if (selectedIndex === 1) {
-          console.log('deleted');
+          mutate(id);
         }
       },
     );
-  }, [showActionSheetWithOptions]);
+  }, [id, mutate, showActionSheetWithOptions]);
 
   return (
     <Pressable onPress={goToDetail}>
