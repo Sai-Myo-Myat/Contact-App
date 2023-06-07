@@ -9,7 +9,7 @@ const toQueryString = (params: {[k: string]: string}) => {
 export const fetchQuery = async <T>(
   url: string,
   params: {[key: string]: any} | null,
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
+  method: string,
 ) => {
   let resource = API_BASE + url;
   if (method === 'GET' && params) {
@@ -24,6 +24,7 @@ export const fetchQuery = async <T>(
     method: method,
     body,
   });
+  console.log('url', url, 'method', method);
   const data = await resp.json();
   console.log(data.status, 'status');
   if (data.status === 200 || data.status === 201) {

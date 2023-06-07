@@ -35,11 +35,11 @@ const Form = () => {
   // const [dob, setDob] = useState<string>('');
 
   //get contact
-  const useExistingContactData = (idParam: number) => {
-    const {isLoading, data, isError, error} = useContact(idParam);
-    return {isLoading, data, isError, error};
-  };
-  const {isLoading, data, isError, error} = useExistingContactData(id);
+  // const useExistingContactData = (idParam: number) => {
+  //   const {isLoading, data, isError, error} = useContact(idParam);
+  //   return {isLoading, data, isError, error};
+  // };
+  const {isLoading, data, isError, error} = useContact(id);
   const [dob, setDob] = useState<any>();
 
   //navigation
@@ -55,7 +55,13 @@ const Form = () => {
 
   //db functions
   const addContact = async (props: ContactType) => {
-    const formData = await fetchQuery('', props, 'POST');
+    let url = '';
+    let method = 'POST';
+    if (id) {
+      url = `/${id}`;
+      method = 'PUT';
+    }
+    const formData = await fetchQuery(url, props, method);
     return formData;
   };
 
