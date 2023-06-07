@@ -8,29 +8,11 @@ import tw from 'twrnc';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamsList} from '../types';
 
-interface Props {
-  name: string;
-  phoneNumber: string;
-  dateOfBirth?: Date;
-  remark?: string;
-  id: number;
-}
+import {ContactType} from '../types';
 
-// const deleteContact = (id: number) => {
-//   db.transaction(tx => {
-//     tx.executeSql('DELETE FROM contact WHERE id = ? ', [id], (txObj, result) =>
-//       console.log('delete', result),
-//     );
-//   });
-// };
-
-const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
-  // const {modalVisiable, setModalVisiable} = useState(true);
-
+const ContactItem: FC<ContactType> = ({id, name, phone_number}) => {
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Home'>>();
-
-  // const queryClient = useQueryClient();
 
   const goToDetail = useCallback(() => {
     navigate('Detail', {id: id});
@@ -40,23 +22,13 @@ const ContactItem: FC<Props> = ({name, phoneNumber, id}) => {
     navigate('Form', {id: id});
   }, [id, navigate]);
 
-  // const deleteContactCallback = useCallback(() => {
-  //   deleteContact(id);
-  //   queryClient.invalidateQueries('fetchContact');
-  // }, [id, queryClient]);
-
-  // const setModalVisiableX = useCallback(
-  //   () => setModalVisiable(!modalVisiable),
-  //   [],
-  // );
-
   return (
     <Pressable onPress={goToDetail}>
       <View style={[tw`p-4 flex gap-1`]}>
         <View style={[tw`flex gap-3`]}>
           <Text style={[tw`text-[#F1F6F9] font-bold text-lg`]}>{name}</Text>
           <Text style={[tw`text-[#F1F6F9] font-bold text-sm`]}>
-            phone number : {phoneNumber}
+            phone number : {phone_number}
           </Text>
           <Text style={[tw`text-[#9BA4B5]`]}>2011-2-4</Text>
         </View>

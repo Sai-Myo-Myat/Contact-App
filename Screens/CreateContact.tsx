@@ -1,34 +1,31 @@
 //dependencies
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {useMutation, useQueryClient} from 'react-query';
 import tw from 'twrnc';
 
 //components
 import CustomButton from '../Components/CustomButton';
 import DatePickerController from '../Components/DatePickerController';
 
-//db
-import {db, getContactPromise} from '../db';
 //types
-import {RootStackParamsList} from '../types';
+import {ContactType, RootStackParamsList} from '../types';
 
-interface InputType {
-  name: string;
-  phoneNumber: string;
-  dateOfBirth: Date;
-  remark: string;
-}
+import {fetchQuery} from '../api/base';
+
+type ContactScreenRouteProps = RouteProp<RootStackParamsList, 'Form'>;
 
 const Form = () => {
   //variables
-  const route = useRoute();
-  const {id} = route.params;
-  const [dob, setDob] = useState<string>('');
+  const {
+    params: {id},
+  } = useRoute<ContactScreenRouteProps>();
+  // const [dob, setDob] = useState<string>('');
+
   //navigation
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamsList, 'Form'>>();
@@ -39,52 +36,11 @@ const Form = () => {
 
   //react query
   const queryClient = useQueryClient();
-  const {data} = useQuery('getContact', () => getContact(id));
 
   //db functions
-  const addContact = (props: InputType) => {
-    console.log('dataOfBirth', props.dateOfBirth);
-    let array: any = [
-      props.name,
-      props.phoneNumber,
-      props.dateOfBirth,
-      props.remark,
-    ];
-    let queryString =
-      'INSERT INTO contact (name, phoneNumber, dateOfBirth, remark) VALUES (?,?,?,?)';
-
-    if (id) {
-      queryString =
-        'UPDATE contact SET name=?, phoneNumber=?, dateOfBirth=?, remark=? WHERE id=?';
-      array = [...array, id];
-    }
-
-    db.transaction(tx => {
-      tx.executeSql(
-        queryString,
-        array,
-        (_txObj, {rows: {_array}, rowsAffected}) => {
-          if (rowsAffected > 0) {
-            console.log('rowsAffected', rowsAffected);
-          }
-        },
-        (_txObj, error: any) => error.message,
-      );
-    });
-    return new Promise((resolve, _reject) => {
-      return resolve('success');
-    });
-  };
-
-  const getContact = async (id: number) => {
-    if (id) {
-      return getContactPromise(id)
-        .then(res => {
-          console.log(res, 'result from promise, form-edit page');
-          return res;
-        })
-        .catch(err => console.log(err));
-    }
+  const addContact = async (props: ContactType) => {
+    const data = await fetchQuery('', props, 'POST');
+    return data;
   };
 
   //react query
@@ -98,37 +54,34 @@ const Form = () => {
   const {
     handleSubmit,
     register,
-    reset,
     control,
     formState: {errors},
-  } = useForm<InputType>();
+  } = useForm<ContactType>();
 
-  const onSubmit: SubmitHandler<InputType> = formData => {
+  const onSubmit: SubmitHandler<ContactType> = formData => {
     mutation.mutate(formData);
     goToHome();
   };
 
-  useEffect(() => {
-    if (data && data[0]) {
-      setDob(data[0].dateOfBirth);
-      console.log('typeof dob', typeof data[0]?.dateOfBirth);
-      reset({
-        name: data[0].name,
-        phoneNumber: data[0].phoneNumber,
-        dateOfBirth: data[0].dateOfBirth,
-        remark: data[0].remark,
-      });
-      return;
-    }
-    reset({
-      name: '',
-      phoneNumber: '',
-      dateOfBirth: undefined,
-      remark: '',
-    });
-  }, [dob, reset, data]);
-
-  console.log(data, 'after reset');
+  // useEffect(() => {
+  //   if (data && data[0]) {
+  //     setDob(data[0].dateOfBirth);
+  //     console.log('typeof dob', typeof data[0]?.dateOfBirth);
+  //     reset({
+  //       name: data[0].name,
+  //       phoneNumber: data[0].phoneNumber,
+  //       dateOfBirth: data[0].dateOfBirth,
+  //       remark: data[0].remark,
+  //     });
+  //     return;
+  //   }
+  //   reset({
+  //     name: '',
+  //     phoneNumber: '',
+  //     dateOfBirth: undefined,
+  //     remark: '',
+  //   });
+  // }, [dob, reset, data]);
 
   //rendering
   const renderName = useCallback(({field: {value, onChange}}: any) => {
@@ -151,7 +104,7 @@ const Form = () => {
       return (
         <TextInput
           placeholder={'Enter your phone number...'}
-          {...register('phoneNumber', {
+          {...register('phone_number', {
             required: !id ? 'Phone Number is required!' : false,
             maxLength: 12,
             minLength: 11,
@@ -209,7 +162,7 @@ const Form = () => {
               maxLength: 10,
               minLength: 3,
             }}
-            defaultValue={data?.name || ''}
+            defaultValue={''}
             render={renderName}
           />
         </View>
@@ -218,18 +171,18 @@ const Form = () => {
           <View style={[tw`flex-row gap-2 items-center mb-2`]}>
             <Text style={[tw`self-start text-[#F1F6F9]`]}>Phone Number</Text>
             <Text style={[tw`text-[#E43F5A]`]}>
-              {errors.phoneNumber ? ` : ${errors.phoneNumber.message} ` : ''}
+              {errors.phone_number ? ` : ${errors.phone_number.message} ` : ''}
             </Text>
           </View>
           <Controller
             control={control}
-            name="phoneNumber"
-            defaultValue={data ? data?.phoneNumber : ''}
+            name="phone_number"
+            defaultValue={''}
             render={renderPhoneNumber}
           />
         </View>
 
-        <DatePickerController name="dateOfBirth" control={control} />
+        <DatePickerController name="date_of_birth" control={control} />
 
         <View>
           <Text style={[tw`self-start text-[#F1F6F9] mb-2`]}>Remark</Text>

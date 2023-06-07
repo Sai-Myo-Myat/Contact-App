@@ -7,12 +7,12 @@ import tw from 'twrnc';
 import {fetchQuery} from '../api/base';
 import {ContactType, RootStackParamsList} from '../types';
 
-type ProductScreenRouteProps = RouteProp<RootStackParamsList, 'Detail'>;
+type ConatctScreenRouteProps = RouteProp<RootStackParamsList, 'Detail'>;
 
 const ContactDetail = () => {
   const {
     params: {id},
-  } = useRoute<ProductScreenRouteProps>();
+  } = useRoute<ConatctScreenRouteProps>();
 
   const useContact = () => {
     return useQuery('fetchContact', async () => {

@@ -27,9 +27,9 @@ const HomeScreen = () => {
     ({item}: ListRenderItemInfo<ContactType>) => {
       return (
         <ContactItem
-          name={item?.name}
-          phoneNumber={item?.phone_number}
           id={item.id}
+          name={item.name}
+          phone_number={item.phone_number}
         />
       );
     },

@@ -11,8 +11,8 @@ export interface ContactType {
   id: number;
   name: string;
   phone_number: string;
-  date_of_birth: Timestamp;
-  remark: string;
+  date_of_birth?: Timestamp;
+  remark?: string;
 }
 
 export interface ContextType {

@@ -7,7 +7,7 @@ import {FormProvider, useForm} from 'react-hook-form';
 import {QueryClient, QueryClientProvider} from 'react-query';
 
 import ContactDetail from './Screens/ContactDetail';
-import Form from './Screens/Form';
+import Form from './Screens/CreateContact';
 import HomeScreen from './Screens/HomeScreen';
 import SearchScreen from './Screens/SearchScreen';
 import TestScreen from './Screens/TestScreen';
