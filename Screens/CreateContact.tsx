@@ -32,13 +32,8 @@ const Form = () => {
   const {
     params: {id},
   } = useRoute<ContactScreenRouteProps>();
-  // const [dob, setDob] = useState<string>('');
 
   //get contact
-  // const useExistingContactData = (idParam: number) => {
-  //   const {isLoading, data, isError, error} = useContact(idParam);
-  //   return {isLoading, data, isError, error};
-  // };
   const {isLoading, data, isError, error} = useContact(id);
   const [dob, setDob] = useState<any>();
 

@@ -3,6 +3,7 @@ import {Pressable, Text, View} from 'react-native';
 
 import {AntDesign, Feather} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
+import {useActionSheet} from '@expo/react-native-action-sheet';
 import tw from 'twrnc';
 
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -22,6 +23,31 @@ const ContactItem: FC<ContactType> = ({id, name, phone_number}) => {
     navigate('Form', {id: id});
   }, [id, navigate]);
 
+  //action sheet
+  const {showActionSheetWithOptions} = useActionSheet();
+
+  const onDelete = useCallback(() => {
+    const options = ['Cancle', 'Delete'];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 0;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+        containerStyle: tw`h-1/5 flex bg-[#394867]`,
+        textStyle: tw`text-lg`,
+        tintColor: '#F1F6F9',
+      },
+      (selectedIndex: number | undefined) => {
+        if (selectedIndex === 1) {
+          console.log('deleted');
+        }
+      },
+    );
+  }, [showActionSheetWithOptions]);
+
   return (
     <Pressable onPress={goToDetail}>
       <View style={[tw`p-4 flex gap-1`]}>
@@ -36,7 +62,7 @@ const ContactItem: FC<ContactType> = ({id, name, phone_number}) => {
           <Pressable style={[tw`mr-2`]} onPress={goToForm}>
             <Feather name="edit" size={23} color="#F1F6F9" />
           </Pressable>
-          <Pressable style={[tw`mr-2`]} onPress={() => console.log('testing')}>
+          <Pressable style={[tw`mr-2`]} onPress={onDelete}>
             <AntDesign name="delete" size={23} color={'#F1F6F9'} />
           </Pressable>
         </View>
