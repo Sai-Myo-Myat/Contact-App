@@ -1,5 +1,6 @@
 import {API_BASE} from '@env';
 const toQueryString = (params: {[k: string]: string}) => {
+  console.log('params, ', params);
   return Object.keys(params)
     .filter(k => params[k])
     .map(key => `${key}=${params[key]}`)
@@ -13,7 +14,7 @@ export const fetchQuery = async <T>(
 ) => {
   let resource = API_BASE + url;
   if (method === 'GET' && params) {
-    resource += toQueryString(params);
+    resource += `?${toQueryString(params)}`;
   }
 
   const body =
@@ -24,11 +25,11 @@ export const fetchQuery = async <T>(
     method: method,
     body,
   });
-  console.log('url', url, 'method', method);
+  console.log('url', resource, 'method', method, 'search', params);
   const data = await resp.json();
-  console.log(data.status, 'status');
+  // console.log('data', data);
   if (data.status === 200 || data.status === 201) {
-    return data.data as T;
+    return data as T;
   } else {
     const error = new Error(data.message);
     console.log('error: ', error.message);

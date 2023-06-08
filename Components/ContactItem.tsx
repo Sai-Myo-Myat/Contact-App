@@ -28,7 +28,7 @@ const ContactItem: FC<ContactType> = ({id, name, phone_number}) => {
   const queryClient = useQueryClient();
 
   const deleteContact = async (idParam: number) => {
-    const data = await fetchQuery(`/${idParam}`, {}, 'DELETE');
+    const data = await fetchQuery(`/${idParam}`, null, 'DELETE');
     return data;
   };
 
@@ -51,7 +51,7 @@ const ContactItem: FC<ContactType> = ({id, name, phone_number}) => {
         options,
         cancelButtonIndex,
         destructiveButtonIndex,
-        containerStyle: tw`h-1/5 flex bg-[#394867]`,
+        containerStyle: tw`h-1/5 flex bg-[#212A3E]`,
         textStyle: tw`text-lg`,
         tintColor: '#F1F6F9',
       },

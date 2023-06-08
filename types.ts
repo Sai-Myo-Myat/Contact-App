@@ -12,6 +12,11 @@ export interface ContactType {
   remark?: string;
 }
 
+export interface ContactListSuccessResponseData {
+  contacts: ContactType[];
+  total: number;
+}
+
 export interface ContextType {
-  current_contact_id: number;
+  search_string: string;
 }

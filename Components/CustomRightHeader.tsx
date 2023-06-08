@@ -17,9 +17,6 @@ const CustomRightHeader = () => {
 
   return (
     <View style={[tw`flex-row justify-between`]}>
-      {/* <Pressable style={[tw`mr-2`]} onPress={}>
-        <Feather name="search" size={30} style={[tw`text-[#F1F6F9]`]} />
-      </Pressable> */}
       <Pressable onPress={goToForm}>
         <AntDesign name="plus" size={30} style={[tw`text-[#F1F6F9]`]} />
       </Pressable>

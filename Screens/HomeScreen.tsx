@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 
 import {FlashList, ListRenderItemInfo} from '@shopify/flash-list';
@@ -7,22 +7,84 @@ import {fetchQuery} from '../api/base';
 
 import ContactItem from '../Components/ContactItem';
 
-import {useQuery} from 'react-query';
+import {
+  QueryFunctionContext,
+  QueryKey,
+  useInfiniteQuery,
+  useQueryClient,
+} from 'react-query';
 
-import {ContactType} from '../types';
+import {ContactListSuccessResponseData, ContactType} from '../types';
 import SearchBar from '../Components/SearchBar';
+import {useForm} from 'react-hook-form';
+
+const fetchContactList = async <T extends QueryKey = QueryKey>(
+  context: QueryFunctionContext<T, {limit: number; offset: number}>,
+) => {
+  const {limit, offset} = context.pageParam || {
+    limit: pageSize,
+    offset: 0,
+  };
+  const data = await fetchQuery<ContactListSuccessResponseData>(
+    '',
+    {limit, offset},
+    'GET',
+  );
+  console.log('data aa', data);
+  return data;
+};
+
+const pageSize = 6;
 
 const useContactList = () => {
-  return useQuery('fetchAllContacts', async () => {
-    const data = await fetchQuery<ContactType[]>('', {}, 'GET');
-    return data;
+  const {
+    data,
+    isError,
+    isLoading,
+    error,
+    isFetching,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery('fetchAllContacts', fetchContactList, {
+    getNextPageParam: (lastPage, pages) => {
+      const hasMorePage = lastPage.total > pageSize * pages.length;
+      if (!hasMorePage) {
+        return undefined;
+      }
+      return {limit: pageSize, offset: pages.length * pageSize};
+    },
   });
+  return {
+    data,
+    isError,
+    isLoading,
+    error,
+    isFetching,
+    hasNextPage,
+    fetchNextPage,
+  };
 };
 
 const HomeScreen = () => {
-  const {isLoading, isError, data, error} = useContactList();
+  const {control} = useForm();
+  const [search, setSearch] = useState<string>('');
 
-  // console.log('data from database', data);
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries('fetchAllContacts');
+  }, [queryClient, search]);
+
+  const {
+    isLoading,
+    isError,
+    data,
+    error,
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+  } = useContactList();
+  console.log('data', JSON.stringify(data));
 
   const renderContactItem = useCallback(
     ({item}: ListRenderItemInfo<ContactType>) => {
@@ -37,6 +99,12 @@ const HomeScreen = () => {
     [],
   );
 
+  const loadMoreContact = useCallback(() => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage]);
+
   if (isLoading) {
     return (
       <View style={[tw`bg-[#212A3E] w-full h-full p-10`]}>
@@ -48,13 +116,20 @@ const HomeScreen = () => {
     console.log('error', error);
   }
 
+  const contacts = data?.pages.flatMap(page => page.contacts);
+  // console.log('contacts', contacts);
+
   return (
     <View style={[tw`bg-[#212A3E] w-full h-full`]}>
-      <SearchBar />
+      <SearchBar control={control} name="search_string" setSearch={setSearch} />
       <FlashList
-        data={data as any}
+        data={contacts as any}
         renderItem={renderContactItem}
         estimatedItemSize={20}
+        refreshing={isFetching}
+        onRefresh={loadMoreContact}
+        onEndReached={loadMoreContact}
+        onEndReachedThreshold={0.5}
       />
     </View>
   );
