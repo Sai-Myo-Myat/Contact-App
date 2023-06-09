@@ -12,6 +12,10 @@ export interface ContactType {
   remark?: string;
 }
 
+export interface ContactResponseType {
+  data: ContactType;
+}
+
 export interface ContactListSuccessResponseData {
   contacts: ContactType[];
   total: number;

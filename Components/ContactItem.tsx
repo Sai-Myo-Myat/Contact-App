@@ -34,7 +34,7 @@ const ContactItem: FC<ContactType> = ({id, name, phone_number}) => {
 
   const {mutate} = useMutation(deleteContact, {
     onSuccess: () => {
-      queryClient.invalidateQueries('fetchAllContacts');
+      queryClient.invalidateQueries('fetchAllContacts_');
     },
   });
 

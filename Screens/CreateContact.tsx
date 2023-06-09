@@ -63,7 +63,7 @@ const Form = () => {
   //react query
   const mutation = useMutation(addContact, {
     onSuccess: () => {
-      queryClient.invalidateQueries('fetchAllContacts');
+      queryClient.invalidateQueries('fetchAllContacts_');
     },
   });
 
@@ -88,7 +88,7 @@ const Form = () => {
       reset({
         name: data.name,
         phone_number: data.phone_number,
-        date_of_birth: moment(data.date_of_birth).format('DD-MM-YYYY'),
+        date_of_birth: moment(data.date_of_birth).format('YYYY-MM-DD'),
         remark: data.remark,
       });
       return;

@@ -22,9 +22,8 @@ const DatePickerController: FC<Props> = props => {
 
   const onChangeFun = useCallback<any>(
     (event: DateTimePickerEvent, date: Date) => {
-      console.log('data is here', moment(date).format('DD-MM-YYYY'));
       setIsOpen(false);
-      onChange(moment(date).format('DD-MM-YYYY'));
+      onChange(moment(date).format('YYYY-MM-DD'));
     },
     [onChange],
   );
@@ -32,8 +31,6 @@ const DatePickerController: FC<Props> = props => {
   const openDatePicker = useCallback(() => {
     setIsOpen(true);
   }, []);
-
-  console.log('here is dob', value);
 
   return (
     <View style={[tw`w-full `]}>

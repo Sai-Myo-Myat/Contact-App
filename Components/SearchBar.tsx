@@ -17,9 +17,19 @@ const SearchBar: FC<Props> = props => {
   } = useController({...props});
   const {setSearch} = props;
 
-  const onChangeX = useCallback(() => {
+  const onSearch = useCallback(() => {
     setSearch(value);
   }, [setSearch, value]);
+
+  const onChangeX = useCallback(
+    (text: string) => {
+      if (text === '') {
+        setSearch('');
+      }
+      onChange(text);
+    },
+    [onChange, setSearch],
+  );
 
   return (
     <View
@@ -29,9 +39,9 @@ const SearchBar: FC<Props> = props => {
         placeholder="Search contacts with name..."
         placeholderTextColor="#394867"
         defaultValue={value}
-        onChangeText={onChange}
+        onChangeText={onChangeX}
       />
-      <Pressable style={[tw`mr-2`]} onPress={onChangeX}>
+      <Pressable style={[tw`mr-2`]} onPress={onSearch}>
         <Feather name="search" size={30} style={[tw`text-[#F1F6F9]`]} />
       </Pressable>
     </View>

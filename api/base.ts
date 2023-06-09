@@ -1,6 +1,5 @@
 import {API_BASE} from '@env';
 const toQueryString = (params: {[k: string]: string}) => {
-  console.log('params, ', params);
   return Object.keys(params)
     .filter(k => params[k])
     .map(key => `${key}=${params[key]}`)
@@ -20,14 +19,12 @@ export const fetchQuery = async <T>(
   const body =
     method === 'POST' || method === 'PUT' ? JSON.stringify(params) : undefined;
 
-  // console.log('this is body', body);
   const resp = await fetch(resource, {
     method: method,
     body,
   });
-  console.log('url', resource, 'method', method, 'search', params);
+  console.log('url', resource);
   const data = await resp.json();
-  // console.log('data', data);
   if (data.status === 200 || data.status === 201) {
     return data as T;
   } else {
@@ -36,17 +33,3 @@ export const fetchQuery = async <T>(
     return error as T;
   }
 };
-
-// console.log(
-//   'Fetching Error',
-//   err,
-//   '\n',
-//   'method: ',
-//   method,
-//   '\n',
-//   'url: ',
-//   url,
-//   '\n',
-//   'resourse: ',
-//   resource,
-// );
