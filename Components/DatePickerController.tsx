@@ -18,9 +18,10 @@ const DatePickerController: FC<Props> = props => {
 
   const {
     field: {value, onChange},
-  } = useController({...props});
+    formState: {errors},
+  } = useController({...props, rules: {required: 'Date Of Birth is required'}});
 
-  const onChangeFun = useCallback<any>(
+  const onChangeX = useCallback<any>(
     (event: DateTimePickerEvent, date: Date) => {
       setIsOpen(false);
       onChange(moment(date).format('YYYY-MM-DD'));
@@ -34,7 +35,12 @@ const DatePickerController: FC<Props> = props => {
 
   return (
     <View style={[tw`w-full `]}>
-      <Text style={[tw`self-start text-[#F1F6F9] mb-2`]}>Date Of Birth</Text>
+      <View style={[tw`flex-row gap-2 items-center mb-2`]}>
+        <Text style={[tw`self-start text-[#F1F6F9]`]}>Date Of Birth</Text>
+        <Text style={[tw`text-[#E43F5A]`]}>
+          {errors.date_of_birth ? ` : ${errors.date_of_birth.message} ` : ''}
+        </Text>
+      </View>
       <Pressable onPress={openDatePicker}>
         <View
           style={[
@@ -46,7 +52,7 @@ const DatePickerController: FC<Props> = props => {
       </Pressable>
 
       {isOpen && (
-        <DatePicker value={undefined || new Date()} onChange={onChangeFun} />
+        <DatePicker value={undefined || new Date()} onChange={onChangeX} />
       )}
     </View>
   );

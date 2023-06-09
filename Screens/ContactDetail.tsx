@@ -15,7 +15,6 @@ const ContactDetail = () => {
   } = useRoute<ConatctScreenRouteProps>();
 
   const {data, isLoading} = useContact(id);
-  console.log(data, 'detail');
 
   if (isLoading) {
     return (

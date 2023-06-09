@@ -84,11 +84,10 @@ const Form = () => {
   useEffect(() => {
     if (id && data) {
       setDob(data.date_of_birth);
-      console.log('typeof dob', typeof data?.date_of_birth);
       reset({
         name: data.name,
         phone_number: data.phone_number,
-        date_of_birth: moment(data.date_of_birth).format('YYYY-MM-DD'),
+        date_of_birth: moment(data.date_of_birth).format('DD-MM-YYYY'),
         remark: data.remark,
       });
       return;
@@ -227,7 +226,6 @@ const Form = () => {
     </BottomSheetModalProvider>
   );
 };
-
 const styles = StyleSheet.create({
   textInput: {
     color: '#F1F6F9',
