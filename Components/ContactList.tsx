@@ -76,15 +76,11 @@ const ContactList: FC<Props> = ({search}) => {
   const renderContactItem = useCallback(
     ({item}: ListRenderItemInfo<ContactType>) => {
       return (
-        <View>
-          {item && (
-            <ContactItem
-              id={item?.id}
-              name={item?.name}
-              phone_number={item?.phone_number}
-            />
-          )}
-        </View>
+        <ContactItem
+          id={item?.id}
+          name={item?.name}
+          phone_number={item?.phone_number}
+        />
       );
     },
     [],
@@ -107,14 +103,13 @@ const ContactList: FC<Props> = ({search}) => {
     console.log('error', error);
   }
 
-  let contacts = data?.pages.flatMap(page => page.contacts);
-  contacts?.map(contact => {
-    if (contact === undefined) {
-      contacts = [];
-    }
-  });
+  let contacts = data?.pages
+    .filter(page => page.contacts)
+    .flatMap(page => page.contacts);
 
-  return contacts ? (
+  console.log(contacts, 'contact');
+
+  return contacts?.length ? (
     <FlashList
       data={contacts as any}
       renderItem={renderContactItem as any}
@@ -125,7 +120,9 @@ const ContactList: FC<Props> = ({search}) => {
       onEndReachedThreshold={0.5}
     />
   ) : (
-    <Text>There is no contact</Text>
+    <View style={[tw`bg-[#212A3E] w-full h-full p-10`]}>
+      <Text style={[tw`text-[#E43F5A]`]}>There is no contact !!!</Text>
+    </View>
   );
 };
 
